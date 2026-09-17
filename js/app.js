@@ -58,7 +58,7 @@ const PALETTES = {
 
 // Clean, minimalist vector paths (24px viewBox)
 const CATEGORY_ICONS = {
-  hidden_packages: `<path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/>`,
+  hidden_packages: `<path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 1.5 C6.7 1.5 6 2.2 6 3 L6 10.5 C5.4 11 5 11.7 5 12.5 L5 16.2 C5 17.2 5.8 18 6.8 18 L10.2 18 C10.2 18.3 10.3 18.6 10.5 18.9 C9.9 19.4 9.5 20.2 9.5 21 C9.5 22.4 10.6 23.5 12 23.5 C13.4 23.5 14.5 22.4 14.5 21 C14.5 20.2 14.1 19.4 13.5 18.9 C13.7 18.6 13.8 18.3 13.8 18 L17.2 18 C18.2 18 19 17.2 19 16.2 L19 12.5 C19 11.7 18.6 11 18 10.5 L18 3 C18 2.2 17.3 1.5 16.5 1.5 C15.7 1.5 15 2.2 15 3 L15 7.5 L9 7.5 L9 3 C9 2.2 8.3 1.5 7.5 1.5 Z M12 19.8 C12.7 19.8 13.2 20.3 13.2 21 C13.2 21.7 12.7 22.2 12 22.2 C11.3 22.2 10.8 21.7 10.8 21 C10.8 20.3 11.3 19.8 12 19.8 Z M9.8 9 L11.4 9 C11.8 9 12 9.3 12 9.7 L12 13 C12 13.4 11.8 13.7 11.4 13.7 L9.8 13.7 C9.4 13.7 9.2 13.4 9.2 13 L9.2 9.7 C9.2 9.3 9.4 9 9.8 9 Z M12.6 9 L14.2 9 C14.6 9 14.8 9.3 14.8 9.7 L14.8 13 C14.8 13.4 14.6 13.7 14.2 13.7 L12.6 13.7 C12.2 13.7 12 13.4 12 13 L12 9.7 C12 9.3 12.2 9 12.6 9 Z"/>`,
   rampages: `<path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`,
   unique_stunt_jumps: `<path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/>`,
   races: `<path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/>`,
@@ -384,7 +384,6 @@ function renderMarkers() {
   state.markerLayer.clearLayers();
   state.leafletMarkers.clear();
 
-  const query = state.searchQuery.toLowerCase().trim();
   const zoom = state.map ? state.map.getZoom() : 0;
 
   // 1. Filter visible markers
@@ -398,16 +397,6 @@ function renderMarkers() {
 
     // Hide collected
     if (state.hideCollected && state.collected.has(marker.id)) return false;
-
-    // Search query
-    if (query) {
-      const match = marker.title.toLowerCase().includes(query) ||
-                    (marker.location && marker.location.toLowerCase().includes(query)) ||
-                    marker.island.toLowerCase().includes(query) ||
-                    (marker.number && marker.number.toString() === query) ||
-                    (marker.unlock && marker.unlock.toLowerCase().includes(query));
-      if (!match) return false;
-    }
 
     return true;
   });
@@ -463,7 +452,7 @@ function openClusterListPopup(cluster) {
         <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
           <span style="font-size: 13px;">${isFound ? '☑' : '☐'}</span>
           <div style="display: flex; flex-direction: column; min-width: 0;">
-            <span style="font-weight: 600; font-size: 12px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${m.title}</span>
+            <span style="font-weight: 600; font-size: 12px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${m.title}">${m.title}</span>
             <span style="font-size: 10px; color: var(--text-muted);">${m.location ? m.location + ' • ' : ''}${m.island}</span>
           </div>
         </div>
@@ -562,7 +551,7 @@ function openMarkerPopup(marker) {
         <div class="popup-title-box">
           <div class="popup-title-row">
             <span class="popup-cat-badge" style="background-color: ${catMeta.color};"></span>
-            <span class="popup-title">${marker.title}</span>
+            <span class="popup-title" title="${marker.title}">${marker.title}</span>
           </div>
           <span class="popup-subtitle">${marker.location ? marker.location + ' • ' : ''}${marker.island}</span>
         </div>
@@ -605,15 +594,22 @@ function openMarkerPopup(marker) {
     .setContent(popupHtml)
     .openOn(state.map);
 
-  // Isolate popup clicks from bubbling to Leaflet map canvas
+  // Isolate popup clicks from bubbling to Leaflet map canvas & enable marquee on overflow
   setTimeout(() => {
     const popupEl = state.popup.getElement();
     if (popupEl) {
       popupEl.classList.remove("video-expanded");
       L.DomEvent.disableClickPropagation(popupEl);
       L.DomEvent.disableScrollPropagation(popupEl);
+
+      const titleEl = popupEl.querySelector(".popup-title");
+      if (titleEl && titleEl.scrollWidth > titleEl.clientWidth) {
+        const overflowDist = titleEl.scrollWidth - titleEl.clientWidth;
+        titleEl.style.setProperty("--marquee-dist", `-${overflowDist + 10}px`);
+        titleEl.classList.add("marquee-scroll");
+      }
     }
-  }, 10);
+  }, 20);
 }
 
 // Global delegated handler for popup actions
@@ -922,19 +918,6 @@ function bindEvents() {
     selectPalette.value = state.palette;
     selectPalette.addEventListener("change", (e) => {
       applyPalette(e.target.value);
-    });
-  }
-
-  // Search input (debounced 100ms for mobile performance)
-  let searchTimeout = null;
-  const searchInput = document.getElementById("searchInput");
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        state.searchQuery = e.target.value;
-        renderMarkers();
-      }, 100);
     });
   }
 

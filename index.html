@@ -62,7 +62,7 @@
       <button class="nav-item" data-cat="hidden_packages">
         <div class="nav-item-left">
           <span class="cat-icon-badge" style="background-color: #c88219;">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/></svg>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 1.5 C6.7 1.5 6 2.2 6 3 L6 10.5 C5.4 11 5 11.7 5 12.5 L5 16.2 C5 17.2 5.8 18 6.8 18 L10.2 18 C10.2 18.3 10.3 18.6 10.5 18.9 C9.9 19.4 9.5 20.2 9.5 21 C9.5 22.4 10.6 23.5 12 23.5 C13.4 23.5 14.5 22.4 14.5 21 C14.5 20.2 14.1 19.4 13.5 18.9 C13.7 18.6 13.8 18.3 13.8 18 L17.2 18 C18.2 18 19 17.2 19 16.2 L19 12.5 C19 11.7 18.6 11 18 10.5 L18 3 C18 2.2 17.3 1.5 16.5 1.5 C15.7 1.5 15 2.2 15 3 L15 7.5 L9 7.5 L9 3 C9 2.2 8.3 1.5 7.5 1.5 Z M12 19.8 C12.7 19.8 13.2 20.3 13.2 21 C13.2 21.7 12.7 22.2 12 22.2 C11.3 22.2 10.8 21.7 10.8 21 C10.8 20.3 11.3 19.8 12 19.8 Z M9.8 9 L11.4 9 C11.8 9 12 9.3 12 9.7 L12 13 C12 13.4 11.8 13.7 11.4 13.7 L9.8 13.7 C9.4 13.7 9.2 13.4 9.2 13 L9.2 9.7 C9.2 9.3 9.4 9 9.8 9 Z M12.6 9 L14.2 9 C14.6 9 14.8 9.3 14.8 9.7 L14.8 13 C14.8 13.4 14.6 13.7 14.2 13.7 L12.6 13.7 C12.2 13.7 12 13.4 12 13 L12 9.7 C12 9.3 12.2 9 12.6 9 Z"/></svg>
           </span>
           <span class="nav-item-name">Hidden Packages</span>
         </div>
@@ -144,26 +144,32 @@
           </div>
         </label>
 
-        <div class="setting-select-row">
-          <label for="selectPalette">Color Mode</label>
-          <select id="selectPalette" class="setting-select">
-            <option value="standard">Default (Subdued)</option>
-            <option value="red_green">Protan / Deutan</option>
-            <option value="blue_yellow">Tritanopia</option>
-            <option value="high_contrast">High Contrast</option>
-          </select>
+        <div class="palette-control-group">
+          <div class="palette-control-header">
+            <svg class="palette-icon-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+              <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+            </svg>
+            <label for="selectPalette">Color Mode</label>
+          </div>
+          <div class="styled-select-wrap">
+            <select id="selectPalette" class="styled-palette-select">
+              <option value="standard">Default (Authentic)</option>
+              <option value="red_green">Protan / Deutan</option>
+              <option value="blue_yellow">Tritanopia</option>
+              <option value="high_contrast">High Contrast</option>
+            </select>
+            <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
         </div>
       </div>
 
       <button class="sidebar-action-btn" id="btnResetProgress" title="Reset tracking">Reset Progress</button>
     </div>
   </aside>
-
-  <!-- Search Input Bar (Floating Top) -->
-  <div class="search-bar-wrap">
-    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-    <input type="text" id="searchInput" class="search-input" placeholder="Search collectible..." />
-  </div>
 
   <!-- Island Quick-Jump Selector (Mobile Only Floating Bar) -->
   <nav class="mobile-island-bar" aria-label="Island Selection">
