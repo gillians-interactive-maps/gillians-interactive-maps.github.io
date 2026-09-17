@@ -1,6 +1,6 @@
 /**
- * GTA Liberty City Stories - Authentic In-Game Radar & Collectibles HUD
- * High-detail stylized vector blips, robust tile scaling (zero 404 gaps), lazy video loading.
+ * GTA Liberty City Stories - Clean & Legible Interactive Map
+ * Minimalist map pins, high legibility, robust tile scaling, lazy video loading.
  */
 
 const STORAGE_KEY = "gta_lcs_collected_markers";
@@ -19,139 +19,64 @@ const SAFE_REWARDS = [
   { count: 100, reward: "$50,000 Bonus & 100% Completion" }
 ];
 
-// Rich, authentic GTA vector artwork for radar blips & UI
+// Clean, minimalist flat silhouettes
 const CATEGORY_ICONS = {
-  hidden_packages: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M16 2L28 8.5V23.5L16 30L4 23.5V8.5L16 2Z" fill="#111" stroke="#000" stroke-width="2"/>
-    <path d="M16 2.5L27 8.5L16 14.5L5 8.5L16 2.5Z" fill="#FFC400"/>
-    <path d="M4.5 9.5L15.5 15.5V28.5L4.5 22.5V9.5Z" fill="#D48800"/>
-    <path d="M16.5 15.5L27.5 9.5V22.5L16.5 28.5V15.5Z" fill="#FFA000"/>
-    <path d="M16 2.5L16 14.5" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M10.5 5.5L21.5 11.5" stroke="#FFFFFF" stroke-width="2.5"/>
-    <path d="M10 12.5V25.5" stroke="#FFFFFF" stroke-width="2"/>
-    <path d="M22 12.5V25.5" stroke="#FFFFFF" stroke-width="2"/>
-    <circle cx="16" cy="8.5" r="2.5" fill="#FFFFFF" stroke="#000" stroke-width="1"/>
+  hidden_packages: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/>
   </svg>`,
 
-  rampages: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M16 2C9.5 2 5 6.5 5 13C5 17.5 7.5 20.5 10 22.5V26H22V22.5C24.5 20.5 27 17.5 27 13C27 6.5 22.5 2 16 2Z" fill="#E74C3C" stroke="#000" stroke-width="2"/>
-    <path d="M8 12L13 14.5L13.5 17.5L8.5 16Z" fill="#000"/>
-    <path d="M24 12L19 14.5L18.5 17.5L23.5 16Z" fill="#000"/>
-    <path d="M16 17.5L14.5 21H17.5L16 17.5Z" fill="#000"/>
-    <path d="M11 25H21V28H11V25Z" fill="#FFF" stroke="#000" stroke-width="1"/>
-    <line x1="13.5" y1="25" x2="13.5" y2="28" stroke="#000" stroke-width="1.2"/>
-    <line x1="16" y1="25" x2="16" y2="28" stroke="#000" stroke-width="1.2"/>
-    <line x1="18.5" y1="25" x2="18.5" y2="28" stroke="#000" stroke-width="1.2"/>
+  rampages: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
   </svg>`,
 
-  unique_stunt_jumps: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 27L16 16H20L5 27H3Z" fill="#F5A623" stroke="#000" stroke-width="1.5"/>
-    <path d="M12 20L15 17" stroke="#000" stroke-width="1.5"/>
-    <path d="M7 24L10 21" stroke="#000" stroke-width="1.5"/>
-    <path d="M17 12L23 5L28 7L29 11L21 14L17 12Z" fill="#FFF" stroke="#000" stroke-width="1.5"/>
-    <circle cx="20" cy="14" r="2" fill="#000"/>
-    <circle cx="27" cy="10" r="2" fill="#000"/>
-    <path d="M10 18Q18 8 26 4" stroke="#FFF" stroke-width="2" stroke-dasharray="2 2"/>
+  unique_stunt_jumps: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/>
   </svg>`,
 
-  car_races: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5 6L14 12L5 18V6Z" fill="#FFF" stroke="#000" stroke-width="1.2"/>
-    <path d="M27 6L18 12L27 18V6Z" fill="#FFF" stroke="#000" stroke-width="1.2"/>
-    <path d="M5 6L8 8V12L5 10V6Z" fill="#000"/>
-    <path d="M11 10L14 12V16L11 14V10Z" fill="#000"/>
-    <path d="M27 6L24 8V12L27 10V6Z" fill="#000"/>
-    <path d="M21 10L18 12V16L21 14V10Z" fill="#000"/>
-    <line x1="5" y1="5" x2="21" y2="27" stroke="#000" stroke-width="2"/>
-    <line x1="27" y1="5" x2="11" y2="27" stroke="#000" stroke-width="2"/>
-    <rect x="9" y="19" width="14" height="8" rx="2" fill="#2ECC71" stroke="#000" stroke-width="1.5"/>
-    <circle cx="11.5" cy="23" r="1.5" fill="#FFF"/>
-    <circle cx="20.5" cy="23" r="1.5" fill="#FFF"/>
-    <rect x="13.5" y="21" width="5" height="4" fill="#000"/>
+  car_races: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/>
+    <circle cx="7.5" cy="14.5" r="1.5"/>
+    <circle cx="16.5" cy="14.5" r="1.5"/>
   </svg>`,
 
-  bike_races: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="8" cy="22" r="4.5" fill="#161922" stroke="#1ABC9C" stroke-width="2"/>
-    <circle cx="24" cy="22" r="4.5" fill="#161922" stroke="#1ABC9C" stroke-width="2"/>
-    <path d="M8 22L15 15L24 22M15 15L20 12L22 15" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="14" cy="8" r="2.5" fill="#1ABC9C" stroke="#000" stroke-width="1"/>
-    <path d="M14 10.5L18 13.5L15 17L12 15Z" fill="#FFF" stroke="#000" stroke-width="1"/>
-    <path d="M4 27L10 27M13 27L22 27" stroke="#1ABC9C" stroke-width="1.5"/>
+  bike_races: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M19.44 9.03L15.41 5H11v2h3.59l2 2H5c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5c0-1.66-.82-3.13-2.08-4.04L10 11h3.41l2 2H13v2h4.41l2.48 2.48c-.56.92-.89 2-.89 3.16 0 2.8 2.2 5 5 5s5-2.2 5-5-2.2-5-5-5c-.75 0-1.46.16-2.11.45l-2.45-2.45V9.03h-.01zM5 17c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm14 3c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
   </svg>`,
 
-  rc_races: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="4" y="11" width="20" height="11" fill="#95A5A6" stroke="#000" stroke-width="1.5"/>
-    <path d="M17 11L22 15V22H17V11Z" fill="#7F8C8D" stroke="#000" stroke-width="1"/>
-    <rect x="18" y="13" width="3" height="3" fill="#000"/>
-    <line x1="7" y1="11" x2="11" y2="3" stroke="#FFF" stroke-width="2"/>
-    <circle cx="12" cy="2" r="1.5" fill="#E74C3C"/>
-    <path d="M14 2L16 4M10 1L8 3" stroke="#FFC400" stroke-width="1.5"/>
-    <circle cx="9" cy="22" r="3" fill="#000" stroke="#FFF" stroke-width="1"/>
-    <circle cx="19" cy="22" r="3" fill="#000" stroke="#FFF" stroke-width="1"/>
+  rc_races: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M12 2a1 1 0 0 1 1 1v3.08A8 8 0 0 1 20 14v4a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-1H9v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4a8 8 0 0 1 7-7.92V3a1 1 0 0 1 1-1zm0 6a6 6 0 0 0-6 6v3h12v-3a6 6 0 0 0-6-6zm-3 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/>
   </svg>`,
 
-  checkpoint_challenges: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="16" cy="18" r="11" fill="#1C1F26" stroke="#E67E22" stroke-width="2.5"/>
-    <rect x="14" y="3" width="4" height="4" fill="#E67E22" stroke="#000" stroke-width="1"/>
-    <path d="M16 10V18L21 21" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="16" cy="18" r="2" fill="#E67E22"/>
-    <circle cx="23" cy="11" r="1.5" fill="#E67E22"/>
+  checkpoint_challenges: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M19.03 7.39l1.42-1.42c-.45-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm1-11h-2v5l4.25 2.52.77-1.28-3.02-1.79V9zM9 1h6v2H9z"/>
   </svg>`,
 
-  drive_by_challenges: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="16" cy="16" r="12" stroke="#9B59B6" stroke-width="2" fill="#151720"/>
-    <circle cx="16" cy="16" r="6" stroke="#9B59B6" stroke-width="1.5"/>
-    <line x1="16" y1="2" x2="16" y2="8" stroke="#FFF" stroke-width="2"/>
-    <line x1="16" y1="24" x2="16" y2="30" stroke="#FFF" stroke-width="2"/>
-    <line x1="2" y1="16" x2="8" y2="16" stroke="#FFF" stroke-width="2"/>
-    <line x1="24" y1="16" x2="30" y2="16" stroke="#FFF" stroke-width="2"/>
-    <circle cx="16" cy="16" r="2" fill="#E74C3C"/>
+  drive_by_challenges: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M12 2v3.08A7.002 7.002 0 0 0 5.08 12H2v2h3.08A7.002 7.002 0 0 0 12 18.92V22h2v-3.08A7.002 7.002 0 0 0 18.92 14H22v-2h-3.08A7.002 7.002 0 0 0 14 5.08V2h-2zm0 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
   </svg>`,
 
-  bumps_and_grinds: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M2 28C6 28 10 24 14 20C18 16 22 22 30 28H2Z" fill="#1B2B1B" stroke="#27AE60" stroke-width="2"/>
-    <circle cx="9" cy="18" r="3.5" fill="#000" stroke="#27AE60" stroke-width="1.5"/>
-    <circle cx="21" cy="12" r="3.5" fill="#000" stroke="#27AE60" stroke-width="1.5"/>
-    <path d="M9 18L15 13L21 12M15 13L17 9L20 10" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="16" cy="7" r="1.8" fill="#27AE60"/>
+  bumps_and_grinds: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M3 18c3-3 6-3 9 0s6 3 9 0v3H3v-3zm3.5-5.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm11 0a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM9 10l3-3 3 3h-6z"/>
   </svg>`,
 
-  rc_triad_take_down: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="7" y="12" width="18" height="15" fill="#C0392B" stroke="#000" stroke-width="1.5"/>
-    <rect x="11" y="10" width="10" height="2" fill="#F1C40F"/>
-    <rect x="7" y="18" width="18" height="3" fill="#000"/>
-    <path d="M16 10Q19 4 23 5" stroke="#FFF" stroke-width="2" fill="none"/>
-    <circle cx="23" cy="5" r="2.5" fill="#FFC400"/>
-    <path d="M23 2L24 4M26 5L24 6M23 8L22 6M20 5L22 4" stroke="#FF5722" stroke-width="1.5"/>
+  rc_triad_take_down: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M12 8a7 7 0 1 0 7 7 7 7 0 0 0-7-7zm0 12a5 5 0 1 1 5-5 5 5 0 0 1-5 5zm6.5-13.5l1.41-1.41A9.97 9.97 0 0 0 17 3.58V5.6a8.03 8.03 0 0 1 1.5 1.4zM13 2h-2v4h2V2zm8 6h-2a8.03 8.03 0 0 1-1.4 1.5l1.41 1.41A9.97 9.97 0 0 0 21 8z"/>
   </svg>`,
 
-  see_the_sight_before_your_flight: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="4" y="9" width="24" height="17" rx="2" fill="#2980B9" stroke="#000" stroke-width="2"/>
-    <circle cx="16" cy="17.5" r="5.5" fill="#0E1726" stroke="#FFF" stroke-width="2"/>
-    <circle cx="16" cy="17.5" r="2.5" fill="#2980B9"/>
-    <rect x="8" y="5" width="6" height="4" fill="#FFF" stroke="#000" stroke-width="1"/>
-    <circle cx="23" cy="12.5" r="1.5" fill="#FFC400"/>
+  see_the_sight_before_your_flight: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M9.4 4l-1.4 2H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-3l-1.4-2H9.4zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/>
   </svg>`,
 
-  slash_tv: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6 22L16 12L20 14L10 24L6 22Z" fill="#962D3E" stroke="#000" stroke-width="1.5"/>
-    <path d="M16 12L26 4L28 6L18 14" stroke="#FFF" stroke-width="2"/>
-    <path d="M19 8L21 7M22 10L24 9M25 12L27 11" stroke="#E74C3C" stroke-width="2"/>
-    <ellipse cx="21" cy="21" rx="6" ry="7" fill="#FFF" stroke="#000" stroke-width="1.5"/>
-    <circle cx="19" cy="20" r="1" fill="#000"/>
-    <circle cx="23" cy="20" r="1" fill="#000"/>
-    <circle cx="21" cy="23" r="0.8" fill="#E74C3C"/>
+  slash_tv: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M19.78 4.22a3 3 0 0 0-4.24 0L12 7.76l1.41 1.41 2.83-2.83.71.71-2.83 2.83 1.41 1.41 2.83-2.83.71.71-2.83 2.83L17.66 15.34l3.54-3.54a3 3 0 0 0 0-4.24l-1.42-3.34zM7.76 12L4.22 15.54a3 3 0 0 0 0 4.24l.18.18a3 3 0 0 0 4.24 0L12 16.42 7.76 12zm-1.42 7.07a1 1 0 0 1-1.41-1.41l2.12-2.12 1.41 1.41-2.12 2.12z"/>
   </svg>`,
 
-  maria_latore: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6 18C10 18 13 14 18 14H24V18L18 20L10 24H6V18Z" fill="#D4AC0D" stroke="#000" stroke-width="1.5"/>
-    <path d="M23 18V28H20V20" fill="#E91E63" stroke="#000" stroke-width="1.2"/>
-    <line x1="22" y1="18" x2="22" y2="28" stroke="#FFF" stroke-width="2"/>
-    <circle cx="12" cy="10" r="2.5" fill="#E91E63"/>
-    <path d="M9 10Q12 7 15 10Q12 13 9 10Z" fill="#E91E63"/>
+  maria_latore: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
   </svg>`
 };
 
-// Accurately calculated island bounds matching marker clusters with 5% margin
+// Accurately calculated island bounds matching marker clusters
 const ISLAND_BOUNDS = {
   all: [[-128, 0], [0, 128]],
   portland: [[-112, 75], [-52, 119]],
@@ -169,7 +94,7 @@ const state = {
   hideCollected: false,
   activeIsland: "all",
   currentMarker: null,
-  currentMediaTab: "image", // "image" tip always first!
+  currentMediaTab: "image", // photo tip always first
   collected: new Set(),
   leafletMarkers: new Map(),
   map: null,
@@ -227,10 +152,8 @@ function initMap() {
     maxBoundsViscosity: 0.85
   });
 
-  // CRITICAL FIX FOR ZOOM:
-  // Tile server only hosts tiles up to zoom 3.
-  // Setting maxNativeZoom: 3 ensures Leaflet auto-scales Zoom 3 tiles smoothly at zooms 3.25 to 6,
-  // completely eliminating 404 tile requests and map disappearing!
+  // maxNativeZoom: 3 ensures Zoom 3 tiles are smoothly scaled at zooms 3.25 to 6,
+  // preventing 404 tile requests and preventing map tiles from disappearing!
   L.tileLayer("https://assets.gtamap.net/map-tiles/gtamap/lcs/lc/game/{z}/{x}/{y}.jpg", {
     tileSize: 128,
     minNativeZoom: 0,
@@ -242,44 +165,43 @@ function initMap() {
     updateWhenIdle: false,
     updateWhenZooming: true,
     keepBuffer: 8,
-    errorTileUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%230b0e13'/%3E%3C/svg%3E"
+    errorTileUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%23243447'/%3E%3C/svg%3E"
   }).addTo(state.map);
 
   state.markerLayer = L.layerGroup().addTo(state.map);
   state.map.fitBounds(ISLAND_BOUNDS.all);
 
   state.map.on("click", (e) => {
-    if (!e.originalEvent.target.closest(".custom-marker")) {
-      closeBottomSheet();
+    if (!e.originalEvent.target.closest(".map-pin")) {
+      closeDetailCard();
     }
   });
 }
 
-// --- Stylized GTA Radar Blip Marker Generator ---
+// --- Clean Map Pin Generator (Teardrop pin, zero aura) ---
 function createMarkerIcon(marker) {
   const isCollected = state.collected.has(marker.id);
-  const color = marker.color || "#f5a623";
+  const color = marker.color || "#3b82f6";
   const iconSvg = CATEGORY_ICONS[marker.category] || CATEGORY_ICONS.hidden_packages;
   const isSelected = state.currentMarker && state.currentMarker.id === marker.id;
 
   const html = `
-    <div class="custom-marker ${isCollected ? 'collected' : ''} ${isSelected ? 'active-selected' : ''}" 
-         data-cat="${marker.category}" 
-         title="${marker.title}">
-      <div class="marker-blip-bg" style="--blip-color: ${color};"></div>
-      <div class="marker-icon-svg">
+    <div class="map-pin ${isCollected ? 'collected' : ''} ${isSelected ? 'selected' : ''}" style="--pin-color: ${color};">
+      <svg class="pin-base" viewBox="0 0 24 32" width="22" height="30">
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 20 12 20s12-11 12-20c0-6.63-5.37-12-12-12z" fill="var(--pin-color)" stroke="#0f172a" stroke-width="1.2"/>
+        <circle cx="12" cy="11" r="7.5" fill="#000000" opacity="0.2"/>
+      </svg>
+      <div class="pin-icon">
         ${iconSvg}
       </div>
-      <div class="marker-check-badge">✓</div>
-      <div class="marker-radar-ping"></div>
     </div>
   `;
 
   return L.divIcon({
     html: html,
-    className: "marker-div-icon",
-    iconSize: [28, 28],
-    iconAnchor: [14, 14]
+    className: "pin-div-icon",
+    iconSize: [22, 30],
+    iconAnchor: [11, 30]
   });
 }
 
@@ -319,7 +241,7 @@ function renderMarkers() {
 
     lMarker.on("click", (e) => {
       L.DomEvent.stopPropagation(e);
-      openBottomSheet(marker);
+      openDetailCard(marker);
     });
 
     lMarker.addTo(state.markerLayer);
@@ -340,22 +262,22 @@ function updateMarkerVisual(markerId) {
   }
 }
 
-// --- Dynamic Safehouse Reward (GTA HUD Style) ---
+// --- Dynamic Safehouse Reward ---
 function getDynamicRewardText() {
   const hpCollected = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
   const next = SAFE_REWARDS.find(r => r.count > hpCollected);
   if (next) {
-    return `NEXT PICKUP: <strong>${next.reward.toUpperCase()}</strong> [ ${hpCollected} / ${next.count} ]`;
+    return `Next safehouse reward: <strong>${next.reward}</strong> (${hpCollected}/${next.count} found)`;
   }
-  return `ALL SAFEHOUSE PICKUPS UNLOCKED [ 100 / 100 ]!`;
+  return `All safehouse rewards unlocked (100/100)!`;
 }
 
-// --- Bottom Sheet & Media Controller ---
-function openBottomSheet(marker) {
+// --- Detail Card Controller (Clean popup) ---
+function openDetailCard(marker) {
   state.currentMarker = marker;
-  state.currentMediaTab = "image"; // ALWAYS start with image tip to save data!
+  state.currentMediaTab = "image"; // Photo tip first to save bandwidth
 
-  // Update map marker highlights
+  // Highlight marker
   state.leafletMarkers.forEach((lMarker, mId) => {
     const m = state.markers.find(item => item.id === mId);
     if (m) lMarker.setIcon(createMarkerIcon(m));
@@ -363,32 +285,28 @@ function openBottomSheet(marker) {
 
   const catMeta = state.categories[marker.category] || { name: marker.category, color: marker.color };
 
-  document.getElementById("sheetCategory").textContent = catMeta.name;
-  document.getElementById("sheetCategory").style.color = marker.color || "var(--gta-gold)";
-  document.getElementById("sheetTitle").textContent = marker.title;
-  document.getElementById("sheetSubtitle").textContent = `${marker.location ? marker.location + ' • ' : ''}${marker.island}`;
+  document.getElementById("cardTitle").textContent = marker.title;
+  document.getElementById("cardSubtitle").textContent = `${marker.location ? marker.location + ' • ' : ''}${marker.island} (${catMeta.name})`;
 
-  // Info Box: ONLY show unlock tag if there is a specific mission requirement
-  const infoBox = document.getElementById("sheetInfoBox");
+  // Info Box
+  const infoEl = document.getElementById("cardInfo");
   let infoHtml = "";
 
   if (marker.unlock) {
-    infoHtml += `<div class="info-row"><span class="info-tag">🔒 ${marker.unlock}</span></div>`;
+    infoHtml += `<div class="card-unlock">🔒 ${marker.unlock}</div>`;
   }
   if (marker.objective) {
-    infoHtml += `<p class="info-desc">${marker.objective}</p>`;
+    infoHtml += `<div class="card-objective">${marker.objective}</div>`;
   }
-
-  // Dynamic reward for packages or static reward for others
   if (marker.category === "hidden_packages") {
-    infoHtml += `<p class="info-reward">🎁 ${getDynamicRewardText()}</p>`;
+    infoHtml += `<div class="card-reward">🎁 ${getDynamicRewardText()}</div>`;
   } else if (marker.reward) {
-    infoHtml += `<p class="info-reward">🎁 REWARD: ${marker.reward.toUpperCase()}</p>`;
+    infoHtml += `<div class="card-reward">🎁 Reward: ${marker.reward}</div>`;
   }
-  infoBox.innerHTML = infoHtml;
+  infoEl.innerHTML = infoHtml;
 
-  // Media Switcher Setup
-  const tabsContainer = document.getElementById("sheetMediaTabs");
+  // Media tabs
+  const tabsContainer = document.getElementById("cardMediaTabs");
   const tabVid = document.getElementById("tabVideo");
 
   if (marker.video) {
@@ -398,14 +316,13 @@ function openBottomSheet(marker) {
     tabsContainer.style.display = "none";
   }
 
-  // Render Image Tip First (Zero Video Bandwidth used!)
+  // Render photo tip
   renderMediaView("image");
 
-  updateCollectedBtn();
+  updateMarkFoundBtn();
   updateStepperBtns();
 
-  document.getElementById("bottomSheet").classList.add("open");
-  document.getElementById("sheetBackdrop").classList.add("active");
+  document.getElementById("detailCard").classList.add("active");
 }
 
 function renderMediaView(tab) {
@@ -413,11 +330,10 @@ function renderMediaView(tab) {
   const marker = state.currentMarker;
   if (!marker) return;
 
-  const mediaBox = document.getElementById("sheetMediaBox");
+  const mediaBox = document.getElementById("cardMediaBox");
   const tabImg = document.getElementById("tabImage");
   const tabVid = document.getElementById("tabVideo");
 
-  // Destroy previous video if any
   const existingVideo = mediaBox.querySelector("video");
   if (existingVideo) {
     existingVideo.pause();
@@ -429,7 +345,6 @@ function renderMediaView(tab) {
     tabVid.classList.add("active");
     tabImg.classList.remove("active");
 
-    // Only load video NOW because user explicitly tapped "Watch Video"
     mediaBox.innerHTML = `
       <video src="${marker.video}" controls playsinline autoplay muted loop preload="auto">
         Your browser does not support the video tag.
@@ -443,20 +358,19 @@ function renderMediaView(tab) {
       mediaBox.innerHTML = `<img src="${marker.image}" alt="${marker.title}" loading="eager" />`;
     } else {
       mediaBox.innerHTML = `
-        <div style="color: var(--gta-text-dim); font-family: var(--font-gta-hud); font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; text-align: center; padding: 24px; line-height: 1.6;">
-          [ NO PHOTO INTEL IN ARCHIVE ]<br>
-          ${marker.video ? '<span style="color: var(--gta-gold);">SELECT "WATCH VIDEO" FOR SURVEILLANCE FEED</span>' : ''}
+        <div class="media-empty">
+          No photo tip available.<br>
+          ${marker.video ? '<span style="color: var(--color-blue); cursor: pointer;" onclick="renderMediaView(&quot;video&quot;)">Watch video walkthrough</span>' : ''}
         </div>
       `;
     }
   }
 }
 
-function closeBottomSheet() {
-  document.getElementById("bottomSheet").classList.remove("open");
-  document.getElementById("sheetBackdrop").classList.remove("active");
+function closeDetailCard() {
+  document.getElementById("detailCard").classList.remove("active");
 
-  const mediaBox = document.getElementById("sheetMediaBox");
+  const mediaBox = document.getElementById("cardMediaBox");
   const existingVideo = mediaBox.querySelector("video");
   if (existingVideo) {
     existingVideo.pause();
@@ -483,26 +397,26 @@ function toggleCurrentCollected() {
   }
 
   saveCollected();
-  updateCollectedBtn();
+  updateMarkFoundBtn();
   updateMarkerVisual(mId);
 
   if (state.currentMarker.category === "hidden_packages") {
-    const rewEl = document.querySelector("#sheetInfoBox .info-reward");
+    const rewEl = document.querySelector("#cardInfo .card-reward");
     if (rewEl) rewEl.innerHTML = `🎁 ${getDynamicRewardText()}`;
   }
 }
 
-function updateCollectedBtn() {
-  const btn = document.getElementById("btnCollect");
+function updateMarkFoundBtn() {
+  const btn = document.getElementById("btnMarkFound");
   if (!state.currentMarker) return;
   const isFound = state.collected.has(state.currentMarker.id);
 
   if (isFound) {
     btn.classList.add("collected");
-    btn.innerHTML = `<span class="check-icon">✓</span> COLLECTED`;
+    btn.innerHTML = `<span class="check-box-icon">☑</span> Found (hidden)`;
   } else {
     btn.classList.remove("collected");
-    btn.innerHTML = `<span class="check-icon">○</span> MARK AS FOUND`;
+    btn.innerHTML = `<span class="check-box-icon">☐</span> Hide this marker`;
   }
 }
 
@@ -529,7 +443,7 @@ function navigatePackage(offset) {
 
   if (target) {
     state.map.setView([target.lat, target.lng], 4, { animate: true });
-    openBottomSheet(target);
+    openDetailCard(target);
   }
 }
 
@@ -549,7 +463,7 @@ function updateProgressUI() {
   }
   const subStats = document.getElementById("drawerSubStats");
   if (subStats) {
-    subStats.textContent = `${Math.round((totalCollected / totalAll) * 100)}% Complete`;
+    subStats.textContent = `${Math.round((totalCollected / totalAll) * 100)}% collected`;
   }
 
   // Safehouse Weapon Milestone Tracker in Drawer
@@ -558,9 +472,9 @@ function updateProgressUI() {
     milestoneList.innerHTML = SAFE_REWARDS.map(r => {
       const unlocked = hpCollected >= r.count;
       return `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 3px 0; color: ${unlocked ? 'var(--gta-green)' : 'var(--gta-text-dim)'}; font-family: var(--font-gta-hud); font-size: 11px;">
-          <span>${unlocked ? '✓' : '○'} ${r.reward.toUpperCase()}</span>
-          <span style="color: var(--gta-gold);">${r.count} PKGS</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 3px 0; color: ${unlocked ? 'var(--color-green)' : 'var(--text-dim)'}; font-size: 11px;">
+          <span>${unlocked ? '✓' : '○'} ${r.reward}</span>
+          <span style="color: var(--color-amber);">${r.count} pkgs</span>
         </div>
       `;
     }).join("");
@@ -591,14 +505,14 @@ function setIsland(islandKey) {
 
 function setCategoryFilter(cat) {
   state.activeCategory = cat;
-  document.querySelectorAll(".chip-btn").forEach(b => {
+  document.querySelectorAll(".sidebar-btn[data-cat]").forEach(b => {
     b.classList.toggle("active", b.dataset.cat === cat);
   });
   renderMarkers();
 }
 
-function toggleFilterDrawer(open) {
-  const drawer = document.getElementById("filterDrawer");
+function toggleChecklistDrawer(open) {
+  const drawer = document.getElementById("checklistDrawer");
   const backdrop = document.getElementById("drawerBackdrop");
   if (open === undefined) {
     open = !drawer.classList.contains("open");
@@ -615,18 +529,18 @@ function initDrawerCategories() {
   Object.keys(state.categories).forEach(catId => {
     const cat = state.categories[catId];
     const item = document.createElement("div");
-    item.className = "filter-item";
+    item.className = "drawer-item";
     item.innerHTML = `
-      <div class="filter-item-left">
-        <span class="dot" style="background-color: ${cat.color}"></span>
-        <span class="filter-item-name">${cat.name}</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background-color: ${cat.color};"></span>
+        <span style="font-weight: 500;">${cat.name}</span>
       </div>
       <div style="display: flex; align-items: center; gap: 8px;">
-        <span class="filter-item-count" id="count_${catId}">0/${cat.count}</span>
-        <label class="toggle-switch">
-          <input type="checkbox" checked data-subcat="${catId}" />
+        <span style="font-size: 11px; color: var(--text-dim);" id="count_${catId}">0/${cat.count}</span>
+        <div class="toggle-switch">
+          <input type="checkbox" checked data-subcat="${catId}" id="subcat_${catId}" />
           <span class="toggle-slider"></span>
-        </label>
+        </div>
       </div>
     `;
 
@@ -654,7 +568,7 @@ function resetProgress() {
     state.collected.clear();
     saveCollected();
     renderMarkers();
-    if (state.currentMarker) updateCollectedBtn();
+    if (state.currentMarker) updateMarkFoundBtn();
   }
 }
 
@@ -693,50 +607,77 @@ function importProgress() {
 }
 
 function bindEvents() {
+  // Island navigation
   document.querySelectorAll(".island-btn").forEach(btn => {
     btn.addEventListener("click", () => setIsland(btn.dataset.island));
   });
 
-  document.querySelectorAll(".chip-btn").forEach(btn => {
+  // Sidebar category filter buttons
+  document.querySelectorAll(".sidebar-btn[data-cat]").forEach(btn => {
     btn.addEventListener("click", () => setCategoryFilter(btn.dataset.cat));
   });
 
+  // Hide completed button in sidebar
+  const btnToggleHide = document.getElementById("btnToggleHide");
+  if (btnToggleHide) {
+    btnToggleHide.classList.toggle("active", state.hideCollected);
+    btnToggleHide.addEventListener("click", () => {
+      state.hideCollected = !state.hideCollected;
+      btnToggleHide.classList.toggle("active", state.hideCollected);
+      const toggleEl = document.getElementById("toggleHideCollected");
+      if (toggleEl) toggleEl.checked = state.hideCollected;
+      saveSettings();
+      renderMarkers();
+    });
+  }
+
+  // Drawer open/close
+  document.getElementById("btnOpenDrawer").addEventListener("click", () => toggleChecklistDrawer(true));
+  document.getElementById("btnCloseDrawer").addEventListener("click", () => toggleChecklistDrawer(false));
+  document.getElementById("drawerBackdrop").addEventListener("click", () => toggleChecklistDrawer(false));
+
+  // Media tabs
   document.getElementById("tabImage").addEventListener("click", () => renderMediaView("image"));
   document.getElementById("tabVideo").addEventListener("click", () => renderMediaView("video"));
 
-  document.getElementById("sheetCloseBtn").addEventListener("click", closeBottomSheet);
-  document.getElementById("sheetBackdrop").addEventListener("click", closeBottomSheet);
-  document.getElementById("sheetHandle").addEventListener("click", closeBottomSheet);
-  document.getElementById("btnCollect").addEventListener("click", toggleCurrentCollected);
+  // Detail card buttons
+  document.getElementById("cardCloseBtn").addEventListener("click", closeDetailCard);
+  document.getElementById("btnMarkFound").addEventListener("click", toggleCurrentCollected);
   document.getElementById("btnPrev").addEventListener("click", () => navigatePackage(-1));
   document.getElementById("btnNext").addEventListener("click", () => navigatePackage(1));
 
-  document.getElementById("btnOpenMenu").addEventListener("click", () => toggleFilterDrawer(true));
-  document.getElementById("btnCloseDrawer").addEventListener("click", () => toggleFilterDrawer(false));
-  document.getElementById("drawerBackdrop").addEventListener("click", () => toggleFilterDrawer(false));
-
+  // Drawer hide toggle
   const hideToggle = document.getElementById("toggleHideCollected");
-  hideToggle.checked = state.hideCollected;
-  hideToggle.addEventListener("change", (e) => {
-    state.hideCollected = e.target.checked;
-    saveSettings();
-    renderMarkers();
-  });
+  if (hideToggle) {
+    hideToggle.checked = state.hideCollected;
+    hideToggle.addEventListener("change", (e) => {
+      state.hideCollected = e.target.checked;
+      if (btnToggleHide) btnToggleHide.classList.toggle("active", state.hideCollected);
+      saveSettings();
+      renderMarkers();
+    });
+  }
 
+  // Search input
   const searchInput = document.getElementById("searchInput");
   searchInput.addEventListener("input", (e) => {
     state.searchQuery = e.target.value;
     renderMarkers();
   });
 
+  // Progress widget click opens drawer
+  document.getElementById("progressWidget").addEventListener("click", () => toggleChecklistDrawer(true));
+
+  // Backup & Reset
   document.getElementById("btnResetProgress").addEventListener("click", resetProgress);
   document.getElementById("btnExportProgress").addEventListener("click", exportProgress);
   document.getElementById("btnImportProgress").addEventListener("click", importProgress);
 
+  // Keyboard navigation
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closeBottomSheet();
-      toggleFilterDrawer(false);
+      closeDetailCard();
+      toggleChecklistDrawer(false);
     }
     if (state.currentMarker && state.currentMarker.category === "hidden_packages") {
       if (e.key === "ArrowLeft") navigatePackage(-1);

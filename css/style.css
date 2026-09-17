@@ -1,38 +1,27 @@
 ﻿/* ==========================================================================
-   GTA: Liberty City Stories - Authentic In-Game HUD & Radar Theme
+   GTA Liberty City Stories - Clean & Legible Interactive Map
+   Inspired by GTA IV Interactive Maps (clean layout, map pins, zero aura)
    ========================================================================== */
 
-@font-face {
-  font-family: 'Pricedown';
-  src: url('../assets/fonts/pricedown.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
-  --gta-bg: #080a0e;
-  --gta-surface: #12151c;
-  --gta-surface-light: #1b202a;
-  --gta-surface-elevated: #242a38;
-  --gta-border: #000000;
-  --gta-border-subtle: #262c3a;
-  --gta-gold: #f5a623;
-  --gta-gold-bright: #ffc400;
-  --gta-gold-dark: #b87814;
-  --gta-text-white: #ffffff;
-  --gta-text-muted: #a6b2c4;
-  --gta-text-dim: #606d82;
-  --gta-red: #e74c3c;
-  --gta-red-dark: #962d3e;
-  --gta-green: #2ecc71;
-  --gta-cyan: #00d2d3;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --bg-ocean: #243447;
+  --panel-bg: #111827;
+  --panel-bg-hover: #1f2937;
+  --panel-border: #374151;
+  --panel-border-light: #4b5563;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --text-dim: #6b7280;
+  
+  --color-blue: #3b82f6;
+  --color-red: #ef4444;
+  --color-amber: #f59e0b;
+  --color-green: #10b981;
+  --color-purple: #8b5cf6;
+  
+  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --safe-top: env(safe-area-inset-top, 0px);
-
-  --font-gta-heading: 'Pricedown', 'Impact', sans-serif;
-  --font-gta-hud: 'Impact', 'Trebuchet MS', 'Arial Black', sans-serif;
-  --font-gta-body: 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
@@ -47,315 +36,148 @@ html, body {
   height: 100%;
   height: 100dvh;
   overflow: hidden;
-  background-color: var(--gta-bg);
-  color: var(--gta-text-white);
-  font-family: var(--font-gta-body);
-  user-select: none;
+  background-color: var(--bg-ocean);
+  color: var(--text-main);
+  font-family: var(--font-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ==========================================================================
-   Map Container & Leaflet Canvas
-   ========================================================================== */
 #map {
   width: 100%;
   height: 100%;
-  background-color: #0b0e13;
+  background-color: var(--bg-ocean);
   z-index: 1;
 }
 
 .leaflet-container {
-  background-color: #0b0e13;
+  background-color: var(--bg-ocean);
   outline: none;
 }
 
 .leaflet-tile {
   image-rendering: auto;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
 }
 
 /* ==========================================================================
-   Top HUD Bar (Pause Menu / Radar Style)
+   Slim Left Sidebar (Desktop & Tablet)
    ========================================================================== */
-.top-nav {
+.map-sidebar {
   position: absolute;
-  top: max(8px, var(--safe-top));
-  left: 8px;
-  right: 8px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--panel-border);
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  pointer-events: none;
-}
-
-.top-bar-row {
-  display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  pointer-events: auto;
+  padding: 8px 0;
 }
 
-/* Authentic GTA LCS Branding */
-.brand-badge {
-  display: flex;
-  align-items: center;
-  background: var(--gta-surface);
-  border: 2px solid var(--gta-border);
-  box-shadow: 2px 2px 0px #000000;
-  padding: 0;
-  height: 38px;
-  cursor: default;
-}
-
-.brand-badge .logo-tag {
-  background: var(--gta-gold);
-  color: #000000;
-  font-family: var(--font-gta-heading);
-  font-size: 17px;
-  letter-spacing: 0.5px;
-  padding: 0 10px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  border-right: 2px solid #000000;
-  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.4);
-}
-
-.brand-badge .title {
-  font-family: var(--font-gta-hud);
-  font-size: 11px;
-  font-weight: 900;
-  color: var(--gta-text-white);
-  letter-spacing: 1px;
-  padding: 0 10px;
-  text-transform: uppercase;
-}
-
-/* Search Bar (Tactical Terminal / Police Computer style) */
-.search-wrapper {
-  position: relative;
-  flex: 1;
-  max-width: 260px;
-}
-
-.search-input {
-  width: 100%;
-  height: 38px;
-  background: var(--gta-surface);
-  border: 2px solid var(--gta-border);
-  padding: 0 10px 0 32px;
-  color: var(--gta-text-white);
-  font-family: var(--font-gta-hud);
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  outline: none;
-  box-shadow: 2px 2px 0px #000000;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.search-input::placeholder {
-  color: var(--gta-text-dim);
-  letter-spacing: 0.5px;
-}
-
-.search-input:focus {
-  background: var(--gta-surface-light);
-  border-color: var(--gta-gold);
-}
-
-.search-icon {
-  position: absolute;
-  left: 9px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  color: var(--gta-gold);
-  pointer-events: none;
-}
-
-/* Top Icon Buttons */
-.btn-icon {
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--gta-surface);
-  border: 2px solid var(--gta-border);
-  color: var(--gta-gold);
-  cursor: pointer;
-  box-shadow: 2px 2px 0px #000000;
-  transition: background 0.15s, transform 0.1s;
-}
-
-.btn-icon:hover {
-  background: var(--gta-surface-light);
-  color: #ffffff;
-}
-
-.btn-icon:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0px #000000;
-}
-
-/* Category Filter Chips Bar (Tactical HUD Ribbon) */
-.quick-chips-bar {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-  pointer-events: auto;
-  scrollbar-width: none;
-}
-
-.quick-chips-bar::-webkit-scrollbar {
-  display: none;
-}
-
-.chip-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  background: var(--gta-surface);
-  border: 2px solid var(--gta-border);
-  color: var(--gta-text-muted);
-  font-family: var(--font-gta-hud);
-  font-size: 11px;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  cursor: pointer;
-  box-shadow: 2px 2px 0px #000000;
-  transition: background 0.12s, color 0.12s, border-color 0.12s;
-}
-
-.chip-btn:hover {
-  background: var(--gta-surface-light);
-  color: #ffffff;
-}
-
-.chip-btn.active {
-  background: var(--gta-gold);
-  border-color: #000000;
-  color: #000000;
-}
-
-.chip-btn .chip-icon {
-  width: 14px;
-  height: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.chip-btn .count-badge {
-  font-family: var(--font-gta-heading);
-  font-size: 12px;
-  padding: 0 4px;
-  background: #000000;
-  color: var(--gta-gold);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.chip-btn.active .count-badge {
-  background: #000000;
-  color: #ffffff;
-}
-
-/* ==========================================================================
-   HUD Floating Progress Widget (Authentic GTA LCS Health & Cash Bar)
-   ========================================================================== */
-.floating-progress {
-  position: absolute;
-  bottom: calc(8px + var(--safe-bottom));
-  left: 8px;
-  z-index: 999;
-  background: var(--gta-surface);
-  border: 2px solid var(--gta-border);
-  box-shadow: 3px 3px 0px #000000;
-  padding: 6px 10px;
+.sidebar-group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  cursor: pointer;
-  transition: background 0.15s;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
 }
 
-.floating-progress:hover {
-  background: var(--gta-surface-light);
+.sidebar-divider {
+  width: 28px;
+  height: 1px;
+  background: var(--panel-border);
+  margin: 4px 0;
 }
 
-.progress-header-row {
+.sidebar-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
-.progress-info .label {
-  font-family: var(--font-gta-hud);
+.sidebar-btn:hover {
+  background: var(--panel-bg-hover);
+  color: var(--text-main);
+}
+
+.sidebar-btn.active {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: var(--color-blue);
+  color: var(--color-blue);
+}
+
+.sidebar-btn .badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
   font-size: 9px;
-  color: var(--gta-text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
+  font-weight: 700;
+  background: var(--color-blue);
+  color: #ffffff;
+  padding: 0 4px;
+  border-radius: 8px;
+  line-height: 12px;
 }
 
-.progress-info .stats {
-  font-family: var(--font-gta-heading);
-  font-size: 17px;
-  color: var(--gta-gold-bright);
-  letter-spacing: 0.5px;
-  text-shadow: 1px 1px 0px #000000;
-}
-
-.progress-bar-bg {
-  width: 110px;
-  height: 6px;
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--gta-gold-dark), var(--gta-gold-bright));
-  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+/* Tooltip on hover */
+.sidebar-btn[data-title]:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  left: 54px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #030712;
+  color: #f9fafb;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  z-index: 2000;
 }
 
 /* ==========================================================================
-   Island Selector (Tactical District Radar Tabs)
+   Island Selector Bar (Top Right)
    ========================================================================== */
-.island-controls {
+.island-bar {
   position: absolute;
-  bottom: calc(8px + var(--safe-bottom));
-  right: 8px;
+  top: max(12px, var(--safe-top));
+  right: 12px;
   z-index: 999;
   display: flex;
-  background: var(--gta-surface);
-  border: 2px solid var(--gta-border);
-  box-shadow: 3px 3px 0px #000000;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .island-btn {
-  padding: 8px 10px;
+  padding: 6px 10px;
   background: transparent;
   border: none;
-  border-right: 2px solid var(--gta-border);
-  color: var(--gta-text-muted);
-  font-family: var(--font-gta-hud);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
+  border-right: 1px solid var(--panel-border);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.15s, color 0.15s;
 }
 
 .island-btn:last-child {
@@ -363,361 +185,216 @@ html, body {
 }
 
 .island-btn:hover {
-  background: var(--gta-surface-light);
-  color: #ffffff;
+  background: var(--panel-bg-hover);
+  color: var(--text-main);
 }
 
 .island-btn.active {
-  background: var(--gta-gold);
-  color: #000000;
-  font-weight: 900;
+  background: var(--color-blue);
+  color: #ffffff;
 }
 
 /* ==========================================================================
-   Map Markers (Stylized GTA Diamond Radar Blips)
-   CRITICAL: No transition on transform to prevent Leaflet zoom stutter!
+   Floating Progress Pill (Bottom Right)
    ========================================================================== */
-.marker-div-icon {
+.floating-progress {
+  position: absolute;
+  bottom: calc(12px + var(--safe-bottom));
+  right: 12px;
+  z-index: 999;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  font-size: 11px;
+}
+
+.floating-progress:hover {
+  background: var(--panel-bg-hover);
+}
+
+.floating-progress .progress-title {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.floating-progress .progress-val {
+  font-weight: 700;
+  color: var(--color-blue);
+}
+
+.floating-progress .progress-bar {
+  width: 50px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.floating-progress .progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--color-blue);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ==========================================================================
+   Map Markers (Clean Teardrop Pins, Zero Aura)
+   ========================================================================== */
+.pin-div-icon {
   background: transparent !important;
   border: none !important;
 }
 
-.custom-marker {
+.map-pin {
   position: relative;
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 30px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  filter: drop-shadow(2px 2px 0px #000000);
+  transition: transform 0.12s ease;
 }
 
-.custom-marker:hover {
-  filter: drop-shadow(3px 3px 0px #000000) drop-shadow(0 0 6px var(--gta-gold));
+.map-pin:hover {
+  transform: scale(1.15);
   z-index: 1000 !important;
 }
 
-.custom-marker.active-selected {
-  filter: drop-shadow(0 0 8px var(--gta-gold-bright)) drop-shadow(2px 2px 0px #000000);
+.map-pin.selected {
+  transform: scale(1.22);
   z-index: 1001 !important;
 }
 
-.marker-blip-bg {
+.pin-base {
   position: absolute;
-  inset: 2px;
-  background: var(--blip-color, var(--gta-gold));
-  border: 2px solid #000000;
-  transform: rotate(45deg);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 30px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
 }
 
-.marker-icon-svg {
-  position: relative;
-  z-index: 2;
-  width: 17px;
-  height: 17px;
+.pin-icon {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
   pointer-events: none;
+  z-index: 2;
 }
 
-.marker-icon-svg svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.9));
-}
-
-/* Radar ping animation for selected marker */
-.marker-radar-ping {
-  display: none;
-  position: absolute;
-  top: -12px;
-  left: -12px;
-  right: -12px;
-  bottom: -12px;
-  border: 2px solid var(--gta-gold-bright);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.custom-marker.active-selected .marker-radar-ping {
-  display: block;
-  animation: gtaRadarPing 1.3s cubic-bezier(0.1, 0.5, 0.7, 1) infinite;
-}
-
-@keyframes gtaRadarPing {
-  0% {
-    transform: scale(0.6);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-  }
-}
-
-/* Collected state */
-.custom-marker.collected {
-  filter: drop-shadow(1px 1px 0px #000000) grayscale(0.9);
-  opacity: 0.4;
-}
-
-.custom-marker.collected .marker-blip-bg {
-  background: #181d26 !important;
-  border-color: #000000;
-  box-shadow: none;
-}
-
-.marker-check-badge {
-  display: none;
-  position: absolute;
-  bottom: -4px;
-  right: -4px;
+.pin-icon svg {
   width: 13px;
   height: 13px;
-  background: var(--gta-green);
-  color: #000000;
-  font-family: var(--font-gta-hud);
-  font-size: 10px;
-  font-weight: 900;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px solid #000000;
-  z-index: 3;
 }
 
-.custom-marker.collected .marker-check-badge {
-  display: flex;
+/* Collected state: cleanly dimmed without any aura */
+.map-pin.collected {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+
+.map-pin.collected:hover {
+  opacity: 0.7;
 }
 
 /* ==========================================================================
-   Bottom Sheet / Collectible Intel Dossier
+   Detail Card / Modal (Inspired by GTA IV interactive map reference)
+   Floats at the top-center on Desktop, anchors to bottom on Mobile
    ========================================================================== */
-.bottom-sheet-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  z-index: 2000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.bottom-sheet-backdrop.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.bottom-sheet {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2001;
-  background: var(--gta-surface);
-  border-top: 3px solid var(--gta-gold);
-  border-left: 2px solid #000000;
-  border-right: 2px solid #000000;
-  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.85);
-  padding: 8px 12px calc(12px + var(--safe-bottom)) 12px;
-  transform: translateY(105%);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  max-height: 86vh;
-  display: flex;
+.detail-card {
+  position: absolute;
+  top: 15px;
+  left: calc(50% + 24px); /* Offset slightly for the 48px sidebar */
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: min(440px, 92vw);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  display: none;
   flex-direction: column;
-  gap: 8px;
 }
 
-.bottom-sheet.open {
-  transform: translateY(0);
-}
-
-/* Tactical hazard stripe bar */
-.sheet-hazard-stripe {
-  height: 4px;
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--gta-gold),
-    var(--gta-gold) 8px,
-    #000000 8px,
-    #000000 16px
-  );
-  margin: -8px -12px 6px -12px;
-}
-
-.sheet-handle {
-  width: 36px;
-  height: 4px;
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  align-self: center;
-  cursor: pointer;
-  margin-bottom: 2px;
-}
-
-.sheet-header {
+.detail-card.active {
   display: flex;
-  align-items: flex-start;
+}
+
+/* Header */
+.card-header {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--panel-border);
 }
 
-.sheet-titles {
+.card-title-box {
   display: flex;
   flex-direction: column;
-  gap: 2px;
 }
 
-.sheet-category-badge {
-  font-family: var(--font-gta-hud);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--gta-gold);
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
 }
 
-.sheet-title {
-  font-family: var(--font-gta-heading);
-  font-size: 22px;
-  letter-spacing: 0.5px;
-  color: var(--gta-text-white);
-  text-shadow: 1px 1px 0px #000000;
-}
-
-.sheet-subtitle {
-  font-family: var(--font-gta-hud);
+.card-subtitle {
   font-size: 11px;
-  color: var(--gta-text-muted);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-.sheet-close-btn {
-  background: var(--gta-surface-light);
-  border: 2px solid var(--gta-border);
-  color: var(--gta-gold);
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-family: var(--font-gta-hud);
-  font-size: 14px;
-  box-shadow: 2px 2px 0px #000000;
-}
-
-.sheet-close-btn:hover {
-  background: var(--gta-red);
-  color: #000000;
-}
-
-/* Info Box / Intel Briefing */
-.info-box {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  background: #090c10;
-  padding: 8px 10px;
-  border: 2px solid var(--gta-border);
-  box-shadow: inset 1px 1px 0px rgba(0, 0, 0, 0.8);
-}
-
-.info-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-family: var(--font-gta-hud);
-  font-size: 11px;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: #ff6b6b;
-  border-left: 3px solid var(--gta-red);
-  padding-left: 6px;
-}
-
-.info-desc {
-  font-size: 12px;
-  line-height: 1.4;
-  color: var(--gta-text-white);
-}
-
-.info-reward {
-  font-family: var(--font-gta-hud);
-  font-size: 11px;
-  color: var(--gta-gold);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  border-top: 1px solid var(--gta-border-subtle);
-  padding-top: 4px;
-}
-
-/* Media Switcher Tabs (Tactical Toggle Buttons) */
-.media-tabs {
-  display: flex;
-  background: #000000;
-  border: 2px solid var(--gta-border);
-}
-
-.media-tab {
-  flex: 1;
-  padding: 8px 10px;
-  font-family: var(--font-gta-hud);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--gta-text-muted);
-  background: var(--gta-surface);
+.card-close-btn {
+  background: transparent;
   border: none;
-  border-right: 2px solid var(--gta-border);
+  color: var(--text-muted);
+  font-size: 16px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: background 0.12s, color 0.12s;
+  padding: 4px 6px;
+  border-radius: 4px;
+  line-height: 1;
 }
 
-.media-tab:last-child {
-  border-right: none;
+.card-close-btn:hover {
+  background: var(--panel-bg-hover);
+  color: var(--text-main);
 }
 
-.media-tab:hover {
-  background: var(--gta-surface-light);
-  color: #ffffff;
-}
-
-.media-tab.active {
-  background: var(--gta-gold);
-  color: #000000;
-  font-weight: 900;
-}
-
-/* Media Surveillance Frame */
-.sheet-media-box {
+/* Media Box */
+.card-media-box {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #000000;
-  border: 2px solid var(--gta-border);
-  box-shadow: 2px 2px 0px #000000;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.sheet-media-box img {
+.card-media-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.sheet-media-box video {
+.card-media-box video {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -725,77 +402,152 @@ html, body {
   display: block;
 }
 
-/* Actions & Stepper Toolbar */
-.sheet-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.media-empty {
+  color: var(--text-dim);
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+  line-height: 1.5;
 }
 
-.btn-collect {
+/* Media Toggle Strip */
+.media-toggle-bar {
+  display: flex;
+  background: #0f172a;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.media-toggle-btn {
   flex: 1;
-  height: 42px;
-  background: var(--gta-surface-light);
-  border: 2px solid var(--gta-border);
-  color: var(--gta-text-white);
-  font-family: var(--font-gta-hud);
-  font-size: 13px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--panel-border);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.media-toggle-btn:last-child {
+  border-right: none;
+}
+
+.media-toggle-btn:hover {
+  background: var(--panel-bg-hover);
+  color: var(--text-main);
+}
+
+.media-toggle-btn.active {
+  background: var(--panel-bg);
+  color: var(--color-blue);
+  font-weight: 700;
+}
+
+/* Info Box */
+.card-info {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 1.4;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.card-unlock {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-red);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.card-objective {
+  color: var(--text-main);
+}
+
+.card-reward {
+  color: var(--color-amber);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* Bottom Actions Toolbar (Mark as Found + Stepper) */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #0f172a;
   gap: 8px;
+}
+
+.btn-mark-found {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 2px 2px 0px #000000;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
-.btn-collect:hover {
-  background: var(--gta-surface-elevated);
+.btn-mark-found:hover {
+  background: var(--panel-bg-hover);
 }
 
-.btn-collect.collected {
-  background: var(--gta-green);
-  border-color: #000000;
-  color: #000000;
-  font-weight: 900;
+.btn-mark-found.collected {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--color-success);
+  color: var(--color-success);
 }
 
 .stepper-btn {
-  width: 42px;
-  height: 42px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gta-surface-light);
-  border: 2px solid var(--gta-border);
-  color: var(--gta-gold);
   cursor: pointer;
-  font-family: var(--font-gta-hud);
-  font-size: 15px;
-  box-shadow: 2px 2px 0px #000000;
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.15s;
 }
 
 .stepper-btn:hover {
-  background: var(--gta-gold);
-  color: #000000;
+  background: var(--panel-bg-hover);
 }
 
 .stepper-btn:disabled {
-  opacity: 0.25;
+  opacity: 0.3;
   pointer-events: none;
 }
 
 /* ==========================================================================
-   Side Filter & Pause Menu Statistics Drawer
+   Checklist & Settings Drawer
    ========================================================================== */
 .drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  z-index: 3000;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -806,25 +558,25 @@ html, body {
   pointer-events: auto;
 }
 
-.filter-drawer {
+.checklist-drawer {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(340px, 88vw);
-  background: var(--gta-surface);
-  border-left: 3px solid var(--gta-gold);
-  z-index: 3001;
-  padding: max(16px, var(--safe-top)) 14px calc(16px + var(--safe-bottom)) 14px;
+  width: min(340px, 85vw);
+  background: var(--panel-bg);
+  border-left: 1px solid var(--panel-border);
+  z-index: 2001;
+  padding: max(16px, var(--safe-top)) 16px calc(16px + var(--safe-bottom)) 16px;
   transform: translateX(100%);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.9);
+  gap: 14px;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
 }
 
-.filter-drawer.open {
+.checklist-drawer.open {
   transform: translateX(0);
 }
 
@@ -833,107 +585,78 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding-bottom: 8px;
-  border-bottom: 2px solid var(--gta-border);
+  border-bottom: 1px solid var(--panel-border);
 }
 
 .drawer-title {
-  font-family: var(--font-gta-heading);
-  font-size: 20px;
-  letter-spacing: 0.5px;
-  color: var(--gta-gold);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
 }
 
-.drawer-content {
+.drawer-body {
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
-.stats-card {
-  background: #090c10;
-  border: 2px solid var(--gta-border);
-  box-shadow: 2px 2px 0px #000000;
+.stat-card {
+  background: #0f172a;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
   padding: 10px 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.stats-card-title {
-  font-family: var(--font-gta-hud);
+.stat-card-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.stat-card-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-blue);
+}
+
+.section-label {
   font-size: 11px;
-  letter-spacing: 0.8px;
+  font-weight: 700;
   text-transform: uppercase;
-  color: var(--gta-gold);
-}
-
-.stats-card-val {
-  font-family: var(--font-gta-heading);
-  font-size: 20px;
-  color: #ffffff;
-  text-shadow: 1px 1px 0px #000000;
-}
-
-.filter-section-title {
-  font-family: var(--font-gta-hud);
-  font-size: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--gta-text-dim);
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
   margin-bottom: 4px;
 }
 
-.filter-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.filter-item {
+.drawer-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 8px 10px;
-  background: #090c10;
-  border: 1px solid var(--gta-border-subtle);
+  background: #0f172a;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  font-size: 12px;
 }
 
-.filter-item-left {
+/* Toggle Switch */
+.toggle-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
 }
 
-.filter-item-left .dot {
-  width: 9px;
-  height: 9px;
-  border: 1px solid #000000;
-}
-
-.filter-item-name {
-  font-family: var(--font-gta-hud);
-  font-size: 12px;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: var(--gta-text-white);
-}
-
-.filter-item-count {
-  font-family: var(--font-gta-heading);
-  font-size: 12px;
-  color: var(--gta-gold);
-  background: #000000;
-  padding: 1px 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Tactical Checkbox Toggle Switch */
 .toggle-switch {
   position: relative;
-  width: 38px;
-  height: 20px;
+  width: 34px;
+  height: 18px;
 }
 
 .toggle-switch input {
@@ -946,83 +669,152 @@ html, body {
   position: absolute;
   cursor: pointer;
   inset: 0;
-  background-color: #1f2533;
-  border: 2px solid #000000;
-  transition: .15s;
+  background-color: var(--panel-border);
+  border-radius: 18px;
+  transition: 0.15s;
 }
 
 .toggle-slider:before {
   position: absolute;
   content: "";
-  height: 12px;
+  height: 14px;
   width: 14px;
   left: 2px;
   bottom: 2px;
-  background-color: #ffffff;
-  transition: .15s;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.15s;
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background-color: var(--gta-gold);
+  background-color: var(--color-blue);
 }
 
 .toggle-switch input:checked + .toggle-slider:before {
   transform: translateX(16px);
-  background-color: #000000;
 }
 
-.drawer-btn-secondary {
+.drawer-btn {
   width: 100%;
-  padding: 10px;
-  background: var(--gta-surface-light);
-  border: 2px solid var(--gta-border);
-  color: var(--gta-text-white);
-  font-family: var(--font-gta-hud);
+  padding: 8px;
+  border-radius: 6px;
+  background: #0f172a;
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
   font-size: 11px;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  box-shadow: 2px 2px 0px #000000;
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.15s;
 }
 
-.drawer-btn-secondary:hover {
-  background: var(--gta-surface-elevated);
-  color: var(--gta-gold);
+.drawer-btn:hover {
+  background: var(--panel-bg-hover);
 }
 
 .drawer-btn-danger {
-  border-color: #000000;
-  background: rgba(231, 76, 60, 0.2);
-  color: #ff8787;
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
 }
 
 .drawer-btn-danger:hover {
-  background: var(--gta-red);
-  color: #000000;
+  background: rgba(239, 68, 68, 0.15);
 }
 
-/* Desktop layout adaptations */
-@media (min-width: 768px) {
-  .bottom-sheet {
-    left: auto;
-    right: 14px;
-    bottom: 14px;
-    width: 390px;
-    border: 2px solid #000000;
-    border-top: 3px solid var(--gta-gold);
-    transform: translateX(430px);
+/* Search Bar (Floating) */
+.search-bar-wrap {
+  position: absolute;
+  top: max(12px, var(--safe-top));
+  left: 60px;
+  z-index: 999;
+  width: min(220px, 45vw);
+}
+
+.search-input {
+  width: 100%;
+  height: 32px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 0 10px 0 28px;
+  color: var(--text-main);
+  font-size: 12px;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.search-input:focus {
+  border-color: var(--color-blue);
+}
+
+.search-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Mobile Adaptations (Screens <= 640px)
+   ========================================================================== */
+@media (max-width: 640px) {
+  .map-sidebar {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 52px;
+    flex-direction: row;
+    border-right: none;
+    border-top: 1px solid var(--panel-border);
+    padding: 0 8px;
+    padding-bottom: var(--safe-bottom);
   }
 
-  .bottom-sheet.open {
-    transform: translateX(0);
+  .sidebar-group {
+    flex-direction: row;
+    width: auto;
+    gap: 4px;
   }
 
-  .bottom-sheet-backdrop {
-    display: none;
+  .sidebar-divider {
+    width: 1px;
+    height: 24px;
+    margin: 0 4px;
+  }
+
+  .search-bar-wrap {
+    left: 12px;
+    top: max(12px, var(--safe-top));
+    width: 160px;
+  }
+
+  .island-bar {
+    top: max(12px, var(--safe-top));
+    right: 12px;
+  }
+
+  .floating-progress {
+    display: none; /* Collapsed into sidebar on mobile */
+  }
+
+  .detail-card {
+    top: auto;
+    bottom: 52px;
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+    max-height: 80vh;
   }
 }
