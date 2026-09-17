@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#0d1015" />
+  <meta name="theme-color" content="#080a0e" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="description" content="Minimalist GTA Liberty City Stories Interactive Map & Tracker for 100 Hidden Packages and Side Missions." />
-  <title>GTA: Liberty City Stories Map</title>
+  <meta name="description" content="GTA: Liberty City Stories - 100% Interactive Radar & Collectibles Checklist." />
+  <title>GTA: Liberty City Stories — 100% Radar Map</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -19,89 +19,86 @@
   <!-- Leaflet Map Canvas -->
   <div id="map"></div>
 
-  <!-- Top Navigation Bar -->
+  <!-- Top Navigation HUD Bar -->
   <header class="top-nav">
     <div class="top-bar-row">
       <div class="brand-badge">
         <span class="logo-tag">GTA LCS</span>
-        <span class="title">Map Tracker</span>
+        <span class="title">RADAR INTEL</span>
       </div>
 
       <div class="search-wrapper">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search #, area, mission..." />
+        <input type="text" id="searchInput" class="search-input" placeholder="SEARCH #, DISTRICT, MISSION..." />
       </div>
 
       <div class="top-actions">
-        <button id="btnOpenMenu" class="btn-icon" aria-label="Filters & Checklist" title="Menu">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <button id="btnOpenMenu" class="btn-icon" aria-label="Filters & Checklist" title="Tactical Intel & Checklist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- Category Filter Chips -->
+    <!-- Category Filter Chips Ribbon -->
     <div class="quick-chips-bar">
       <button class="chip-btn active" data-cat="all">
-        <span class="dot" style="background-color: #ffffff;"></span>
-        <span>All</span>
+        <span>ALL</span>
       </button>
       <button class="chip-btn" data-cat="hidden_packages">
-        <span class="dot" style="background-color: #e59400;"></span>
-        <span>Packages</span>
+        <span>PACKAGES</span>
         <span class="count-badge" id="chipCount_hp">100</span>
       </button>
       <button class="chip-btn" data-cat="rampages">
-        <span class="dot" style="background-color: #c0392b;"></span>
-        <span>Rampages</span>
+        <span>RAMPAGES</span>
         <span class="count-badge">20</span>
       </button>
       <button class="chip-btn" data-cat="unique_stunt_jumps">
-        <span class="dot" style="background-color: #4a709c;"></span>
-        <span>Stunts</span>
+        <span>STUNTS</span>
         <span class="count-badge">26</span>
       </button>
       <button class="chip-btn" data-cat="races">
-        <span class="dot" style="background-color: #2e7d32;"></span>
-        <span>Races</span>
+        <span>RACES</span>
         <span class="count-badge">9</span>
       </button>
       <button class="chip-btn" data-cat="challenges">
-        <span class="dot" style="background-color: #8e44ad;"></span>
-        <span>Challenges</span>
+        <span>CHALLENGES</span>
         <span class="count-badge">11</span>
       </button>
     </div>
   </header>
 
-  <!-- Floating Bottom Progress Widget (Hidden Packages) -->
-  <div class="floating-progress" id="progressWidget">
-    <div class="progress-info">
-      <span class="label">Packages Found</span>
-      <span class="stats" id="hpProgressText">0 / 100</span>
+  <!-- Floating Bottom Progress Widget (GTA LCS Health / Armor / Cash HUD style) -->
+  <div class="floating-progress" id="progressWidget" title="View 100% Completion Briefing">
+    <div class="progress-header-row">
+      <div class="progress-info">
+        <div class="label">PACKAGES FOUND</div>
+        <div class="stats" id="hpProgressText">0 / 100</div>
+      </div>
     </div>
     <div class="progress-bar-bg">
       <div class="progress-bar-fill" id="hpProgressBar"></div>
     </div>
   </div>
 
-  <!-- Island Selector (Centered, accurate bounds) -->
+  <!-- Island Controls (District Radar Selection) -->
   <nav class="island-controls" aria-label="Island Selection">
-    <button class="island-btn active" data-island="all">All</button>
-    <button class="island-btn" data-island="portland">Portland</button>
-    <button class="island-btn" data-island="staunton">Staunton</button>
-    <button class="island-btn" data-island="shoreside">Shoreside</button>
+    <button class="island-btn active" data-island="all">ALL LC</button>
+    <button class="island-btn" data-island="portland">PORTLAND</button>
+    <button class="island-btn" data-island="staunton">STAUNTON</button>
+    <button class="island-btn" data-island="shoreside">SHORESIDE</button>
   </nav>
 
-  <!-- Bottom Sheet / Details Modal -->
+  <!-- Bottom Sheet / Collectible Intel Dossier -->
   <div class="bottom-sheet-backdrop" id="sheetBackdrop"></div>
   <aside class="bottom-sheet" id="bottomSheet" aria-label="Collectible Details">
+    <div class="sheet-hazard-stripe"></div>
     <div class="sheet-handle" id="sheetHandle"></div>
 
     <div class="sheet-header">
       <div class="sheet-titles">
-        <span class="sheet-category-badge" id="sheetCategory">Hidden Packages</span>
-        <h2 class="sheet-title" id="sheetTitle">Hidden Package #1</h2>
-        <span class="sheet-subtitle" id="sheetSubtitle">Harwood • Portland</span>
+        <span class="sheet-category-badge" id="sheetCategory">HIDDEN PACKAGES</span>
+        <h2 class="sheet-title" id="sheetTitle">HIDDEN PACKAGE #1</h2>
+        <span class="sheet-subtitle" id="sheetSubtitle">HARWOOD • PORTLAND</span>
       </div>
       <button class="sheet-close-btn" id="sheetCloseBtn" aria-label="Close">✕</button>
     </div>
@@ -109,34 +106,34 @@
     <!-- Objective & Specific Mission Unlocks -->
     <div class="info-box" id="sheetInfoBox"></div>
 
-    <!-- Media Switcher (Image Tip shown first) -->
+    <!-- Media Switcher (Image Tip shown first to save bandwidth) -->
     <div class="media-tabs" id="sheetMediaTabs">
       <button class="media-tab active" id="tabImage">
-        <span>Photo Tip</span>
+        <span>📷 PHOTO INTEL</span>
       </button>
       <button class="media-tab" id="tabVideo">
-        <span>Watch Video</span>
+        <span>🎬 WATCH VIDEO</span>
       </button>
     </div>
 
-    <!-- Media Box (Video only loaded on click) -->
+    <!-- Media Box (Video only loaded on demand) -->
     <div class="sheet-media-box" id="sheetMediaBox"></div>
 
     <!-- Actions & Stepper -->
     <div class="sheet-actions">
       <button class="stepper-btn" id="btnPrev" title="Previous Package">◀</button>
       <button class="btn-collect" id="btnCollect">
-        <span class="check-icon">○</span> Mark as Found
+        <span class="check-icon">○</span> MARK AS FOUND
       </button>
       <button class="stepper-btn" id="btnNext" title="Next Package">▶</button>
     </div>
   </aside>
 
-  <!-- Side Filter & Settings Drawer -->
+  <!-- Side Filter & Pause Menu Statistics Drawer -->
   <div class="drawer-backdrop" id="drawerBackdrop"></div>
   <aside class="filter-drawer" id="filterDrawer" aria-label="Settings and Categories">
     <div class="drawer-header">
-      <h3 class="drawer-title">Checklist & Settings</h3>
+      <h3 class="drawer-title">STATISTICS & INTEL</h3>
       <button class="sheet-close-btn" id="btnCloseDrawer" aria-label="Close drawer">✕</button>
     </div>
 
@@ -144,23 +141,23 @@
       <!-- Total Progress Card -->
       <div class="stats-card">
         <div>
-          <div class="stats-card-title">100% Completion Progress</div>
-          <div style="font-size: 11px; color: var(--gta-text-dim); margin-top: 2px;" id="drawerSubStats">Packages & Side Missions</div>
+          <div class="stats-card-title">100% COMPLETION</div>
+          <div style="font-family: var(--font-gta-hud); font-size: 11px; color: var(--gta-text-dim); margin-top: 2px;" id="drawerSubStats">ALL COLLECTIBLES & MISSIONS</div>
         </div>
         <div class="stats-card-val" id="drawerStats">0 / 166</div>
       </div>
 
       <!-- Safehouse Weapon Milestone Tracker -->
       <div id="safehouseTrackerBox" style="display: flex; flex-direction: column; gap: 6px;">
-        <div class="filter-section-title">Safehouse Weapon Rewards</div>
-        <div class="info-box" id="safehouseMilestoneList" style="font-size: 11px;"></div>
+        <div class="filter-section-title">SAFEHOUSE WEAPON REWARDS</div>
+        <div class="info-box" id="safehouseMilestoneList"></div>
       </div>
 
       <!-- Display Options -->
       <div>
-        <div class="filter-section-title">Options</div>
+        <div class="filter-section-title">RADAR OPTIONS</div>
         <div class="filter-item">
-          <div class="filter-item-name">Hide Found Items</div>
+          <div class="filter-item-name">HIDE FOUND ON RADAR</div>
           <label class="toggle-switch">
             <input type="checkbox" id="toggleHideCollected" />
             <span class="toggle-slider"></span>
@@ -170,16 +167,16 @@
 
       <!-- Category Checklist Toggles -->
       <div>
-        <div class="filter-section-title">Filter Categories</div>
+        <div class="filter-section-title">FILTER CATEGORIES</div>
         <div class="filter-list" id="drawerCategoryList"></div>
       </div>
 
       <!-- Backup & Reset -->
-      <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid var(--gta-border);">
-        <div class="filter-section-title">Data Transfer</div>
-        <button class="drawer-btn-secondary" id="btnExportProgress">Export Progress (JSON)</button>
-        <button class="drawer-btn-secondary" id="btnImportProgress">Import Progress (JSON)</button>
-        <button class="drawer-btn-secondary drawer-btn-danger" id="btnResetProgress">Reset All Progress</button>
+      <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 2px solid var(--gta-border);">
+        <div class="filter-section-title">SAVE DATA MANAGEMENT</div>
+        <button class="drawer-btn-secondary" id="btnExportProgress">💾 BACKUP PROGRESS (JSON)</button>
+        <button class="drawer-btn-secondary" id="btnImportProgress">📂 RESTORE PROGRESS (JSON)</button>
+        <button class="drawer-btn-secondary drawer-btn-danger" id="btnResetProgress">↺ RESET ALL PROGRESS</button>
       </div>
     </div>
   </aside>
