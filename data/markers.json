@@ -2,107 +2,28 @@
   "categories": {
     "hidden_packages": {
       "name": "Hidden Packages",
-      "color": "#e59400",
-      "icon": "package",
-      "section": "collectibles",
-      "desc": "100 rotating golden packages hidden across Liberty City.",
+      "color": "#f59e0b",
       "count": 100
     },
     "rampages": {
       "name": "Rampages",
-      "color": "#c0392b",
-      "icon": "skull",
-      "section": "challenges",
-      "desc": "20 kill-frenzy rampage skull pickups against rival gangs.",
+      "color": "#ef4444",
       "count": 20
     },
     "unique_stunt_jumps": {
       "name": "Unique Stunt Jumps",
-      "color": "#4a709c",
-      "icon": "jump",
-      "section": "challenges",
-      "desc": "26 cinematic vehicular stunt jumps across the three islands.",
+      "color": "#eab308",
       "count": 26
     },
-    "car_races": {
-      "name": "Car Races",
-      "color": "#2e7d32",
-      "icon": "car",
-      "section": "races",
-      "desc": "Street races initiated via public payphones.",
-      "count": 3
+    "races": {
+      "name": "Races",
+      "color": "#3b82f6",
+      "count": 9
     },
-    "bike_races": {
-      "name": "Bike Races",
-      "color": "#16a085",
-      "icon": "bike",
-      "section": "races",
-      "desc": "Two-wheeled street racing challenges on motorcycles & scooters.",
-      "count": 3
-    },
-    "rc_races": {
-      "name": "RC Races",
-      "color": "#7f8c8d",
-      "icon": "rc",
-      "section": "races",
-      "desc": "Remote-controlled miniature car races in TOYZ vans.",
-      "count": 3
-    },
-    "checkpoint_challenges": {
-      "name": "Checkpoint Challenges",
-      "color": "#d35400",
-      "icon": "flag",
-      "section": "challenges",
-      "desc": "Time-trial checkpoint collection courses.",
-      "count": 3
-    },
-    "drive_by_challenges": {
-      "name": "Drive-by Challenges",
-      "color": "#8e44ad",
-      "icon": "target",
-      "section": "challenges",
-      "desc": "Vehicle drive-by gun challenges on bikes.",
-      "count": 3
-    },
-    "bumps_and_grinds": {
-      "name": "Bumps & Grinds",
-      "color": "#27ae60",
-      "icon": "crosshair",
-      "section": "challenges",
-      "desc": "10-course dirt bike motocross time-trials in Harwood.",
-      "count": 1
-    },
-    "rc_triad_take_down": {
-      "name": "RC Triad Take-down",
-      "color": "#c0392b",
-      "icon": "bomb",
-      "section": "challenges",
-      "desc": "Eliminate 20 Triads using self-destructing RC Bandits.",
-      "count": 1
-    },
-    "see_the_sight_before_your_flight": {
-      "name": "See the Sight Before Your Flight",
-      "color": "#2980b9",
-      "icon": "camera",
-      "section": "side_missions",
-      "desc": "12-level tourist landmark photography tour from the airport.",
-      "count": 1
-    },
-    "slash_tv": {
-      "name": "Slash TV",
-      "color": "#962d3e",
-      "icon": "tv",
-      "section": "side_missions",
-      "desc": "Chainsaw survival challenge in the cargo ship's dark hold.",
-      "count": 1
-    },
-    "maria_latore": {
-      "name": "Maria La Tore",
-      "color": "#d4ac0d",
-      "icon": "user",
-      "section": "side_missions",
-      "desc": "Maria's apartment storyline and racing side missions.",
-      "count": 1
+    "challenges": {
+      "name": "Side Challenges",
+      "color": "#10b981",
+      "count": 11
     }
   },
   "islands": [
@@ -130,7 +51,7 @@
       "video_start": 45,
       "video_end": 64,
       "video_timestamp": "0:45",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -152,7 +73,7 @@
       "video_start": 64,
       "video_end": 99,
       "video_timestamp": "1:04",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -174,7 +95,7 @@
       "video_start": 99,
       "video_end": 122,
       "video_timestamp": "1:39",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -196,7 +117,7 @@
       "video_start": 122,
       "video_end": 141,
       "video_timestamp": "2:02",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -218,7 +139,7 @@
       "video_start": 141,
       "video_end": 165,
       "video_timestamp": "2:21",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -240,7 +161,7 @@
       "video_start": 165,
       "video_end": 188,
       "video_timestamp": "2:45",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -262,7 +183,7 @@
       "video_start": 188,
       "video_end": 214,
       "video_timestamp": "3:08",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -284,7 +205,7 @@
       "video_start": 214,
       "video_end": 235,
       "video_timestamp": "3:34",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -306,7 +227,7 @@
       "video_start": 235,
       "video_end": 254,
       "video_timestamp": "3:55",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -328,7 +249,7 @@
       "video_start": 254,
       "video_end": 295,
       "video_timestamp": "4:14",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -350,7 +271,7 @@
       "video_start": 295,
       "video_end": 315,
       "video_timestamp": "4:55",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -372,7 +293,7 @@
       "video_start": 315,
       "video_end": 336,
       "video_timestamp": "5:15",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -394,7 +315,7 @@
       "video_start": 336,
       "video_end": 357,
       "video_timestamp": "5:36",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -416,7 +337,7 @@
       "video_start": 357,
       "video_end": 386,
       "video_timestamp": "5:57",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -438,7 +359,7 @@
       "video_start": 386,
       "video_end": 428,
       "video_timestamp": "6:26",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -460,7 +381,7 @@
       "video_start": 428,
       "video_end": 453,
       "video_timestamp": "7:08",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -482,7 +403,7 @@
       "video_start": 453,
       "video_end": 478,
       "video_timestamp": "7:33",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -504,7 +425,7 @@
       "video_start": 478,
       "video_end": 497,
       "video_timestamp": "7:58",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -526,7 +447,7 @@
       "video_start": 497,
       "video_end": 519,
       "video_timestamp": "8:17",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -548,7 +469,7 @@
       "video_start": 519,
       "video_end": 546,
       "video_timestamp": "8:39",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -570,7 +491,7 @@
       "video_start": 546,
       "video_end": 572,
       "video_timestamp": "9:06",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -592,7 +513,7 @@
       "video_start": 572,
       "video_end": 594,
       "video_timestamp": "9:32",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -614,7 +535,7 @@
       "video_start": 594,
       "video_end": 627,
       "video_timestamp": "9:54",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -636,7 +557,7 @@
       "video_start": 627,
       "video_end": 651,
       "video_timestamp": "10:27",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -658,7 +579,7 @@
       "video_start": 651,
       "video_end": 676,
       "video_timestamp": "10:51",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -680,7 +601,7 @@
       "video_start": 676,
       "video_end": 711,
       "video_timestamp": "11:16",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -702,7 +623,7 @@
       "video_start": 711,
       "video_end": 740,
       "video_timestamp": "11:51",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -724,7 +645,7 @@
       "video_start": 740,
       "video_end": 779,
       "video_timestamp": "12:20",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -746,7 +667,7 @@
       "video_start": 779,
       "video_end": 809,
       "video_timestamp": "12:59",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -768,7 +689,7 @@
       "video_start": 809,
       "video_end": 835,
       "video_timestamp": "13:29",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -790,7 +711,7 @@
       "video_start": 835,
       "video_end": 861,
       "video_timestamp": "13:55",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -812,7 +733,7 @@
       "video_start": 861,
       "video_end": 890,
       "video_timestamp": "14:21",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -834,7 +755,7 @@
       "video_start": 890,
       "video_end": 911,
       "video_timestamp": "14:50",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -856,7 +777,7 @@
       "video_start": 911,
       "video_end": 930,
       "video_timestamp": "15:11",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -878,7 +799,7 @@
       "video_start": 930,
       "video_end": 954,
       "video_timestamp": "15:30",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -900,7 +821,7 @@
       "video_start": 954,
       "video_end": 974,
       "video_timestamp": "15:54",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -922,7 +843,7 @@
       "video_start": 974,
       "video_end": 1000,
       "video_timestamp": "16:14",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -944,7 +865,7 @@
       "video_start": 1000,
       "video_end": 1029,
       "video_timestamp": "16:40",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -966,7 +887,7 @@
       "video_start": 1029,
       "video_end": 1062,
       "video_timestamp": "17:09",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -988,7 +909,7 @@
       "video_start": 1062,
       "video_end": 1087,
       "video_timestamp": "17:42",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1010,7 +931,7 @@
       "video_start": 1087,
       "video_end": 1111,
       "video_timestamp": "18:07",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1032,7 +953,7 @@
       "video_start": 1111,
       "video_end": 1136,
       "video_timestamp": "18:31",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1054,7 +975,7 @@
       "video_start": 1136,
       "video_end": 1157,
       "video_timestamp": "18:56",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1076,7 +997,7 @@
       "video_start": 1157,
       "video_end": 1179,
       "video_timestamp": "19:17",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1098,7 +1019,7 @@
       "video_start": 1179,
       "video_end": 1200,
       "video_timestamp": "19:39",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1120,7 +1041,7 @@
       "video_start": 1200,
       "video_end": 1219,
       "video_timestamp": "20:00",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1142,7 +1063,7 @@
       "video_start": 1219,
       "video_end": 1240,
       "video_timestamp": "20:19",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1164,7 +1085,7 @@
       "video_start": 1240,
       "video_end": 1265,
       "video_timestamp": "20:40",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1186,7 +1107,7 @@
       "video_start": 1265,
       "video_end": 1286,
       "video_timestamp": "21:05",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1208,7 +1129,7 @@
       "video_start": 1286,
       "video_end": 1313,
       "video_timestamp": "21:26",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1230,7 +1151,7 @@
       "video_start": 1313,
       "video_end": 1334,
       "video_timestamp": "21:53",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1252,7 +1173,7 @@
       "video_start": 1334,
       "video_end": 1357,
       "video_timestamp": "22:14",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1274,7 +1195,7 @@
       "video_start": 1357,
       "video_end": 1377,
       "video_timestamp": "22:37",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1296,7 +1217,7 @@
       "video_start": 1377,
       "video_end": 1400,
       "video_timestamp": "22:57",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1318,7 +1239,7 @@
       "video_start": 1400,
       "video_end": 1424,
       "video_timestamp": "23:20",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1340,7 +1261,7 @@
       "video_start": 1424,
       "video_end": 1445,
       "video_timestamp": "23:44",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1362,7 +1283,7 @@
       "video_start": 1445,
       "video_end": 1474,
       "video_timestamp": "24:05",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1384,7 +1305,7 @@
       "video_start": 1474,
       "video_end": 1515,
       "video_timestamp": "24:34",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1406,7 +1327,7 @@
       "video_start": 1515,
       "video_end": 1540,
       "video_timestamp": "25:15",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1428,7 +1349,7 @@
       "video_start": 1540,
       "video_end": 1567,
       "video_timestamp": "25:40",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1450,7 +1371,7 @@
       "video_start": 1567,
       "video_end": 1617,
       "video_timestamp": "26:07",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1472,7 +1393,7 @@
       "video_start": 1617,
       "video_end": 1638,
       "video_timestamp": "26:57",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1494,7 +1415,7 @@
       "video_start": 1638,
       "video_end": 1661,
       "video_timestamp": "27:18",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1516,7 +1437,7 @@
       "video_start": 1661,
       "video_end": 1682,
       "video_timestamp": "27:41",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1538,7 +1459,7 @@
       "video_start": 1682,
       "video_end": 1709,
       "video_timestamp": "28:02",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1560,7 +1481,7 @@
       "video_start": 1709,
       "video_end": 1744,
       "video_timestamp": "28:29",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1582,7 +1503,7 @@
       "video_start": 1744,
       "video_end": 1768,
       "video_timestamp": "29:04",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1604,7 +1525,7 @@
       "video_start": 1768,
       "video_end": 1789,
       "video_timestamp": "29:28",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1626,7 +1547,7 @@
       "video_start": 1789,
       "video_end": 1814,
       "video_timestamp": "29:49",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1648,7 +1569,7 @@
       "video_start": 1814,
       "video_end": 1846,
       "video_timestamp": "30:14",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1670,7 +1591,7 @@
       "video_start": 1846,
       "video_end": 1870,
       "video_timestamp": "30:46",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1692,7 +1613,7 @@
       "video_start": 1870,
       "video_end": 1894,
       "video_timestamp": "31:10",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1714,7 +1635,7 @@
       "video_start": 1894,
       "video_end": 1927,
       "video_timestamp": "31:34",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1736,7 +1657,7 @@
       "video_start": 1927,
       "video_end": 1968,
       "video_timestamp": "32:07",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1758,7 +1679,7 @@
       "video_start": 1968,
       "video_end": 2005,
       "video_timestamp": "32:48",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1780,7 +1701,7 @@
       "video_start": 2005,
       "video_end": 2032,
       "video_timestamp": "33:25",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1802,7 +1723,7 @@
       "video_start": 2032,
       "video_end": 2055,
       "video_timestamp": "33:52",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1824,7 +1745,7 @@
       "video_start": 2055,
       "video_end": 2083,
       "video_timestamp": "34:15",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1846,7 +1767,7 @@
       "video_start": 2083,
       "video_end": 2106,
       "video_timestamp": "34:43",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1868,7 +1789,7 @@
       "video_start": 2106,
       "video_end": 2131,
       "video_timestamp": "35:06",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1890,7 +1811,7 @@
       "video_start": 2131,
       "video_end": 2161,
       "video_timestamp": "35:31",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1912,7 +1833,7 @@
       "video_start": 2161,
       "video_end": 2188,
       "video_timestamp": "36:01",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1934,7 +1855,7 @@
       "video_start": 2188,
       "video_end": 2223,
       "video_timestamp": "36:28",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1956,7 +1877,7 @@
       "video_start": 2223,
       "video_end": 2252,
       "video_timestamp": "37:03",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -1978,7 +1899,7 @@
       "video_start": 2252,
       "video_end": 2278,
       "video_timestamp": "37:32",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2000,7 +1921,7 @@
       "video_start": 2278,
       "video_end": 2305,
       "video_timestamp": "37:58",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2022,7 +1943,7 @@
       "video_start": 2305,
       "video_end": 2327,
       "video_timestamp": "38:25",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2044,7 +1965,7 @@
       "video_start": 2327,
       "video_end": 2354,
       "video_timestamp": "38:47",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2066,7 +1987,7 @@
       "video_start": 2354,
       "video_end": 2377,
       "video_timestamp": "39:14",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2088,7 +2009,7 @@
       "video_start": 2377,
       "video_end": 2413,
       "video_timestamp": "39:37",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2110,7 +2031,7 @@
       "video_start": 2413,
       "video_end": 2436,
       "video_timestamp": "40:13",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2132,7 +2053,7 @@
       "video_start": 2436,
       "video_end": 2461,
       "video_timestamp": "40:36",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2154,7 +2075,7 @@
       "video_start": 2461,
       "video_end": 2482,
       "video_timestamp": "41:01",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2176,7 +2097,7 @@
       "video_start": 2482,
       "video_end": 2502,
       "video_timestamp": "41:22",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2198,7 +2119,7 @@
       "video_start": 2502,
       "video_end": 2525,
       "video_timestamp": "41:42",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2220,7 +2141,7 @@
       "video_start": 2525,
       "video_end": 2551,
       "video_timestamp": "42:05",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2242,7 +2163,7 @@
       "video_start": 2551,
       "video_end": 2578,
       "video_timestamp": "42:31",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2264,7 +2185,7 @@
       "video_start": 2578,
       "video_end": 2606,
       "video_timestamp": "42:58",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2286,7 +2207,7 @@
       "video_start": 2606,
       "video_end": 2630,
       "video_timestamp": "43:26",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
@@ -2308,12 +2229,12 @@
       "video_start": 2630,
       "video_end": 2650,
       "video_timestamp": "43:50",
-      "color": "#e59400",
+      "color": "#f59e0b",
       "countable": true
     },
     {
       "id": "bike_races_lcs_bike_races_0",
-      "category": "bike_races",
+      "category": "races",
       "number": 1,
       "title": "Red-Light Rush (Sanchez)",
       "location": "Portland",
@@ -2327,12 +2248,13 @@
       "lng": 91.008,
       "image": null,
       "video": null,
-      "color": "#16a085",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "bike_races"
     },
     {
       "id": "bike_races_lcs_bike_races_1",
-      "category": "bike_races",
+      "category": "races",
       "number": 2,
       "title": "Torrington T.T. (PCJ-600)",
       "location": "Staunton Island",
@@ -2346,12 +2268,13 @@
       "lng": 65.77264,
       "image": "assets/images/lcs_bike_races_1.webp",
       "video": null,
-      "color": "#16a085",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "bike_races"
     },
     {
       "id": "bike_races_lcs_bike_races_2",
-      "category": "bike_races",
+      "category": "races",
       "number": 3,
       "title": "Wichita Wheelie (Shoreside Bike Race)",
       "location": "Shoreside Vale",
@@ -2365,12 +2288,13 @@
       "lng": 32.0864,
       "image": "assets/images/lcs_bike_races_2.webp",
       "video": null,
-      "color": "#16a085",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "bike_races"
     },
     {
       "id": "bumps_and_grinds_lcs_bng_0",
-      "category": "bumps_and_grinds",
+      "category": "challenges",
       "number": 1,
       "title": "Bumps & Grinds (Harwood Dirt Track)",
       "location": "Portland",
@@ -2384,12 +2308,13 @@
       "lng": 89.488,
       "image": null,
       "video": null,
-      "color": "#27ae60",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "bumps_and_grinds"
     },
     {
       "id": "car_races_lcs_car_races_0",
-      "category": "car_races",
+      "category": "races",
       "number": 1,
       "title": "Low Rider Rumble (Payphone)",
       "location": "Portland",
@@ -2403,12 +2328,13 @@
       "lng": 103.2,
       "image": null,
       "video": null,
-      "color": "#2e7d32",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "car_races"
     },
     {
       "id": "car_races_lcs_car_races_1",
-      "category": "car_races",
+      "category": "races",
       "number": 2,
       "title": "Deimos Dash & Torrington T.T. (Payphone)",
       "location": "Staunton Island",
@@ -2422,12 +2348,13 @@
       "lng": 63.78994,
       "image": "assets/images/lcs_car_races_1.webp",
       "video": null,
-      "color": "#2e7d32",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "car_races"
     },
     {
       "id": "car_races_lcs_car_races_2",
-      "category": "car_races",
+      "category": "races",
       "number": 3,
       "title": "Wi-Cheetah Run & Gangsta GP (Payphone)",
       "location": "Staunton Island",
@@ -2441,12 +2368,13 @@
       "lng": 49.8112,
       "image": "assets/images/lcs_car_races_2.webp",
       "video": null,
-      "color": "#2e7d32",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "car_races"
     },
     {
       "id": "checkpoint_challenges_lcs_cc_scrap_0",
-      "category": "checkpoint_challenges",
+      "category": "challenges",
       "number": 1,
       "title": "Scrapyard Challenge",
       "location": "Portland",
@@ -2460,12 +2388,13 @@
       "lng": 101.19808,
       "image": null,
       "video": null,
-      "color": "#d35400",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "checkpoint_challenges"
     },
     {
       "id": "checkpoint_challenges_lcs_cc_track_0",
-      "category": "checkpoint_challenges",
+      "category": "challenges",
       "number": 2,
       "title": "Harwood Dirt Course Time Trial",
       "location": "Portland",
@@ -2479,12 +2408,13 @@
       "lng": 106.48,
       "image": null,
       "video": null,
-      "color": "#d35400",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "checkpoint_challenges"
     },
     {
       "id": "checkpoint_challenges_lcs_cc_gogo_0",
-      "category": "checkpoint_challenges",
+      "category": "challenges",
       "number": 3,
       "title": "Go-Go Faggio Checkpoints",
       "location": "Portland",
@@ -2498,12 +2428,13 @@
       "lng": 78.35744,
       "image": null,
       "video": null,
-      "color": "#d35400",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "checkpoint_challenges"
     },
     {
       "id": "drive_by_challenges_lcs_dbc_freeway_0",
-      "category": "drive_by_challenges",
+      "category": "challenges",
       "number": 1,
       "title": "9mm Mayhem",
       "location": "Portland",
@@ -2517,12 +2448,13 @@
       "lng": 94.27968,
       "image": null,
       "video": null,
-      "color": "#8e44ad",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "drive_by_challenges"
     },
     {
       "id": "drive_by_challenges_lcs_dbc_faggio_0",
-      "category": "drive_by_challenges",
+      "category": "challenges",
       "number": 2,
       "title": "Scooter Shooter",
       "location": "Portland",
@@ -2536,12 +2468,13 @@
       "lng": 92.02304,
       "image": null,
       "video": null,
-      "color": "#8e44ad",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "drive_by_challenges"
     },
     {
       "id": "drive_by_challenges_lcs_dbc_angel_0",
-      "category": "drive_by_challenges",
+      "category": "challenges",
       "number": 3,
       "title": "AWOL Angel",
       "location": "Shoreside Vale",
@@ -2555,12 +2488,13 @@
       "lng": 42.66129,
       "image": null,
       "video": null,
-      "color": "#8e44ad",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "drive_by_challenges"
     },
     {
       "id": "maria_latore_lcs_ml_0",
-      "category": "maria_latore",
+      "category": "challenges",
       "number": 1,
       "title": "Maria La Tore's Apartment",
       "location": "Portland",
@@ -2574,8 +2508,9 @@
       "lng": 99.7242,
       "image": null,
       "video": null,
-      "color": "#d4ac0d",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "maria_latore"
     },
     {
       "id": "rampages_lcs_rampages_0",
@@ -2593,7 +2528,7 @@
       "lng": 91.57594,
       "image": null,
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2612,7 +2547,7 @@
       "lng": 91.168,
       "image": "assets/images/lcs_rampages_1.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2631,7 +2566,7 @@
       "lng": 94.9584,
       "image": "assets/images/lcs_rampages_2.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2650,7 +2585,7 @@
       "lng": 107.008,
       "image": "assets/images/lcs_rampages_3.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2669,7 +2604,7 @@
       "lng": 101.888,
       "image": "assets/images/lcs_rampages_4.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2688,7 +2623,7 @@
       "lng": 70.07488,
       "image": "assets/images/lcs_rampages_5.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2707,7 +2642,7 @@
       "lng": 71.81824,
       "image": "assets/images/lcs_rampages_6.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2726,7 +2661,7 @@
       "lng": 68.168,
       "image": "assets/images/lcs_rampages_7.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2745,7 +2680,7 @@
       "lng": 58.768,
       "image": "assets/images/lcs_rampages_8.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2764,7 +2699,7 @@
       "lng": 29.36,
       "image": "assets/images/lcs_rampages_9.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2783,7 +2718,7 @@
       "lng": 36.84,
       "image": "assets/images/lcs_rampages_10.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2802,7 +2737,7 @@
       "lng": 47.968,
       "image": "assets/images/lcs_rampages_11.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2821,7 +2756,7 @@
       "lng": 49.33728,
       "image": "assets/images/lcs_rampages_12.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2840,7 +2775,7 @@
       "lng": 104.12096,
       "image": null,
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2859,7 +2794,7 @@
       "lng": 67.328,
       "image": "assets/images/lcs_rampages_14.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2878,7 +2813,7 @@
       "lng": 66.08032,
       "image": "assets/images/lcs_rampages_15.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2897,7 +2832,7 @@
       "lng": 65.504,
       "image": "assets/images/lcs_rampages_16.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2916,7 +2851,7 @@
       "lng": 25.424,
       "image": "assets/images/lcs_rampages_17.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2935,7 +2870,7 @@
       "lng": 30.69376,
       "image": "assets/images/lcs_rampages_18.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
@@ -2954,12 +2889,12 @@
       "lng": 46.5888,
       "image": "assets/images/lcs_rampages_19.webp",
       "video": null,
-      "color": "#c0392b",
+      "color": "#ef4444",
       "countable": true
     },
     {
       "id": "rc_races_lcs_rc_races_0",
-      "category": "rc_races",
+      "category": "races",
       "number": 1,
       "title": "Thrashing RC Buggies",
       "location": "Portland",
@@ -2973,12 +2908,13 @@
       "lng": 94.48576,
       "image": null,
       "video": null,
-      "color": "#7f8c8d",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "rc_races"
     },
     {
       "id": "rc_races_lcs_rc_races_1",
-      "category": "rc_races",
+      "category": "races",
       "number": 2,
       "title": "Ragin' RC Buggies",
       "location": "Staunton Island",
@@ -2992,12 +2928,13 @@
       "lng": 66.68,
       "image": "assets/images/lcs_rc_races_1.webp",
       "video": null,
-      "color": "#7f8c8d",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "rc_races"
     },
     {
       "id": "rc_races_lcs_rc_races_2",
-      "category": "rc_races",
+      "category": "races",
       "number": 3,
       "title": "Chasin' RC Buggies",
       "location": "Shoreside Vale",
@@ -3011,12 +2948,13 @@
       "lng": 37.2256,
       "image": "assets/images/lcs_rc_races_2.webp",
       "video": null,
-      "color": "#7f8c8d",
-      "countable": true
+      "color": "#3b82f6",
+      "countable": true,
+      "sub_type": "rc_races"
     },
     {
       "id": "rc_triad_take_down_lcs_rc_ttd_0",
-      "category": "rc_triad_take_down",
+      "category": "challenges",
       "number": 1,
       "title": "RC Triad Take-Down",
       "location": "Portland",
@@ -3030,12 +2968,13 @@
       "lng": 96.7488,
       "image": null,
       "video": null,
-      "color": "#c0392b",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "rc_triad_take_down"
     },
     {
       "id": "see_the_sight_before_your_flight_lcs_ssbyf_0",
-      "category": "see_the_sight_before_your_flight",
+      "category": "challenges",
       "number": 1,
       "title": "See the Sight Before Your Flight",
       "location": "Shoreside Vale",
@@ -3049,12 +2988,13 @@
       "lng": 43.24352,
       "image": null,
       "video": null,
-      "color": "#2980b9",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "see_the_sight_before_your_flight"
     },
     {
       "id": "slash_tv_lcs_stv_0",
-      "category": "slash_tv",
+      "category": "challenges",
       "number": 1,
       "title": "Slash TV (Chainsaw Survival)",
       "location": "Portland",
@@ -3068,8 +3008,9 @@
       "lng": 114.71771,
       "image": null,
       "video": null,
-      "color": "#962d3e",
-      "countable": true
+      "color": "#10b981",
+      "countable": true,
+      "sub_type": "slash_tv"
     },
     {
       "id": "unique_stunt_jumps_lcs_stunt_jumps_0",
@@ -3087,7 +3028,7 @@
       "lng": 88.89088,
       "image": null,
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3106,7 +3047,7 @@
       "lng": 111.488,
       "image": "assets/images/lcs_unique_stunt_jumps_1.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3125,7 +3066,7 @@
       "lng": 105.1008,
       "image": "assets/images/lcs_unique_stunt_jumps_2.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3144,7 +3085,7 @@
       "lng": 92.55104,
       "image": "assets/images/lcs_unique_stunt_jumps_3.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3163,7 +3104,7 @@
       "lng": 93.4816,
       "image": "assets/images/lcs_unique_stunt_jumps_4.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3182,7 +3123,7 @@
       "lng": 89.5136,
       "image": "assets/images/lcs_unique_stunt_jumps_5.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3201,7 +3142,7 @@
       "lng": 107.85376,
       "image": "assets/images/lcs_unique_stunt_jumps_6.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3220,7 +3161,7 @@
       "lng": 108.8887,
       "image": "assets/images/lcs_unique_stunt_jumps_7.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3239,7 +3180,7 @@
       "lng": 101.6832,
       "image": "assets/images/lcs_unique_stunt_jumps_8.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3258,7 +3199,7 @@
       "lng": 109.0784,
       "image": "assets/images/lcs_unique_stunt_jumps_9.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3277,7 +3218,7 @@
       "lng": 91.09248,
       "image": "assets/images/lcs_unique_stunt_jumps_10.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3296,7 +3237,7 @@
       "lng": 96.48768,
       "image": "assets/images/lcs_unique_stunt_jumps_11.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3315,7 +3256,7 @@
       "lng": 93.73504,
       "image": "assets/images/lcs_unique_stunt_jumps_12.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3334,7 +3275,7 @@
       "lng": 76.5984,
       "image": "assets/images/lcs_unique_stunt_jumps_13.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3353,7 +3294,7 @@
       "lng": 79.12288,
       "image": "assets/images/lcs_unique_stunt_jumps_14.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3372,7 +3313,7 @@
       "lng": 60.48416,
       "image": "assets/images/lcs_unique_stunt_jumps_15.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3391,7 +3332,7 @@
       "lng": 60.95616,
       "image": null,
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3410,7 +3351,7 @@
       "lng": 78.11744,
       "image": "assets/images/lcs_unique_stunt_jumps_17.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3429,7 +3370,7 @@
       "lng": 56.8992,
       "image": "assets/images/lcs_unique_stunt_jumps_18.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3448,7 +3389,7 @@
       "lng": 23.96192,
       "image": "assets/images/lcs_unique_stunt_jumps_19.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3467,7 +3408,7 @@
       "lng": 29.59456,
       "image": "assets/images/lcs_unique_stunt_jumps_20.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3486,7 +3427,7 @@
       "lng": 32.0256,
       "image": "assets/images/lcs_unique_stunt_jumps_21.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3505,7 +3446,7 @@
       "lng": 33.4496,
       "image": "assets/images/lcs_unique_stunt_jumps_22.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3524,7 +3465,7 @@
       "lng": 40.6784,
       "image": "assets/images/lcs_unique_stunt_jumps_23.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3543,7 +3484,7 @@
       "lng": 39.0304,
       "image": "assets/images/lcs_unique_stunt_jumps_24.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     },
     {
@@ -3562,7 +3503,7 @@
       "lng": 26.9024,
       "image": "assets/images/lcs_unique_stunt_jumps_25.webp",
       "video": null,
-      "color": "#4a709c",
+      "color": "#eab308",
       "countable": true
     }
   ]

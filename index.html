@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#111827" />
+  <meta name="theme-color" content="#000000" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="description" content="Interactive map and tracker for GTA: Liberty City Stories 100 Hidden Packages and Side Activities." />
+  <meta name="description" content="Interactive map and tracker for GTA: Liberty City Stories Hidden Packages and Side Activities." />
   <title>GTA: Liberty City Stories Map</title>
 
   <!-- Leaflet CSS -->
@@ -19,95 +19,150 @@
   <!-- Leaflet Map Canvas -->
   <div id="map"></div>
 
-  <!-- Slim Left Sidebar (Clean & Unobtrusive) -->
-  <aside class="map-sidebar" aria-label="Category Navigation">
-    <div class="sidebar-group">
-      <!-- All Categories -->
-      <button class="sidebar-btn active" data-cat="all" data-title="All Collectibles" aria-label="All Collectibles">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M4 4h7v7H4zm9 0h7v7h-7zm-9 9h7v7H4zm9 0h7v7h-7z"/>
-        </svg>
+  <!-- Extended Desktop Sidebar / Mobile Bottom Nav -->
+  <aside class="app-sidebar" id="appSidebar" aria-label="Main Navigation">
+    <!-- Desktop Header -->
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <h1 class="sidebar-title">GTA: Liberty City Stories</h1>
+        <span class="sidebar-subtitle">Interactive Map & Checklist</span>
+      </div>
+      <!-- Overall Packages Progress -->
+      <div class="sidebar-progress-box" id="sidebarProgressBox" title="View Detailed Progress & Milestones">
+        <div class="progress-row">
+          <span class="progress-lbl">Hidden Packages</span>
+          <span class="progress-stat" id="hpProgressText">0 / 100</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="hpProgressBar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filter List -->
+    <nav class="sidebar-nav" aria-label="Category Filters">
+      <div class="nav-section-label">Collectibles & Activities</div>
+
+      <!-- All Items -->
+      <button class="nav-item active" data-cat="all">
+        <div class="nav-item-left">
+          <span class="cat-icon-badge" style="background-color: #64748b;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M4 4h7v7H4zm9 0h7v7h-7zm-9 9h7v7H4zm9 0h7v7h-7z"/></svg>
+          </span>
+          <span class="nav-item-name">All Items</span>
+        </div>
+        <span class="nav-item-count" id="count_all">0/166</span>
       </button>
 
-      <div class="sidebar-divider"></div>
-
       <!-- Hidden Packages -->
-      <button class="sidebar-btn" data-cat="hidden_packages" data-title="Hidden Packages (100)" aria-label="Hidden Packages">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/>
-        </svg>
+      <button class="nav-item" data-cat="hidden_packages">
+        <div class="nav-item-left">
+          <span class="cat-icon-badge" style="background-color: #f59e0b;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/></svg>
+          </span>
+          <span class="nav-item-name">Hidden Packages</span>
+        </div>
+        <span class="nav-item-count" id="count_hidden_packages">0/100</span>
       </button>
 
       <!-- Rampages -->
-      <button class="sidebar-btn" data-cat="rampages" data-title="Rampages (20)" aria-label="Rampages">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-        </svg>
+      <button class="nav-item" data-cat="rampages">
+        <div class="nav-item-left">
+          <span class="cat-icon-badge" style="background-color: #ef4444;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          </span>
+          <span class="nav-item-name">Rampages</span>
+        </div>
+        <span class="nav-item-count" id="count_rampages">0/20</span>
       </button>
 
       <!-- Unique Stunt Jumps -->
-      <button class="sidebar-btn" data-cat="unique_stunt_jumps" data-title="Unique Stunts (26)" aria-label="Unique Stunt Jumps">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/>
-        </svg>
+      <button class="nav-item" data-cat="unique_stunt_jumps">
+        <div class="nav-item-left">
+          <span class="cat-icon-badge" style="background-color: #eab308;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/></svg>
+          </span>
+          <span class="nav-item-name">Unique Stunt Jumps</span>
+        </div>
+        <span class="nav-item-count" id="count_unique_stunt_jumps">0/26</span>
       </button>
 
-      <!-- Street & RC Races -->
-      <button class="sidebar-btn" data-cat="races" data-title="Street Races (9)" aria-label="Races">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/>
-        </svg>
+      <!-- Races (All Car, Bike, RC Races) -->
+      <button class="nav-item" data-cat="races">
+        <div class="nav-item-left">
+          <span class="cat-icon-badge" style="background-color: #3b82f6;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>
+          </span>
+          <span class="nav-item-name">Races</span>
+        </div>
+        <span class="nav-item-count" id="count_races">0/9</span>
       </button>
 
       <!-- Side Challenges -->
-      <button class="sidebar-btn" data-cat="challenges" data-title="Side Challenges (11)" aria-label="Challenges">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M12 2v3.08A7.002 7.002 0 0 0 5.08 12H2v2h3.08A7.002 7.002 0 0 0 12 18.92V22h2v-3.08A7.002 7.002 0 0 0 18.92 14H22v-2h-3.08A7.002 7.002 0 0 0 14 5.08V2h-2zm0 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-        </svg>
+      <button class="nav-item" data-cat="challenges">
+        <div class="nav-item-left">
+          <span class="cat-icon-badge" style="background-color: #10b981;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h6v-2h-4z"/></svg>
+          </span>
+          <span class="nav-item-name">Side Challenges</span>
+        </div>
+        <span class="nav-item-count" id="count_challenges">0/11</span>
       </button>
+    </nav>
+
+    <!-- Island Quick Jump (Desktop Sidebar) -->
+    <div class="sidebar-section">
+      <div class="nav-section-label">Jump to Island</div>
+      <div class="island-btn-grid">
+        <button class="island-btn active" data-island="all">All</button>
+        <button class="island-btn" data-island="portland">Portland</button>
+        <button class="island-btn" data-island="staunton">Staunton</button>
+        <button class="island-btn" data-island="shoreside">Shoreside</button>
+      </div>
     </div>
 
-    <div class="sidebar-group">
-      <!-- Hide Completed Toggle -->
-      <button class="sidebar-btn" id="btnToggleHide" data-title="Hide Found Items" aria-label="Hide Found Items">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-        </svg>
-      </button>
+    <!-- Quick Options & Map Style -->
+    <div class="sidebar-footer">
+      <div class="sidebar-options">
+        <label class="toggle-label" for="toggleHideCollected">
+          <span>Hide found markers</span>
+          <div class="toggle-switch">
+            <input type="checkbox" id="toggleHideCollected" />
+            <span class="toggle-slider"></span>
+          </div>
+        </label>
 
-      <!-- Checklist & Settings Drawer -->
-      <button class="sidebar-btn" id="btnOpenDrawer" data-title="Progress & Checklist" aria-label="Progress and Checklist">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-        </svg>
-      </button>
+        <label class="toggle-label" for="toggleMapLayer">
+          <span>HD Clean Map</span>
+          <div class="toggle-switch">
+            <input type="checkbox" id="toggleMapLayer" checked />
+            <span class="toggle-slider"></span>
+          </div>
+        </label>
+      </div>
+
+      <div class="sidebar-btn-row">
+        <button class="sidebar-action-btn" id="btnOpenDrawer" title="Detailed Checklist & Stats">Checklist</button>
+        <button class="sidebar-action-btn" id="btnResetProgress" title="Reset tracking">Reset</button>
+      </div>
     </div>
   </aside>
 
-  <!-- Search Input Bar (Top Left) -->
+  <!-- Search Input Bar (Floating Top) -->
   <div class="search-bar-wrap">
     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     <input type="text" id="searchInput" class="search-input" placeholder="Search collectible..." />
   </div>
 
-  <!-- Island Quick-Jump Selector (Top Right) -->
-  <nav class="island-bar" aria-label="Island Selection">
+  <!-- Island Quick-Jump Selector (Mobile Only Floating Bar) -->
+  <nav class="mobile-island-bar" aria-label="Island Selection">
     <button class="island-btn active" data-island="all">All</button>
     <button class="island-btn" data-island="portland">Portland</button>
     <button class="island-btn" data-island="staunton">Staunton</button>
     <button class="island-btn" data-island="shoreside">Shoreside</button>
   </nav>
 
-  <!-- Floating Progress Counter (Bottom Right) -->
-  <div class="floating-progress" id="progressWidget" title="View Detailed Progress & Checklist">
-    <span class="progress-title">Packages</span>
-    <span class="progress-val" id="hpProgressText">0 / 100</span>
-    <div class="progress-bar">
-      <div class="progress-fill" id="hpProgressBar"></div>
-    </div>
-  </div>
-
-  <!-- Clean Floating Detail Card (Desktop Top-Center / Mobile Bottom) -->
+  <!-- Compact Floating Detail Card (Desktop Top-Center / Mobile Bottom) -->
   <div class="detail-card" id="detailCard" aria-label="Collectible Details">
     <div class="card-header">
       <div class="card-title-box">
@@ -152,10 +207,10 @@
     </div>
 
     <div class="drawer-body">
-      <!-- 100% Completion Stat Card -->
+      <!-- Total Completion Stat Card -->
       <div class="stat-card">
         <div>
-          <div class="stat-card-label">100% Completion</div>
+          <div class="stat-card-label">Total Completion</div>
           <div style="font-size: 11px; color: var(--text-dim); margin-top: 2px;" id="drawerSubStats">All Collectibles</div>
         </div>
         <div class="stat-card-val" id="drawerStats">0 / 166</div>
@@ -163,22 +218,8 @@
 
       <!-- Safehouse Weapon Rewards -->
       <div>
-        <div class="section-label">Safehouse Weapon Rewards</div>
-        <div id="safehouseMilestoneList" style="display: flex; flex-direction: column; gap: 4px; background: #0f172a; padding: 8px 10px; border: 1px solid var(--panel-border); border-radius: 6px; font-size: 11px;"></div>
-      </div>
-
-      <!-- Map Display Options -->
-      <div>
-        <div class="section-label">Options</div>
-        <div class="drawer-item">
-          <label class="toggle-label" for="toggleHideCollected">
-            <span>Hide found markers</span>
-            <div class="toggle-switch">
-              <input type="checkbox" id="toggleHideCollected" />
-              <span class="toggle-slider"></span>
-            </div>
-          </label>
-        </div>
+        <div class="section-label">Safehouse Weapon Milestones</div>
+        <div id="safehouseMilestoneList" style="display: flex; flex-direction: column; gap: 4px; background: #090d16; padding: 8px 10px; border: 1px solid var(--panel-border); border-radius: 6px; font-size: 11px;"></div>
       </div>
 
       <!-- Category Filter Toggles -->
@@ -192,13 +233,14 @@
         <div class="section-label">Data Management</div>
         <button class="drawer-btn" id="btnExportProgress">Export Progress (JSON)</button>
         <button class="drawer-btn" id="btnImportProgress">Import Progress (JSON)</button>
-        <button class="drawer-btn drawer-btn-danger" id="btnResetProgress">Reset All Progress</button>
       </div>
     </div>
   </aside>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Offline/Instant Bundled Marker Data -->
+  <script src="data/markers_data.js"></script>
   <!-- Application JS -->
   <script src="js/app.js"></script>
 </body>

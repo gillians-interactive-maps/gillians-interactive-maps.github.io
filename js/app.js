@@ -1,6 +1,6 @@
 /**
- * GTA Liberty City Stories - Clean & Legible Interactive Map
- * Minimalist map pins, high legibility, robust tile scaling, lazy video loading.
+ * GTA Liberty City Stories - Interactive Map & Checklist
+ * Pure Black Ocean Canvas, Vector SVG Map, Compact Detail Card, Extended Desktop Sidebar
  */
 
 const STORAGE_KEY = "gta_lcs_collected_markers";
@@ -16,67 +16,22 @@ const SAFE_REWARDS = [
   { count: 70, reward: "Laser-scoped Sniper at Safehouses" },
   { count: 80, reward: "Flamethrower at Safehouses" },
   { count: 90, reward: "Rocket Launcher at Safehouses" },
-  { count: 100, reward: "$50,000 Bonus & 100% Completion" }
+  { count: 100, reward: "$50,000 Bonus" }
 ];
 
-// Clean, minimalist flat silhouettes
+// Clean, minimalist vector paths (24px viewBox)
 const CATEGORY_ICONS = {
-  hidden_packages: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/>
-  </svg>`,
+  hidden_packages: `<path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/>`,
 
-  rampages: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-  </svg>`,
+  rampages: `<path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`,
 
-  unique_stunt_jumps: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/>
-  </svg>`,
+  unique_stunt_jumps: `<path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/>`,
 
-  car_races: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/>
-    <circle cx="7.5" cy="14.5" r="1.5"/>
-    <circle cx="16.5" cy="14.5" r="1.5"/>
-  </svg>`,
+  races: `<path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/>`,
 
-  bike_races: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M19.44 9.03L15.41 5H11v2h3.59l2 2H5c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5c0-1.66-.82-3.13-2.08-4.04L10 11h3.41l2 2H13v2h4.41l2.48 2.48c-.56.92-.89 2-.89 3.16 0 2.8 2.2 5 5 5s5-2.2 5-5-2.2-5-5-5c-.75 0-1.46.16-2.11.45l-2.45-2.45V9.03h-.01zM5 17c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm14 3c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
-  </svg>`,
-
-  rc_races: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M12 2a1 1 0 0 1 1 1v3.08A8 8 0 0 1 20 14v4a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-1H9v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4a8 8 0 0 1 7-7.92V3a1 1 0 0 1 1-1zm0 6a6 6 0 0 0-6 6v3h12v-3a6 6 0 0 0-6-6zm-3 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/>
-  </svg>`,
-
-  checkpoint_challenges: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M19.03 7.39l1.42-1.42c-.45-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm1-11h-2v5l4.25 2.52.77-1.28-3.02-1.79V9zM9 1h6v2H9z"/>
-  </svg>`,
-
-  drive_by_challenges: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M12 2v3.08A7.002 7.002 0 0 0 5.08 12H2v2h3.08A7.002 7.002 0 0 0 12 18.92V22h2v-3.08A7.002 7.002 0 0 0 18.92 14H22v-2h-3.08A7.002 7.002 0 0 0 14 5.08V2h-2zm0 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-  </svg>`,
-
-  bumps_and_grinds: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M3 18c3-3 6-3 9 0s6 3 9 0v3H3v-3zm3.5-5.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm11 0a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM9 10l3-3 3 3h-6z"/>
-  </svg>`,
-
-  rc_triad_take_down: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M12 8a7 7 0 1 0 7 7 7 7 0 0 0-7-7zm0 12a5 5 0 1 1 5-5 5 5 0 0 1-5 5zm6.5-13.5l1.41-1.41A9.97 9.97 0 0 0 17 3.58V5.6a8.03 8.03 0 0 1 1.5 1.4zM13 2h-2v4h2V2zm8 6h-2a8.03 8.03 0 0 1-1.4 1.5l1.41 1.41A9.97 9.97 0 0 0 21 8z"/>
-  </svg>`,
-
-  see_the_sight_before_your_flight: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M9.4 4l-1.4 2H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-3l-1.4-2H9.4zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/>
-  </svg>`,
-
-  slash_tv: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M19.78 4.22a3 3 0 0 0-4.24 0L12 7.76l1.41 1.41 2.83-2.83.71.71-2.83 2.83 1.41 1.41 2.83-2.83.71.71-2.83 2.83L17.66 15.34l3.54-3.54a3 3 0 0 0 0-4.24l-1.42-3.34zM7.76 12L4.22 15.54a3 3 0 0 0 0 4.24l.18.18a3 3 0 0 0 4.24 0L12 16.42 7.76 12zm-1.42 7.07a1 1 0 0 1-1.41-1.41l2.12-2.12 1.41 1.41-2.12 2.12z"/>
-  </svg>`,
-
-  maria_latore: `<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-  </svg>`
+  challenges: `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h6v-2h-4z"/>`
 };
 
-// Accurately calculated island bounds matching marker clusters
 const ISLAND_BOUNDS = {
   all: [[-128, 0], [0, 128]],
   portland: [[-112, 75], [-52, 119]],
@@ -89,16 +44,18 @@ const state = {
   categories: {},
   islands: [],
   activeCategory: "all",
-  activeSubCategories: new Set(),
   searchQuery: "",
   hideCollected: false,
+  useVectorMap: true,
   activeIsland: "all",
   currentMarker: null,
-  currentMediaTab: "image", // photo tip always first
+  currentMediaTab: "image",
   collected: new Set(),
   leafletMarkers: new Map(),
   map: null,
-  markerLayer: null
+  markerLayer: null,
+  vectorLayer: null,
+  tileLayer: null
 };
 
 // --- Storage Handlers ---
@@ -124,13 +81,19 @@ function loadSettings() {
     if (raw) {
       const parsed = JSON.parse(raw);
       state.hideCollected = !!parsed.hideCollected;
+      if (typeof parsed.useVectorMap === "boolean") {
+        state.useVectorMap = parsed.useVectorMap;
+      }
     }
   } catch (e) {}
 }
 
 function saveSettings() {
   try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ hideCollected: state.hideCollected }));
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+      hideCollected: state.hideCollected,
+      useVectorMap: state.useVectorMap
+    }));
   } catch (e) {}
 }
 
@@ -152,10 +115,16 @@ function initMap() {
     maxBoundsViscosity: 0.85
   });
 
-  // maxNativeZoom: 3 ensures Zoom 3 tiles are smoothly scaled at zooms 3.25 to 6,
-  // preventing 404 tile requests and preventing map tiles from disappearing!
-  L.tileLayer("https://assets.gtamap.net/map-tiles/gtamap/lcs/lc/game/{z}/{x}/{y}.jpg", {
-    tileSize: 128,
+  // 1. High-Resolution Clean Master Map Layer (GPU-accelerated, seamless, zero-lag)
+  state.vectorLayer = L.imageOverlay("assets/map/lcs_map_clean.png", [[-128, 0], [0, 128]], {
+    opacity: 1,
+    interactive: false,
+    zIndex: 1
+  });
+
+  // 2. Raster Tile Layer (Authentic in-game radar map tiles)
+  state.tileLayer = L.tileLayer("https://assets.gtamap.net/map-tiles/gtamap/lcs/lc/game/{z}/{x}/{y}.jpg", {
+    tileSize: 256,
     minNativeZoom: 0,
     maxNativeZoom: 3,
     maxZoom: 6,
@@ -165,8 +134,15 @@ function initMap() {
     updateWhenIdle: false,
     updateWhenZooming: true,
     keepBuffer: 8,
-    errorTileUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%23243447'/%3E%3C/svg%3E"
-  }).addTo(state.map);
+    errorTileUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%23000000'/%3E%3C/svg%3E"
+  });
+
+  // Apply default layer based on settings
+  if (state.useVectorMap) {
+    state.vectorLayer.addTo(state.map);
+  } else {
+    state.tileLayer.addTo(state.map);
+  }
 
   state.markerLayer = L.layerGroup().addTo(state.map);
   state.map.fitBounds(ISLAND_BOUNDS.all);
@@ -178,30 +154,43 @@ function initMap() {
   });
 }
 
-// --- Clean Map Pin Generator (Teardrop pin, zero aura) ---
+function updateMapLayer() {
+  if (state.useVectorMap) {
+    if (state.map.hasLayer(state.tileLayer)) state.map.removeLayer(state.tileLayer);
+    if (!state.map.hasLayer(state.vectorLayer)) state.vectorLayer.addTo(state.map);
+  } else {
+    if (state.map.hasLayer(state.vectorLayer)) state.map.removeLayer(state.vectorLayer);
+    if (!state.map.hasLayer(state.tileLayer)) state.tileLayer.addTo(state.map);
+  }
+}
+
+// --- Map Pin Generator (26px x 34px, High Visibility, Zero Aura) ---
 function createMarkerIcon(marker) {
   const isCollected = state.collected.has(marker.id);
   const color = marker.color || "#3b82f6";
-  const iconSvg = CATEGORY_ICONS[marker.category] || CATEGORY_ICONS.hidden_packages;
+  const iconPath = CATEGORY_ICONS[marker.category] || CATEGORY_ICONS.hidden_packages;
   const isSelected = state.currentMarker && state.currentMarker.id === marker.id;
 
   const html = `
-    <div class="map-pin ${isCollected ? 'collected' : ''} ${isSelected ? 'selected' : ''}" style="--pin-color: ${color};">
-      <svg class="pin-base" viewBox="0 0 24 32" width="22" height="30">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 20 12 20s12-11 12-20c0-6.63-5.37-12-12-12z" fill="var(--pin-color)" stroke="#0f172a" stroke-width="1.2"/>
-        <circle cx="12" cy="11" r="7.5" fill="#000000" opacity="0.2"/>
+    <div class="map-pin ${isCollected ? 'collected' : ''} ${isSelected ? 'selected' : ''}">
+      <svg viewBox="0 0 26 34" width="26" height="34" style="display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.85));">
+        <!-- Pin Base -->
+        <path d="M13 0C5.82 0 0 5.82 0 13c0 9.75 13 21 13 21s13-11.25 13-21c0-7.18-5.82-13-13-13z" fill="${color}" stroke="#000000" stroke-width="1.4"/>
+        <!-- Inner Head Shadow -->
+        <circle cx="13" cy="13" r="8.5" fill="#000000" opacity="0.25"/>
+        <!-- White Collectible Silhouette -->
+        <g transform="translate(6, 6) scale(0.58)" fill="#ffffff">
+          ${iconPath}
+        </g>
       </svg>
-      <div class="pin-icon">
-        ${iconSvg}
-      </div>
     </div>
   `;
 
   return L.divIcon({
     html: html,
     className: "pin-div-icon",
-    iconSize: [22, 30],
-    iconAnchor: [11, 30]
+    iconSize: [26, 34],
+    iconAnchor: [13, 34]
   });
 }
 
@@ -212,21 +201,19 @@ function renderMarkers() {
   const query = state.searchQuery.toLowerCase().trim();
 
   state.markers.forEach(marker => {
-    if (state.activeCategory === "hidden_packages" && marker.category !== "hidden_packages") return;
-    if (state.activeCategory === "challenges" && !["checkpoint_challenges", "drive_by_challenges", "bumps_and_grinds", "rc_triad_take_down", "see_the_sight_before_your_flight", "slash_tv", "maria_latore"].includes(marker.category)) return;
-    if (state.activeCategory === "races" && !["car_races", "bike_races", "rc_races"].includes(marker.category)) return;
-    if (state.activeCategory === "rampages" && marker.category !== "rampages") return;
-    if (state.activeCategory === "unique_stunt_jumps" && marker.category !== "unique_stunt_jumps") return;
+    // Category filter
+    if (state.activeCategory !== "all" && marker.category !== state.activeCategory) return;
 
-    if (state.activeSubCategories.size > 0 && !state.activeSubCategories.has(marker.category)) return;
-
+    // Island filter
     if (state.activeIsland === "portland" && marker.island !== "Portland") return;
     if (state.activeIsland === "staunton" && marker.island !== "Staunton Island") return;
     if (state.activeIsland === "shoreside" && marker.island !== "Shoreside Vale") return;
 
+    // Hide collected toggle
     const isCollected = state.collected.has(marker.id);
     if (state.hideCollected && isCollected) return;
 
+    // Search query filter
     if (query) {
       const match = marker.title.toLowerCase().includes(query) ||
                     (marker.location && marker.location.toLowerCase().includes(query)) ||
@@ -267,17 +254,21 @@ function getDynamicRewardText() {
   const hpCollected = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
   const next = SAFE_REWARDS.find(r => r.count > hpCollected);
   if (next) {
-    return `Next safehouse reward: <strong>${next.reward}</strong> (${hpCollected}/${next.count} found)`;
+    return `Next reward: <strong>${next.reward}</strong> (${hpCollected}/${next.count} found)`;
   }
   return `All safehouse rewards unlocked (100/100)!`;
 }
 
-// --- Detail Card Controller (Clean popup) ---
+// --- Detail Card Controller & Auto-Zoom on Selected Item ---
 function openDetailCard(marker) {
   state.currentMarker = marker;
   state.currentMediaTab = "image"; // Photo tip first to save bandwidth
 
-  // Highlight marker
+  // Center and smoothly zoom in on the selected item!
+  const targetZoom = Math.max(state.map.getZoom(), 4.25);
+  state.map.setView([marker.lat, marker.lng], targetZoom, { animate: true });
+
+  // Update visual selection on markers
   state.leafletMarkers.forEach((lMarker, mId) => {
     const m = state.markers.find(item => item.id === mId);
     if (m) lMarker.setIcon(createMarkerIcon(m));
@@ -360,7 +351,7 @@ function renderMediaView(tab) {
       mediaBox.innerHTML = `
         <div class="media-empty">
           No photo tip available.<br>
-          ${marker.video ? '<span style="color: var(--color-blue); cursor: pointer;" onclick="renderMediaView(&quot;video&quot;)">Watch video walkthrough</span>' : ''}
+          ${marker.video ? '<span style="color: var(--color-blue); cursor: pointer; text-decoration: underline;" onclick="renderMediaView(&quot;video&quot;)">Watch video walkthrough</span>' : ''}
         </div>
       `;
     }
@@ -408,7 +399,7 @@ function toggleCurrentCollected() {
 
 function updateMarkFoundBtn() {
   const btn = document.getElementById("btnMarkFound");
-  if (!state.currentMarker) return;
+  if (!state.currentMarker || !btn) return;
   const isFound = state.collected.has(state.currentMarker.id);
 
   if (isFound) {
@@ -425,6 +416,7 @@ function updateStepperBtns() {
   const btnNext = document.getElementById("btnNext");
   const marker = state.currentMarker;
 
+  if (!btnPrev || !btnNext) return;
   if (!marker || marker.category !== "hidden_packages") {
     btnPrev.disabled = true;
     btnNext.disabled = true;
@@ -442,7 +434,6 @@ function navigatePackage(offset) {
   const target = state.markers.find(m => m.category === "hidden_packages" && m.number === nextNum);
 
   if (target) {
-    state.map.setView([target.lat, target.lng], 4, { animate: true });
     openDetailCard(target);
   }
 }
@@ -452,10 +443,25 @@ function updateProgressUI() {
   const hpTotal = 100;
   const hpCollected = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
   const totalCollected = state.collected.size;
-  const totalAll = state.markers.length;
+  const totalAll = state.markers.length || 166;
 
-  document.getElementById("hpProgressText").textContent = `${hpCollected} / ${hpTotal}`;
-  document.getElementById("hpProgressBar").style.width = `${Math.round((hpCollected / hpTotal) * 100)}%`;
+  const hpText = document.getElementById("hpProgressText");
+  if (hpText) hpText.textContent = `${hpCollected} / ${hpTotal}`;
+  const hpBar = document.getElementById("hpProgressBar");
+  if (hpBar) hpBar.style.width = `${Math.round((hpCollected / hpTotal) * 100)}%`;
+
+  const countAll = document.getElementById("count_all");
+  if (countAll) countAll.textContent = `${totalCollected}/${totalAll}`;
+
+  // Update Category checklist counts in Sidebar and Drawer
+  Object.keys(state.categories).forEach(catId => {
+    const el = document.getElementById(`count_${catId}`);
+    if (el) {
+      const catTotal = state.categories[catId].count || 0;
+      const catDone = state.markers.filter(m => m.category === catId && state.collected.has(m.id)).length;
+      el.textContent = `${catDone}/${catTotal}`;
+    }
+  });
 
   const drawerStats = document.getElementById("drawerStats");
   if (drawerStats) {
@@ -479,16 +485,6 @@ function updateProgressUI() {
       `;
     }).join("");
   }
-
-  // Update Category checklist counts
-  Object.keys(state.categories).forEach(catId => {
-    const el = document.getElementById(`count_${catId}`);
-    if (el) {
-      const catTotal = state.categories[catId].count || 0;
-      const catDone = state.markers.filter(m => m.category === catId && state.collected.has(m.id)).length;
-      el.textContent = `${catDone}/${catTotal}`;
-    }
-  });
 }
 
 // --- Island Navigation with Accurate Bounds ---
@@ -499,13 +495,13 @@ function setIsland(islandKey) {
   });
 
   const bounds = ISLAND_BOUNDS[islandKey] || ISLAND_BOUNDS.all;
-  state.map.fitBounds(bounds, { animate: true, padding: [15, 15], maxZoom: 4 });
+  state.map.fitBounds(bounds, { animate: true, padding: [15, 15], maxZoom: 4.5 });
   renderMarkers();
 }
 
 function setCategoryFilter(cat) {
   state.activeCategory = cat;
-  document.querySelectorAll(".sidebar-btn[data-cat]").forEach(b => {
+  document.querySelectorAll(".nav-item[data-cat]").forEach(b => {
     b.classList.toggle("active", b.dataset.cat === cat);
   });
   renderMarkers();
@@ -514,6 +510,7 @@ function setCategoryFilter(cat) {
 function toggleChecklistDrawer(open) {
   const drawer = document.getElementById("checklistDrawer");
   const backdrop = document.getElementById("drawerBackdrop");
+  if (!drawer || !backdrop) return;
   if (open === undefined) {
     open = !drawer.classList.contains("open");
   }
@@ -530,35 +527,16 @@ function initDrawerCategories() {
     const cat = state.categories[catId];
     const item = document.createElement("div");
     item.className = "drawer-item";
+    item.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: #06090e; border: 1px solid var(--panel-border); border-radius: 6px; font-size: 11px;";
     item.innerHTML = `
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="width: 8px; height: 8px; border-radius: 50%; background-color: ${cat.color};"></span>
-        <span style="font-weight: 500;">${cat.name}</span>
+        <span style="font-weight: 500; color: var(--text-main);">${cat.name}</span>
       </div>
       <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 11px; color: var(--text-dim);" id="count_${catId}">0/${cat.count}</span>
-        <div class="toggle-switch">
-          <input type="checkbox" checked data-subcat="${catId}" id="subcat_${catId}" />
-          <span class="toggle-slider"></span>
-        </div>
+        <span style="font-size: 11px; color: var(--text-dim);" id="drawer_count_${catId}">0/${cat.count}</span>
       </div>
     `;
-
-    item.querySelector("input").addEventListener("change", (e) => {
-      if (e.target.checked) {
-        state.activeSubCategories.delete(catId);
-      } else {
-        if (state.activeSubCategories.size === 0) {
-          Object.keys(state.categories).forEach(k => {
-            if (k !== catId) state.activeSubCategories.add(k);
-          });
-        } else {
-          state.activeSubCategories.delete(catId);
-        }
-      }
-      renderMarkers();
-    });
-
     list.appendChild(item);
   });
 }
@@ -612,66 +590,85 @@ function bindEvents() {
     btn.addEventListener("click", () => setIsland(btn.dataset.island));
   });
 
-  // Sidebar category filter buttons
-  document.querySelectorAll(".sidebar-btn[data-cat]").forEach(btn => {
+  // Sidebar category filter items
+  document.querySelectorAll(".nav-item[data-cat]").forEach(btn => {
     btn.addEventListener("click", () => setCategoryFilter(btn.dataset.cat));
   });
 
-  // Hide completed button in sidebar
-  const btnToggleHide = document.getElementById("btnToggleHide");
-  if (btnToggleHide) {
-    btnToggleHide.classList.toggle("active", state.hideCollected);
-    btnToggleHide.addEventListener("click", () => {
-      state.hideCollected = !state.hideCollected;
-      btnToggleHide.classList.toggle("active", state.hideCollected);
-      const toggleEl = document.getElementById("toggleHideCollected");
-      if (toggleEl) toggleEl.checked = state.hideCollected;
+  // Drawer open/close
+  const btnOpenDrawer = document.getElementById("btnOpenDrawer");
+  if (btnOpenDrawer) btnOpenDrawer.addEventListener("click", () => toggleChecklistDrawer(true));
+
+  const btnCloseDrawer = document.getElementById("btnCloseDrawer");
+  if (btnCloseDrawer) btnCloseDrawer.addEventListener("click", () => toggleChecklistDrawer(false));
+
+  const drawerBackdrop = document.getElementById("drawerBackdrop");
+  if (drawerBackdrop) drawerBackdrop.addEventListener("click", () => toggleChecklistDrawer(false));
+
+  // Media tabs
+  const tabImg = document.getElementById("tabImage");
+  if (tabImg) tabImg.addEventListener("click", () => renderMediaView("image"));
+
+  const tabVid = document.getElementById("tabVideo");
+  if (tabVid) tabVid.addEventListener("click", () => renderMediaView("video"));
+
+  // Detail card buttons
+  const cardCloseBtn = document.getElementById("cardCloseBtn");
+  if (cardCloseBtn) cardCloseBtn.addEventListener("click", closeDetailCard);
+
+  const btnMarkFound = document.getElementById("btnMarkFound");
+  if (btnMarkFound) btnMarkFound.addEventListener("click", toggleCurrentCollected);
+
+  const btnPrev = document.getElementById("btnPrev");
+  if (btnPrev) btnPrev.addEventListener("click", () => navigatePackage(-1));
+
+  const btnNext = document.getElementById("btnNext");
+  if (btnNext) btnNext.addEventListener("click", () => navigatePackage(1));
+
+  // Hide collected toggle
+  const toggleHide = document.getElementById("toggleHideCollected");
+  if (toggleHide) {
+    toggleHide.checked = state.hideCollected;
+    toggleHide.addEventListener("change", (e) => {
+      state.hideCollected = e.target.checked;
       saveSettings();
       renderMarkers();
     });
   }
 
-  // Drawer open/close
-  document.getElementById("btnOpenDrawer").addEventListener("click", () => toggleChecklistDrawer(true));
-  document.getElementById("btnCloseDrawer").addEventListener("click", () => toggleChecklistDrawer(false));
-  document.getElementById("drawerBackdrop").addEventListener("click", () => toggleChecklistDrawer(false));
-
-  // Media tabs
-  document.getElementById("tabImage").addEventListener("click", () => renderMediaView("image"));
-  document.getElementById("tabVideo").addEventListener("click", () => renderMediaView("video"));
-
-  // Detail card buttons
-  document.getElementById("cardCloseBtn").addEventListener("click", closeDetailCard);
-  document.getElementById("btnMarkFound").addEventListener("click", toggleCurrentCollected);
-  document.getElementById("btnPrev").addEventListener("click", () => navigatePackage(-1));
-  document.getElementById("btnNext").addEventListener("click", () => navigatePackage(1));
-
-  // Drawer hide toggle
-  const hideToggle = document.getElementById("toggleHideCollected");
-  if (hideToggle) {
-    hideToggle.checked = state.hideCollected;
-    hideToggle.addEventListener("change", (e) => {
-      state.hideCollected = e.target.checked;
-      if (btnToggleHide) btnToggleHide.classList.toggle("active", state.hideCollected);
+  // Map layer toggle (Vector SVG vs Game Radar Tiles)
+  const toggleMap = document.getElementById("toggleMapLayer");
+  if (toggleMap) {
+    toggleMap.checked = state.useVectorMap;
+    toggleMap.addEventListener("change", (e) => {
+      state.useVectorMap = e.target.checked;
       saveSettings();
-      renderMarkers();
+      updateMapLayer();
     });
   }
 
   // Search input
   const searchInput = document.getElementById("searchInput");
-  searchInput.addEventListener("input", (e) => {
-    state.searchQuery = e.target.value;
-    renderMarkers();
-  });
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      state.searchQuery = e.target.value;
+      renderMarkers();
+    });
+  }
 
   // Progress widget click opens drawer
-  document.getElementById("progressWidget").addEventListener("click", () => toggleChecklistDrawer(true));
+  const progressBox = document.getElementById("sidebarProgressBox");
+  if (progressBox) progressBox.addEventListener("click", () => toggleChecklistDrawer(true));
 
   // Backup & Reset
-  document.getElementById("btnResetProgress").addEventListener("click", resetProgress);
-  document.getElementById("btnExportProgress").addEventListener("click", exportProgress);
-  document.getElementById("btnImportProgress").addEventListener("click", importProgress);
+  const btnReset = document.getElementById("btnResetProgress");
+  if (btnReset) btnReset.addEventListener("click", resetProgress);
+
+  const btnExport = document.getElementById("btnExportProgress");
+  if (btnExport) btnExport.addEventListener("click", exportProgress);
+
+  const btnImport = document.getElementById("btnImportProgress");
+  if (btnImport) btnImport.addEventListener("click", importProgress);
 
   // Keyboard navigation
   window.addEventListener("keydown", (e) => {
@@ -690,22 +687,43 @@ function bindEvents() {
   });
 }
 
+function loadMarkerDataIntoState(data) {
+  state.markers = data.markers;
+  state.categories = data.categories;
+  state.islands = data.islands;
+
+  initDrawerCategories();
+  renderMarkers();
+  updateProgressUI();
+
+  // Check URL query param ?id=
+  const params = new URLSearchParams(window.location.search);
+  const targetId = params.get("id");
+  if (targetId) {
+    const target = state.markers.find(m => m.id === targetId || (m.category === "hidden_packages" && m.number.toString() === targetId));
+    if (target) {
+      openDetailCard(target);
+    }
+  }
+}
+
 async function init() {
   loadCollected();
   loadSettings();
   initMap();
   bindEvents();
 
+  // Instant offline loading via bundled window.MARKER_DATA
+  if (window.MARKER_DATA && window.MARKER_DATA.markers) {
+    loadMarkerDataIntoState(window.MARKER_DATA);
+    return;
+  }
+
+  // Fallback to fetch
   try {
     const res = await fetch("data/markers.json");
     const data = await res.json();
-    state.markers = data.markers;
-    state.categories = data.categories;
-    state.islands = data.islands;
-
-    initDrawerCategories();
-    renderMarkers();
-    updateProgressUI();
+    loadMarkerDataIntoState(data);
   } catch (e) {
     console.error("Failed to load markers:", e);
   }
