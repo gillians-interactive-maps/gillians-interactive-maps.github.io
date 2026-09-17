@@ -1,6 +1,7 @@
 /**
  * GTA Liberty City Stories - Interactive Map & Checklist
- * Pure Black Ocean Canvas, Vector SVG Map, Compact Detail Card, Extended Desktop Sidebar
+ * Pure Black Ocean Canvas, 4K High-Res Clean Map, Attached Popups,
+ * Colorblind-Aware Palettes, Same-Spot Icon Clustering with Count Badges
  */
 
 const STORAGE_KEY = "gta_lcs_collected_markers";
@@ -19,24 +20,56 @@ const SAFE_REWARDS = [
   { count: 100, reward: "$50,000 Bonus" }
 ];
 
+// Colorblind-Friendly Palettes
+const PALETTES = {
+  standard: {
+    name: "Default (Subdued)",
+    hidden_packages: "#c88219",
+    rampages: "#b83232",
+    unique_stunt_jumps: "#b89628",
+    races: "#466e9b",
+    challenges: "#327f5b"
+  },
+  red_green: {
+    name: "Protan / Deutan",
+    hidden_packages: "#e69f00",   // Warm Orange
+    rampages: "#d55e00",          // Vermilion
+    unique_stunt_jumps: "#f0e442",// Golden Yellow
+    races: "#56b4e9",             // Sky Blue
+    challenges: "#cc79a7"         // Magenta / Reddish Purple
+  },
+  blue_yellow: {
+    name: "Tritanopia",
+    hidden_packages: "#e66101",
+    rampages: "#ca0020",
+    unique_stunt_jumps: "#fdb863",
+    races: "#0571b0",
+    challenges: "#92c5de"
+  },
+  high_contrast: {
+    name: "High Contrast",
+    hidden_packages: "#ffb000",
+    rampages: "#ff0055",
+    unique_stunt_jumps: "#ffe600",
+    races: "#00b4d8",
+    challenges: "#00f5d4"
+  }
+};
+
 // Clean, minimalist vector paths (24px viewBox)
 const CATEGORY_ICONS = {
   hidden_packages: `<path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/>`,
-
   rampages: `<path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`,
-
   unique_stunt_jumps: `<path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/>`,
-
   races: `<path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/>`,
-
   challenges: `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h6v-2h-4z"/>`
 };
 
 const ISLAND_BOUNDS = {
   all: [[-128, 0], [0, 128]],
-  portland: [[-112, 75], [-52, 119]],
-  staunton: [[-117, 44], [-52, 79]],
-  shoreside: [[-108, 16], [-41, 46]]
+  portland: [[-108, 76], [-52, 120]],
+  staunton: [[-118, 44], [-52, 90]],
+  shoreside: [[-110, 16], [-40, 60]]
 };
 
 const state = {
@@ -46,7 +79,8 @@ const state = {
   activeCategory: "all",
   searchQuery: "",
   hideCollected: false,
-  useVectorMap: true,
+  clusterMarkers: true,
+  palette: "standard",
   activeIsland: "all",
   currentMarker: null,
   currentMediaTab: "image",
@@ -55,7 +89,7 @@ const state = {
   map: null,
   markerLayer: null,
   vectorLayer: null,
-  tileLayer: null
+  popup: null
 };
 
 // --- Storage Handlers ---
@@ -81,8 +115,11 @@ function loadSettings() {
     if (raw) {
       const parsed = JSON.parse(raw);
       state.hideCollected = !!parsed.hideCollected;
-      if (typeof parsed.useVectorMap === "boolean") {
-        state.useVectorMap = parsed.useVectorMap;
+      if (typeof parsed.clusterMarkers === "boolean") {
+        state.clusterMarkers = parsed.clusterMarkers;
+      }
+      if (parsed.palette && PALETTES[parsed.palette]) {
+        state.palette = parsed.palette;
       }
     }
   } catch (e) {}
@@ -92,9 +129,36 @@ function saveSettings() {
   try {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify({
       hideCollected: state.hideCollected,
-      useVectorMap: state.useVectorMap
+      clusterMarkers: state.clusterMarkers,
+      palette: state.palette
     }));
   } catch (e) {}
+}
+
+// --- Apply Selected Colorblind Palette ---
+function applyPalette(palKey) {
+  const pal = PALETTES[palKey] || PALETTES.standard;
+  state.palette = palKey;
+
+  Object.keys(pal).forEach(catId => {
+    if (state.categories[catId]) {
+      state.categories[catId].color = pal[catId];
+    }
+  });
+
+  // Update sidebar icon badges
+  Object.keys(pal).forEach(catId => {
+    const badge = document.querySelector(`.nav-item[data-cat="${catId}"] .cat-icon-badge`);
+    if (badge) badge.style.backgroundColor = pal[catId];
+  });
+
+  // Update select input value
+  const selectEl = document.getElementById("selectPalette");
+  if (selectEl) selectEl.value = palKey;
+
+  renderMarkers();
+  initDrawerCategories();
+  saveSettings();
 }
 
 // --- Map Initialization ---
@@ -115,69 +179,76 @@ function initMap() {
     maxBoundsViscosity: 0.85
   });
 
-  // 1. High-Resolution Clean Master Map Layer (GPU-accelerated, seamless, zero-lag)
-  state.vectorLayer = L.imageOverlay("assets/map/lcs_map_clean.png", [[-128, 0], [0, 128]], {
+  // 1. High-Resolution 4K Clean Map Layer (Zero-lag, GPU texture cached, seamless)
+  state.vectorLayer = L.imageOverlay("assets/map/lcs_map_4096.png", [[-128, 0], [0, 128]], {
     opacity: 1,
     interactive: false,
     zIndex: 1
-  });
+  }).addTo(state.map);
 
-  // 2. Raster Tile Layer (Authentic in-game radar map tiles)
-  state.tileLayer = L.tileLayer("https://assets.gtamap.net/map-tiles/gtamap/lcs/lc/game/{z}/{x}/{y}.jpg", {
-    tileSize: 256,
-    minNativeZoom: 0,
-    maxNativeZoom: 3,
-    maxZoom: 6,
-    bounds: [[-128, 0], [0, 128]],
-    noWrap: true,
-    tms: false,
-    updateWhenIdle: false,
-    updateWhenZooming: true,
-    keepBuffer: 8,
-    errorTileUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%23000000'/%3E%3C/svg%3E"
+  // 2. Single reusable attached Leaflet popup with pointer tip
+  state.popup = L.popup({
+    offset: [0, -32],
+    className: "custom-leaflet-popup",
+    closeButton: false,
+    autoPan: true,
+    autoPanPadding: [20, 20],
+    maxWidth: 480,
+    minWidth: 260
   });
-
-  // Apply default layer based on settings
-  if (state.useVectorMap) {
-    state.vectorLayer.addTo(state.map);
-  } else {
-    state.tileLayer.addTo(state.map);
-  }
 
   state.markerLayer = L.layerGroup().addTo(state.map);
   state.map.fitBounds(ISLAND_BOUNDS.all);
 
-  state.map.on("click", (e) => {
-    if (!e.originalEvent.target.closest(".map-pin")) {
-      closeDetailCard();
+  // Zoom-dependent scaling listener
+  function updateZoomScaleClass() {
+    const z = state.map.getZoom();
+    const mapEl = document.getElementById("map");
+    if (!mapEl) return;
+    mapEl.classList.remove("zoom-far", "zoom-mid", "zoom-near");
+    if (z < 2.0) {
+      mapEl.classList.add("zoom-far");
+    } else if (z < 3.5) {
+      mapEl.classList.add("zoom-mid");
+    } else {
+      mapEl.classList.add("zoom-near");
+    }
+  }
+
+  state.map.on("zoom", updateZoomScaleClass);
+  updateZoomScaleClass();
+
+  // Re-cluster markers smoothly when zoom changes
+  state.map.on("zoomend", () => {
+    renderMarkers();
+  });
+
+  // Handle popup close to reset selection
+  state.map.on("popupclose", () => {
+    if (state.currentMarker) {
+      const prevId = state.currentMarker.id;
+      state.currentMarker = null;
+      updateMarkerVisual(prevId);
     }
   });
 }
 
-function updateMapLayer() {
-  if (state.useVectorMap) {
-    if (state.map.hasLayer(state.tileLayer)) state.map.removeLayer(state.tileLayer);
-    if (!state.map.hasLayer(state.vectorLayer)) state.vectorLayer.addTo(state.map);
-  } else {
-    if (state.map.hasLayer(state.vectorLayer)) state.map.removeLayer(state.vectorLayer);
-    if (!state.map.hasLayer(state.tileLayer)) state.tileLayer.addTo(state.map);
-  }
-}
-
-// --- Map Pin Generator (26px x 34px, High Visibility, Zero Aura) ---
+// --- Marker Pin Generators ---
 function createMarkerIcon(marker) {
   const isCollected = state.collected.has(marker.id);
-  const color = marker.color || "#3b82f6";
+  const color = (state.categories[marker.category] && state.categories[marker.category].color) || marker.color || "#c88219";
   const iconPath = CATEGORY_ICONS[marker.category] || CATEGORY_ICONS.hidden_packages;
   const isSelected = state.currentMarker && state.currentMarker.id === marker.id;
 
   const html = `
     <div class="map-pin ${isCollected ? 'collected' : ''} ${isSelected ? 'selected' : ''}">
-      <svg viewBox="0 0 26 34" width="26" height="34" style="display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.85));">
-        <!-- Pin Base -->
+      <svg viewBox="0 0 26 36" width="26" height="36" style="display: block;">
+        <!-- Built-in Contact Shadow -->
+        <ellipse cx="13" cy="34.5" rx="5" ry="1.5" fill="#000000" opacity="0.45"/>
+        <!-- Pin Base with Crisp Outline -->
         <path d="M13 0C5.82 0 0 5.82 0 13c0 9.75 13 21 13 21s13-11.25 13-21c0-7.18-5.82-13-13-13z" fill="${color}" stroke="#000000" stroke-width="1.4"/>
-        <!-- Inner Head Shadow -->
-        <circle cx="13" cy="13" r="8.5" fill="#000000" opacity="0.25"/>
+        <!-- Inner Head Tone -->
+        <circle cx="13" cy="13" r="8.5" fill="#000000" opacity="0.2"/>
         <!-- White Collectible Silhouette -->
         <g transform="translate(6, 6) scale(0.58)" fill="#ffffff">
           ${iconPath}
@@ -189,9 +260,124 @@ function createMarkerIcon(marker) {
   return L.divIcon({
     html: html,
     className: "pin-div-icon",
-    iconSize: [26, 34],
+    iconSize: [26, 36],
     iconAnchor: [13, 34]
   });
+}
+
+function createClusterIcon(cluster) {
+  const count = cluster.items.length;
+  const color = cluster.color;
+  const iconPath = CATEGORY_ICONS[cluster.category] || CATEGORY_ICONS.hidden_packages;
+  const allCollected = cluster.items.every(m => state.collected.has(m.id));
+
+  const html = `
+    <div class="map-pin cluster-pin ${allCollected ? 'collected' : ''}">
+      <svg viewBox="0 0 30 36" width="30" height="36" style="display: block; overflow: visible;">
+        <!-- Built-in Contact Shadow -->
+        <ellipse cx="13" cy="34.5" rx="5.5" ry="1.5" fill="#000000" opacity="0.45"/>
+        <!-- Pin Base with Crisp Outline -->
+        <path d="M13 0C5.82 0 0 5.82 0 13c0 9.75 13 21 13 21s13-11.25 13-21c0-7.18-5.82-13-13-13z" fill="${color}" stroke="#000000" stroke-width="1.4"/>
+        <!-- Inner Head Tone -->
+        <circle cx="13" cy="13" r="8.5" fill="#000000" opacity="0.2"/>
+        <!-- White Collectible Silhouette -->
+        <g transform="translate(6, 6) scale(0.58)" fill="#ffffff">
+          ${iconPath}
+        </g>
+        <!-- Integrated Cluster Count Badge on Pin Shoulder -->
+        <circle cx="22" cy="6" r="6" fill="#0b0f19" stroke="#ffffff" stroke-width="1.4"/>
+        <text x="22" y="6.5" text-anchor="middle" dominant-baseline="central" fill="#ffffff" font-size="7.5" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">${count}</text>
+      </svg>
+    </div>
+  `;
+
+  return L.divIcon({
+    html: html,
+    className: "pin-div-icon cluster-div-icon",
+    iconSize: [30, 36],
+    iconAnchor: [13, 34]
+  });
+}
+
+// --- Same-Spot Icon Grouping Algorithm ---
+function getClusteredNodes(visibleMarkers, zoom) {
+  if (!state.clusterMarkers || zoom >= 5.25) {
+    return visibleMarkers.map(m => ({
+      isCluster: false,
+      lat: m.lat,
+      lng: m.lng,
+      category: m.category,
+      color: (state.categories[m.category] && state.categories[m.category].color) || m.color,
+      items: [m]
+    }));
+  }
+
+  const threshold = 26; // pixel radius threshold
+  const clusters = [];
+
+  // Project marker locations to screen pixel space at current zoom
+  const projected = visibleMarkers.map(m => {
+    const pt = state.map.project([m.lat, m.lng], zoom);
+    return { marker: m, x: pt.x, y: pt.y };
+  });
+
+  const visited = new Set();
+
+  for (let i = 0; i < projected.length; i++) {
+    if (visited.has(i)) continue;
+    const p1 = projected[i];
+    visited.add(i);
+
+    const group = [p1.marker];
+    let sumX = p1.x;
+    let sumY = p1.y;
+
+    for (let j = i + 1; j < projected.length; j++) {
+      if (visited.has(j)) continue;
+      const p2 = projected[j];
+
+      // Group nearby markers of the same category
+      if (p1.marker.category === p2.marker.category) {
+        const dx = p1.x - p2.x;
+        const dy = p1.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist <= threshold) {
+          visited.add(j);
+          group.push(p2.marker);
+          sumX += p2.x;
+          sumY += p2.y;
+        }
+      }
+    }
+
+    const cat = group[0].category;
+    const color = (state.categories[cat] && state.categories[cat].color) || group[0].color;
+
+    if (group.length > 1) {
+      const avgPt = L.point(sumX / group.length, sumY / group.length);
+      const latLng = state.map.unproject(avgPt, zoom);
+      clusters.push({
+        isCluster: true,
+        lat: latLng.lat,
+        lng: latLng.lng,
+        category: cat,
+        color: color,
+        items: group
+      });
+    } else {
+      clusters.push({
+        isCluster: false,
+        lat: p1.marker.lat,
+        lng: p1.marker.lng,
+        category: cat,
+        color: color,
+        items: [p1.marker]
+      });
+    }
+  }
+
+  return clusters;
 }
 
 function renderMarkers() {
@@ -199,50 +385,141 @@ function renderMarkers() {
   state.leafletMarkers.clear();
 
   const query = state.searchQuery.toLowerCase().trim();
+  const zoom = state.map ? state.map.getZoom() : 0;
 
-  state.markers.forEach(marker => {
-    // Category filter
-    if (state.activeCategory !== "all" && marker.category !== state.activeCategory) return;
+  // 1. Filter visible markers
+  const visible = state.markers.filter(marker => {
+    if (state.activeCategory !== "all" && marker.category !== state.activeCategory) return false;
 
-    // Island filter
-    if (state.activeIsland === "portland" && marker.island !== "Portland") return;
-    if (state.activeIsland === "staunton" && marker.island !== "Staunton Island") return;
-    if (state.activeIsland === "shoreside" && marker.island !== "Shoreside Vale") return;
+    // Strict island lock
+    if (state.activeIsland === "portland" && marker.island !== "Portland") return false;
+    if (state.activeIsland === "staunton" && marker.island !== "Staunton Island") return false;
+    if (state.activeIsland === "shoreside" && marker.island !== "Shoreside Vale") return false;
 
-    // Hide collected toggle
-    const isCollected = state.collected.has(marker.id);
-    if (state.hideCollected && isCollected) return;
+    // Hide collected
+    if (state.hideCollected && state.collected.has(marker.id)) return false;
 
-    // Search query filter
+    // Search query
     if (query) {
       const match = marker.title.toLowerCase().includes(query) ||
                     (marker.location && marker.location.toLowerCase().includes(query)) ||
                     marker.island.toLowerCase().includes(query) ||
                     (marker.number && marker.number.toString() === query) ||
                     (marker.unlock && marker.unlock.toLowerCase().includes(query));
-      if (!match) return;
+      if (!match) return false;
     }
 
-    const latLng = [marker.lat, marker.lng];
-    const lMarker = L.marker(latLng, { icon: createMarkerIcon(marker), keyboard: false });
+    return true;
+  });
 
-    lMarker.on("click", (e) => {
-      L.DomEvent.stopPropagation(e);
-      openDetailCard(marker);
-    });
+  // 2. Perform same-spot clustering
+  const nodes = getClusteredNodes(visible, zoom);
 
-    lMarker.addTo(state.markerLayer);
-    state.leafletMarkers.set(marker.id, lMarker);
+  // 3. Render markers
+  nodes.forEach(node => {
+    const latLng = [node.lat, node.lng];
+
+    if (node.isCluster) {
+      const lMarker = L.marker(latLng, { icon: createClusterIcon(node), keyboard: false });
+      lMarker.on("click", (e) => {
+        L.DomEvent.stopPropagation(e);
+        handleClusterClick(node);
+      });
+      lMarker.addTo(state.markerLayer);
+      // Map all items in cluster for quick lookup
+      node.items.forEach(m => state.leafletMarkers.set(m.id, lMarker));
+    } else {
+      const marker = node.items[0];
+      const lMarker = L.marker(latLng, { icon: createMarkerIcon(marker), keyboard: false });
+      lMarker.on("click", (e) => {
+        L.DomEvent.stopPropagation(e);
+        openMarkerPopup(marker);
+      });
+      lMarker.addTo(state.markerLayer);
+      state.leafletMarkers.set(marker.id, lMarker);
+    }
   });
 }
+
+function handleClusterClick(cluster) {
+  const currentZoom = state.map.getZoom();
+  if (currentZoom < 4.75) {
+    // Zoom in smoothly to disperse the clustered icons!
+    state.map.flyTo([cluster.lat, cluster.lng], Math.min(state.map.getMaxZoom(), currentZoom + 1.25), {
+      duration: 0.35
+    });
+  } else {
+    // If already zoomed in or items are at identical spot, show cluster selection list popup
+    openClusterListPopup(cluster);
+  }
+}
+
+function openClusterListPopup(cluster) {
+  const catMeta = state.categories[cluster.category] || { name: cluster.category, color: cluster.color };
+  const itemsHtml = cluster.items.map(m => {
+    const isFound = state.collected.has(m.id);
+    return `
+      <div class="cluster-popup-item" onclick="openMarkerFromCluster('${m.id}')">
+        <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+          <span style="font-size: 13px;">${isFound ? '☑' : '☐'}</span>
+          <div style="display: flex; flex-direction: column; min-width: 0;">
+            <span style="font-weight: 600; font-size: 12px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${m.title}</span>
+            <span style="font-size: 10px; color: var(--text-muted);">${m.location ? m.location + ' • ' : ''}${m.island}</span>
+          </div>
+        </div>
+        <button class="cluster-item-btn">View ➔</button>
+      </div>
+    `;
+  }).join("");
+
+  const popupHtml = `
+    <div class="marker-popup-content">
+      <div class="popup-header">
+        <div class="popup-title-box">
+          <div class="popup-title-row">
+            <span class="popup-cat-badge" style="background-color: ${catMeta.color};"></span>
+            <span class="popup-title">${cluster.items.length} ${catMeta.name} Here</span>
+          </div>
+          <span class="popup-subtitle">Select an item to view</span>
+        </div>
+        <button class="popup-close-btn" onclick="state.map.closePopup()">✕</button>
+      </div>
+      <div style="max-height: 200px; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 4px;">
+        ${itemsHtml}
+      </div>
+    </div>
+  `;
+
+  state.popup
+    .setLatLng([cluster.lat, cluster.lng])
+    .setContent(popupHtml)
+    .openOn(state.map);
+
+  setTimeout(() => {
+    const popupEl = state.popup.getElement();
+    if (popupEl) {
+      popupEl.classList.remove("video-expanded");
+      L.DomEvent.disableClickPropagation(popupEl);
+      L.DomEvent.disableScrollPropagation(popupEl);
+    }
+  }, 10);
+}
+
+window.openMarkerFromCluster = function(markerId) {
+  const target = state.markers.find(m => m.id === markerId);
+  if (target) {
+    setTimeout(() => {
+      openMarkerPopup(target);
+    }, 20);
+  }
+};
 
 function updateMarkerVisual(markerId) {
   const lMarker = state.leafletMarkers.get(markerId);
   const marker = state.markers.find(m => m.id === markerId);
   if (lMarker && marker) {
     if (state.hideCollected && state.collected.has(markerId)) {
-      state.markerLayer.removeLayer(lMarker);
-      state.leafletMarkers.delete(markerId);
+      renderMarkers();
     } else {
       lMarker.setIcon(createMarkerIcon(marker));
     }
@@ -254,78 +531,125 @@ function getDynamicRewardText() {
   const hpCollected = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
   const next = SAFE_REWARDS.find(r => r.count > hpCollected);
   if (next) {
-    return `Next reward: <strong>${next.reward}</strong> (${hpCollected}/${next.count} found)`;
+    return `Next safehouse weapon: <strong>${next.reward}</strong> (${hpCollected}/${next.count})`;
   }
-  return `All safehouse rewards unlocked (100/100)!`;
+  return `All safehouse weapons unlocked (100/100)!`;
 }
 
-// --- Detail Card Controller & Auto-Zoom on Selected Item ---
-function openDetailCard(marker) {
+// --- Attached Marker Popup Controller & Auto-Zoom ---
+function openMarkerPopup(marker) {
+  const prevId = state.currentMarker ? state.currentMarker.id : null;
   state.currentMarker = marker;
-  state.currentMediaTab = "image"; // Photo tip first to save bandwidth
+  state.currentMediaTab = "image"; // Photo tip first
 
-  // Center and smoothly zoom in on the selected item!
-  const targetZoom = Math.max(state.map.getZoom(), 4.25);
+  // Smoothly center and zoom in on item if user is far out
+  const currentZoom = state.map.getZoom();
+  const targetZoom = Math.max(currentZoom, 4.25);
   state.map.setView([marker.lat, marker.lng], targetZoom, { animate: true });
 
-  // Update visual selection on markers
-  state.leafletMarkers.forEach((lMarker, mId) => {
-    const m = state.markers.find(item => item.id === mId);
-    if (m) lMarker.setIcon(createMarkerIcon(m));
-  });
+  if (prevId) updateMarkerVisual(prevId);
+  updateMarkerVisual(marker.id);
 
   const catMeta = state.categories[marker.category] || { name: marker.category, color: marker.color };
+  const isFound = state.collected.has(marker.id);
+  const isPkg = marker.category === "hidden_packages";
 
-  document.getElementById("cardTitle").textContent = marker.title;
-  document.getElementById("cardSubtitle").textContent = `${marker.location ? marker.location + ' • ' : ''}${marker.island} (${catMeta.name})`;
+  // Build attached popup HTML
+  const popupHtml = `
+    <div class="marker-popup-content">
+      <!-- Popup Header -->
+      <div class="popup-header">
+        <div class="popup-title-box">
+          <div class="popup-title-row">
+            <span class="popup-cat-badge" style="background-color: ${catMeta.color};"></span>
+            <span class="popup-title">${marker.title}</span>
+          </div>
+          <span class="popup-subtitle">${marker.location ? marker.location + ' • ' : ''}${marker.island}</span>
+        </div>
+        <button class="popup-close-btn" id="popupCloseBtn" onclick="handlePopupAction(event, 'close')" aria-label="Close">✕</button>
+      </div>
 
-  // Info Box
-  const infoEl = document.getElementById("cardInfo");
-  let infoHtml = "";
+      <!-- Media Box (16:9) -->
+      <div class="popup-media-box" id="popupMediaBox">
+        ${marker.image ? `<img src="${marker.image}" alt="${marker.title}" loading="eager" />` : `<div class="popup-media-empty">No photo tip available.</div>`}
+      </div>
 
-  if (marker.unlock) {
-    infoHtml += `<div class="card-unlock">🔒 ${marker.unlock}</div>`;
-  }
-  if (marker.objective) {
-    infoHtml += `<div class="card-objective">${marker.objective}</div>`;
-  }
-  if (marker.category === "hidden_packages") {
-    infoHtml += `<div class="card-reward">🎁 ${getDynamicRewardText()}</div>`;
-  } else if (marker.reward) {
-    infoHtml += `<div class="card-reward">🎁 Reward: ${marker.reward}</div>`;
-  }
-  infoEl.innerHTML = infoHtml;
+      <!-- Media Switcher (Only if video walkthrough exists) -->
+      ${marker.video ? `
+        <div class="popup-media-tabs">
+          <button class="popup-tab-btn active" id="popupTabImg" onclick="handlePopupAction(event, 'tab-img')">Photo Tip</button>
+          <button class="popup-tab-btn" id="popupTabVid" onclick="handlePopupAction(event, 'tab-vid')">Walkthrough Video</button>
+        </div>
+      ` : ''}
 
-  // Media tabs
-  const tabsContainer = document.getElementById("cardMediaTabs");
-  const tabVid = document.getElementById("tabVideo");
+      <!-- Collectible Info -->
+      <div class="popup-info-box">
+        ${marker.unlock ? `<div class="popup-unlock">🔒 ${marker.unlock}</div>` : ''}
+        ${marker.objective ? `<div class="popup-objective">${marker.objective}</div>` : ''}
+        ${isPkg ? `<div class="popup-reward" id="popupRewardText">🎁 ${getDynamicRewardText()}</div>` : (marker.reward ? `<div class="popup-reward">🎁 Reward: ${marker.reward}</div>` : '')}
+      </div>
 
-  if (marker.video) {
-    tabsContainer.style.display = "flex";
-    tabVid.style.display = "flex";
-  } else {
-    tabsContainer.style.display = "none";
-  }
+      <!-- Popup Action Toolbar: Found Button + Stepper -->
+      <div class="popup-actions">
+        <button class="popup-stepper-btn" id="popupBtnPrev" title="Previous Package" onclick="handlePopupAction(event, 'prev')" ${(!isPkg || marker.number <= 1) ? 'disabled' : ''}>◀</button>
+        <button class="btn-mark-found ${isFound ? 'collected' : ''}" id="popupBtnFound" onclick="handlePopupAction(event, 'found')">
+          <span class="check-box-icon">${isFound ? '☑' : '☐'}</span> Found
+        </button>
+        <button class="popup-stepper-btn" id="popupBtnNext" title="Next Package" onclick="handlePopupAction(event, 'next')" ${(!isPkg || marker.number >= 100) ? 'disabled' : ''}>▶</button>
+      </div>
+    </div>
+  `;
 
-  // Render photo tip
-  renderMediaView("image");
+  state.popup
+    .setLatLng([marker.lat, marker.lng])
+    .setContent(popupHtml)
+    .openOn(state.map);
 
-  updateMarkFoundBtn();
-  updateStepperBtns();
-
-  document.getElementById("detailCard").classList.add("active");
+  // Isolate popup clicks from bubbling to Leaflet map canvas
+  setTimeout(() => {
+    const popupEl = state.popup.getElement();
+    if (popupEl) {
+      popupEl.classList.remove("video-expanded");
+      L.DomEvent.disableClickPropagation(popupEl);
+      L.DomEvent.disableScrollPropagation(popupEl);
+    }
+  }, 10);
 }
 
-function renderMediaView(tab) {
+// Global delegated handler for popup actions
+window.handlePopupAction = function(event, action) {
+  if (event) {
+    if (typeof event.stopPropagation === "function") event.stopPropagation();
+    if (typeof event.preventDefault === "function") event.preventDefault();
+  }
+  if (action === "close") {
+    state.map.closePopup();
+  } else if (action === "found") {
+    toggleCurrentCollected();
+  } else if (action === "prev") {
+    navigatePackage(-1);
+  } else if (action === "next") {
+    navigatePackage(1);
+  } else if (action === "tab-img") {
+    switchPopupMedia("image");
+  } else if (action === "tab-vid") {
+    switchPopupMedia("video");
+  }
+};
+
+function switchPopupMedia(tab) {
   state.currentMediaTab = tab;
   const marker = state.currentMarker;
   if (!marker) return;
 
-  const mediaBox = document.getElementById("cardMediaBox");
-  const tabImg = document.getElementById("tabImage");
-  const tabVid = document.getElementById("tabVideo");
+  const box = document.getElementById("popupMediaBox");
+  const tabImg = document.getElementById("popupTabImg");
+  const tabVid = document.getElementById("popupTabVid");
+  const popupEl = state.popup.getElement();
 
-  const existingVideo = mediaBox.querySelector("video");
+  if (!box || !tabImg || !tabVid) return;
+
+  const existingVideo = box.querySelector("video");
   if (existingVideo) {
     existingVideo.pause();
     existingVideo.removeAttribute("src");
@@ -335,45 +659,17 @@ function renderMediaView(tab) {
   if (tab === "video" && marker.video) {
     tabVid.classList.add("active");
     tabImg.classList.remove("active");
-
-    mediaBox.innerHTML = `
+    if (popupEl) popupEl.classList.add("video-expanded");
+    box.innerHTML = `
       <video src="${marker.video}" controls playsinline autoplay muted loop preload="auto">
-        Your browser does not support the video tag.
+        Your browser does not support video.
       </video>
     `;
   } else {
     tabImg.classList.add("active");
     tabVid.classList.remove("active");
-
-    if (marker.image) {
-      mediaBox.innerHTML = `<img src="${marker.image}" alt="${marker.title}" loading="eager" />`;
-    } else {
-      mediaBox.innerHTML = `
-        <div class="media-empty">
-          No photo tip available.<br>
-          ${marker.video ? '<span style="color: var(--color-blue); cursor: pointer; text-decoration: underline;" onclick="renderMediaView(&quot;video&quot;)">Watch video walkthrough</span>' : ''}
-        </div>
-      `;
-    }
-  }
-}
-
-function closeDetailCard() {
-  document.getElementById("detailCard").classList.remove("active");
-
-  const mediaBox = document.getElementById("cardMediaBox");
-  const existingVideo = mediaBox.querySelector("video");
-  if (existingVideo) {
-    existingVideo.pause();
-    existingVideo.removeAttribute("src");
-    existingVideo.load();
-    mediaBox.innerHTML = "";
-  }
-
-  if (state.currentMarker) {
-    const prevId = state.currentMarker.id;
-    state.currentMarker = null;
-    updateMarkerVisual(prevId);
+    if (popupEl) popupEl.classList.remove("video-expanded");
+    box.innerHTML = marker.image ? `<img src="${marker.image}" alt="${marker.title}" loading="eager" />` : `<div class="popup-media-empty">No photo tip available.</div>`;
   }
 }
 
@@ -388,44 +684,19 @@ function toggleCurrentCollected() {
   }
 
   saveCollected();
-  updateMarkFoundBtn();
-  updateMarkerVisual(mId);
+  renderMarkers();
+
+  const isFound = state.collected.has(mId);
+  const btn = document.getElementById("popupBtnFound");
+  if (btn) {
+    btn.classList.toggle("collected", isFound);
+    btn.innerHTML = `<span class="check-box-icon">${isFound ? '☑' : '☐'}</span> Found`;
+  }
 
   if (state.currentMarker.category === "hidden_packages") {
-    const rewEl = document.querySelector("#cardInfo .card-reward");
+    const rewEl = document.getElementById("popupRewardText");
     if (rewEl) rewEl.innerHTML = `🎁 ${getDynamicRewardText()}`;
   }
-}
-
-function updateMarkFoundBtn() {
-  const btn = document.getElementById("btnMarkFound");
-  if (!state.currentMarker || !btn) return;
-  const isFound = state.collected.has(state.currentMarker.id);
-
-  if (isFound) {
-    btn.classList.add("collected");
-    btn.innerHTML = `<span class="check-box-icon">☑</span> Found (hidden)`;
-  } else {
-    btn.classList.remove("collected");
-    btn.innerHTML = `<span class="check-box-icon">☐</span> Hide this marker`;
-  }
-}
-
-function updateStepperBtns() {
-  const btnPrev = document.getElementById("btnPrev");
-  const btnNext = document.getElementById("btnNext");
-  const marker = state.currentMarker;
-
-  if (!btnPrev || !btnNext) return;
-  if (!marker || marker.category !== "hidden_packages") {
-    btnPrev.disabled = true;
-    btnNext.disabled = true;
-    return;
-  }
-
-  const num = marker.number;
-  btnPrev.disabled = num <= 1;
-  btnNext.disabled = num >= 100;
 }
 
 function navigatePackage(offset) {
@@ -434,21 +705,28 @@ function navigatePackage(offset) {
   const target = state.markers.find(m => m.category === "hidden_packages" && m.number === nextNum);
 
   if (target) {
-    openDetailCard(target);
+    setTimeout(() => {
+      openMarkerPopup(target);
+    }, 20);
   }
 }
 
-// --- Progress & UI Stats ---
+// --- Progress & UI Stats (100% Completion Tracker) ---
 function updateProgressUI() {
-  const hpTotal = 100;
-  const hpCollected = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
+  const totalAll = state.markers.length || 165;
   const totalCollected = state.collected.size;
-  const totalAll = state.markers.length || 166;
+  const totalPct = Math.round((totalCollected / totalAll) * 100);
 
-  const hpText = document.getElementById("hpProgressText");
-  if (hpText) hpText.textContent = `${hpCollected} / ${hpTotal}`;
-  const hpBar = document.getElementById("hpProgressBar");
-  if (hpBar) hpBar.style.width = `${Math.round((hpCollected / hpTotal) * 100)}%`;
+  // Top Sidebar 100% Completion Box
+  const totalText = document.getElementById("totalProgressText");
+  if (totalText) totalText.textContent = `${totalCollected} / ${totalAll} (${totalPct}%)`;
+
+  const totalBar = document.getElementById("totalProgressBar");
+  if (totalBar) totalBar.style.width = `${totalPct}%`;
+
+  // Mobile Island Bar Stat
+  const mobileText = document.getElementById("mobileProgressText");
+  if (mobileText) mobileText.textContent = `${totalCollected}/${totalAll}`;
 
   const countAll = document.getElementById("count_all");
   if (countAll) countAll.textContent = `${totalCollected}/${totalAll}`;
@@ -469,10 +747,11 @@ function updateProgressUI() {
   }
   const subStats = document.getElementById("drawerSubStats");
   if (subStats) {
-    subStats.textContent = `${Math.round((totalCollected / totalAll) * 100)}% collected`;
+    subStats.textContent = `${totalPct}% collected`;
   }
 
   // Safehouse Weapon Milestone Tracker in Drawer
+  const hpCollected = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
   const milestoneList = document.getElementById("safehouseMilestoneList");
   if (milestoneList) {
     milestoneList.innerHTML = SAFE_REWARDS.map(r => {
@@ -490,7 +769,7 @@ function updateProgressUI() {
 // --- Island Navigation with Accurate Bounds ---
 function setIsland(islandKey) {
   state.activeIsland = islandKey;
-  document.querySelectorAll(".island-btn").forEach(b => {
+  document.querySelectorAll(".island-btn[data-island]").forEach(b => {
     b.classList.toggle("active", b.dataset.island === islandKey);
   });
 
@@ -546,7 +825,14 @@ function resetProgress() {
     state.collected.clear();
     saveCollected();
     renderMarkers();
-    if (state.currentMarker) updateMarkFoundBtn();
+    if (state.currentMarker) {
+      updateMarkerVisual(state.currentMarker.id);
+      const btn = document.getElementById("popupBtnFound");
+      if (btn) {
+        btn.classList.remove("collected");
+        btn.innerHTML = `<span class="check-box-icon">☐</span> Found`;
+      }
+    }
   }
 }
 
@@ -586,7 +872,7 @@ function importProgress() {
 
 function bindEvents() {
   // Island navigation
-  document.querySelectorAll(".island-btn").forEach(btn => {
+  document.querySelectorAll(".island-btn[data-island]").forEach(btn => {
     btn.addEventListener("click", () => setIsland(btn.dataset.island));
   });
 
@@ -595,35 +881,18 @@ function bindEvents() {
     btn.addEventListener("click", () => setCategoryFilter(btn.dataset.cat));
   });
 
-  // Drawer open/close
-  const btnOpenDrawer = document.getElementById("btnOpenDrawer");
-  if (btnOpenDrawer) btnOpenDrawer.addEventListener("click", () => toggleChecklistDrawer(true));
+  // Checklist Drawer triggers
+  const progressBox = document.getElementById("sidebarProgressBox");
+  if (progressBox) progressBox.addEventListener("click", () => toggleChecklistDrawer(true));
+
+  const mobileChecklistBtn = document.getElementById("mobileBtnChecklist");
+  if (mobileChecklistBtn) mobileChecklistBtn.addEventListener("click", () => toggleChecklistDrawer(true));
 
   const btnCloseDrawer = document.getElementById("btnCloseDrawer");
   if (btnCloseDrawer) btnCloseDrawer.addEventListener("click", () => toggleChecklistDrawer(false));
 
   const drawerBackdrop = document.getElementById("drawerBackdrop");
   if (drawerBackdrop) drawerBackdrop.addEventListener("click", () => toggleChecklistDrawer(false));
-
-  // Media tabs
-  const tabImg = document.getElementById("tabImage");
-  if (tabImg) tabImg.addEventListener("click", () => renderMediaView("image"));
-
-  const tabVid = document.getElementById("tabVideo");
-  if (tabVid) tabVid.addEventListener("click", () => renderMediaView("video"));
-
-  // Detail card buttons
-  const cardCloseBtn = document.getElementById("cardCloseBtn");
-  if (cardCloseBtn) cardCloseBtn.addEventListener("click", closeDetailCard);
-
-  const btnMarkFound = document.getElementById("btnMarkFound");
-  if (btnMarkFound) btnMarkFound.addEventListener("click", toggleCurrentCollected);
-
-  const btnPrev = document.getElementById("btnPrev");
-  if (btnPrev) btnPrev.addEventListener("click", () => navigatePackage(-1));
-
-  const btnNext = document.getElementById("btnNext");
-  if (btnNext) btnNext.addEventListener("click", () => navigatePackage(1));
 
   // Hide collected toggle
   const toggleHide = document.getElementById("toggleHideCollected");
@@ -636,29 +905,38 @@ function bindEvents() {
     });
   }
 
-  // Map layer toggle (Vector SVG vs Game Radar Tiles)
-  const toggleMap = document.getElementById("toggleMapLayer");
-  if (toggleMap) {
-    toggleMap.checked = state.useVectorMap;
-    toggleMap.addEventListener("change", (e) => {
-      state.useVectorMap = e.target.checked;
+  // Cluster nearby markers toggle
+  const toggleCluster = document.getElementById("toggleClusterMarkers");
+  if (toggleCluster) {
+    toggleCluster.checked = state.clusterMarkers;
+    toggleCluster.addEventListener("change", (e) => {
+      state.clusterMarkers = e.target.checked;
       saveSettings();
-      updateMapLayer();
-    });
-  }
-
-  // Search input
-  const searchInput = document.getElementById("searchInput");
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      state.searchQuery = e.target.value;
       renderMarkers();
     });
   }
 
-  // Progress widget click opens drawer
-  const progressBox = document.getElementById("sidebarProgressBox");
-  if (progressBox) progressBox.addEventListener("click", () => toggleChecklistDrawer(true));
+  // Colorblind Palette select
+  const selectPalette = document.getElementById("selectPalette");
+  if (selectPalette) {
+    selectPalette.value = state.palette;
+    selectPalette.addEventListener("change", (e) => {
+      applyPalette(e.target.value);
+    });
+  }
+
+  // Search input (debounced 100ms for mobile performance)
+  let searchTimeout = null;
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        state.searchQuery = e.target.value;
+        renderMarkers();
+      }, 100);
+    });
+  }
 
   // Backup & Reset
   const btnReset = document.getElementById("btnResetProgress");
@@ -673,7 +951,7 @@ function bindEvents() {
   // Keyboard navigation
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closeDetailCard();
+      state.map.closePopup();
       toggleChecklistDrawer(false);
     }
     if (state.currentMarker && state.currentMarker.category === "hidden_packages") {
@@ -692,8 +970,13 @@ function loadMarkerDataIntoState(data) {
   state.categories = data.categories;
   state.islands = data.islands;
 
-  initDrawerCategories();
-  renderMarkers();
+  if (state.palette && PALETTES[state.palette]) {
+    applyPalette(state.palette);
+  } else {
+    initDrawerCategories();
+    renderMarkers();
+  }
+
   updateProgressUI();
 
   // Check URL query param ?id=
@@ -702,7 +985,7 @@ function loadMarkerDataIntoState(data) {
   if (targetId) {
     const target = state.markers.find(m => m.id === targetId || (m.category === "hidden_packages" && m.number.toString() === targetId));
     if (target) {
-      openDetailCard(target);
+      openMarkerPopup(target);
     }
   }
 }

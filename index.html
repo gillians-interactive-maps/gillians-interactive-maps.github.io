@@ -27,16 +27,20 @@
         <h1 class="sidebar-title">GTA: Liberty City Stories</h1>
         <span class="sidebar-subtitle">Interactive Map & Checklist</span>
       </div>
-      <!-- Overall Packages Progress -->
-      <div class="sidebar-progress-box" id="sidebarProgressBox" title="View Detailed Progress & Milestones">
+      <!-- 100% Completion Tracker & Checklist Trigger -->
+      <button class="sidebar-progress-box" id="sidebarProgressBox" title="Click to open full Checklist & Milestones" aria-label="Open Checklist">
         <div class="progress-row">
-          <span class="progress-lbl">Hidden Packages</span>
-          <span class="progress-stat" id="hpProgressText">0 / 100</span>
+          <span class="progress-lbl">100% Completion</span>
+          <span class="progress-stat" id="totalProgressText">0 / 165</span>
         </div>
         <div class="progress-bar">
-          <div class="progress-fill" id="hpProgressBar"></div>
+          <div class="progress-fill" id="totalProgressBar"></div>
         </div>
-      </div>
+        <div class="progress-footer-hint">
+          <span class="hint-text">Checklist & Rewards</span>
+          <span class="hint-arrow">➔</span>
+        </div>
+      </button>
     </div>
 
     <!-- Category Filter List -->
@@ -46,18 +50,18 @@
       <!-- All Items -->
       <button class="nav-item active" data-cat="all">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #64748b;">
+          <span class="cat-icon-badge" style="background-color: #526173;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M4 4h7v7H4zm9 0h7v7h-7zm-9 9h7v7H4zm9 0h7v7h-7z"/></svg>
           </span>
           <span class="nav-item-name">All Items</span>
         </div>
-        <span class="nav-item-count" id="count_all">0/166</span>
+        <span class="nav-item-count" id="count_all">0/165</span>
       </button>
 
       <!-- Hidden Packages -->
       <button class="nav-item" data-cat="hidden_packages">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #f59e0b;">
+          <span class="cat-icon-badge" style="background-color: #c88219;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h3v3h2V9h6v3h2V9h3v11z"/></svg>
           </span>
           <span class="nav-item-name">Hidden Packages</span>
@@ -68,7 +72,7 @@
       <!-- Rampages -->
       <button class="nav-item" data-cat="rampages">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #ef4444;">
+          <span class="cat-icon-badge" style="background-color: #b83232;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
           </span>
           <span class="nav-item-name">Rampages</span>
@@ -79,7 +83,7 @@
       <!-- Unique Stunt Jumps -->
       <button class="nav-item" data-cat="unique_stunt_jumps">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #eab308;">
+          <span class="cat-icon-badge" style="background-color: #b89628;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/></svg>
           </span>
           <span class="nav-item-name">Unique Stunt Jumps</span>
@@ -90,7 +94,7 @@
       <!-- Races (All Car, Bike, RC Races) -->
       <button class="nav-item" data-cat="races">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #3b82f6;">
+          <span class="cat-icon-badge" style="background-color: #466e9b;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>
           </span>
           <span class="nav-item-name">Races</span>
@@ -101,12 +105,12 @@
       <!-- Side Challenges -->
       <button class="nav-item" data-cat="challenges">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #10b981;">
+          <span class="cat-icon-badge" style="background-color: #327f5b;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h6v-2h-4z"/></svg>
           </span>
           <span class="nav-item-name">Side Challenges</span>
         </div>
-        <span class="nav-item-count" id="count_challenges">0/11</span>
+        <span class="nav-item-count" id="count_challenges">0/10</span>
       </button>
     </nav>
 
@@ -132,19 +136,26 @@
           </div>
         </label>
 
-        <label class="toggle-label" for="toggleMapLayer">
-          <span>HD Clean Map</span>
+        <label class="toggle-label" for="toggleClusterMarkers">
+          <span>Group nearby icons</span>
           <div class="toggle-switch">
-            <input type="checkbox" id="toggleMapLayer" checked />
+            <input type="checkbox" id="toggleClusterMarkers" checked />
             <span class="toggle-slider"></span>
           </div>
         </label>
+
+        <div class="setting-select-row">
+          <label for="selectPalette">Color Mode</label>
+          <select id="selectPalette" class="setting-select">
+            <option value="standard">Default (Subdued)</option>
+            <option value="red_green">Protan / Deutan</option>
+            <option value="blue_yellow">Tritanopia</option>
+            <option value="high_contrast">High Contrast</option>
+          </select>
+        </div>
       </div>
 
-      <div class="sidebar-btn-row">
-        <button class="sidebar-action-btn" id="btnOpenDrawer" title="Detailed Checklist & Stats">Checklist</button>
-        <button class="sidebar-action-btn" id="btnResetProgress" title="Reset tracking">Reset</button>
-      </div>
+      <button class="sidebar-action-btn" id="btnResetProgress" title="Reset tracking">Reset Progress</button>
     </div>
   </aside>
 
@@ -160,43 +171,8 @@
     <button class="island-btn" data-island="portland">Portland</button>
     <button class="island-btn" data-island="staunton">Staunton</button>
     <button class="island-btn" data-island="shoreside">Shoreside</button>
+    <button class="island-btn mobile-checklist-btn" id="mobileBtnChecklist" title="Open Checklist">✓ <span id="mobileProgressText">0/165</span></button>
   </nav>
-
-  <!-- Compact Floating Detail Card (Desktop Top-Center / Mobile Bottom) -->
-  <div class="detail-card" id="detailCard" aria-label="Collectible Details">
-    <div class="card-header">
-      <div class="card-title-box">
-        <h2 class="card-title" id="cardTitle">Hidden Package #1</h2>
-        <span class="card-subtitle" id="cardSubtitle">Harwood, Portland</span>
-      </div>
-      <button class="card-close-btn" id="cardCloseBtn" aria-label="Close">✕</button>
-    </div>
-
-    <!-- Media Box (Photo tip / Video) -->
-    <div class="card-media-box" id="cardMediaBox"></div>
-
-    <!-- Media Switcher (Only shown if video exists) -->
-    <div class="media-toggle-bar" id="cardMediaTabs">
-      <button class="media-toggle-btn active" id="tabImage">
-        <span>Photo Tip</span>
-      </button>
-      <button class="media-toggle-btn" id="tabVideo">
-        <span>Watch Video</span>
-      </button>
-    </div>
-
-    <!-- Objective & Unlock Info -->
-    <div class="card-info" id="cardInfo"></div>
-
-    <!-- Actions Toolbar: Mark as Found Checkbox + Prev/Next -->
-    <div class="card-actions">
-      <button class="stepper-btn" id="btnPrev" title="Previous Package">◀</button>
-      <button class="btn-mark-found" id="btnMarkFound">
-        <span class="check-box-icon">☐</span> Hide this marker
-      </button>
-      <button class="stepper-btn" id="btnNext" title="Next Package">▶</button>
-    </div>
-  </div>
 
   <!-- Side Checklist & Progress Drawer -->
   <div class="drawer-backdrop" id="drawerBackdrop"></div>

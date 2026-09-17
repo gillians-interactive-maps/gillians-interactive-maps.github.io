@@ -1,4 +1,4 @@
-﻿# Large raw video source (258 MB - exceeds GitHub 100MB limit)
+# Large raw video source (258 MB - exceeds GitHub 100MB limit)
 *.webm
 
 # Python cache & temp files
@@ -10,3 +10,12 @@ __pycache__/
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Scratch and test files
+scratch/
+scratch_*
+test_*.png
+out.svg
+assets/map/render_svg.html
+assets/map/lcs_quantized_2048.png
+data/raw_gtamap_hp.json
