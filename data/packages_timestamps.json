@@ -1,0 +1,702 @@
+[
+  {
+    "num": 1,
+    "name": "Harwood",
+    "start_sec": 45,
+    "time_str": "0:45",
+    "end_sec": 64
+  },
+  {
+    "num": 2,
+    "name": "Island (Open sea)",
+    "start_sec": 64,
+    "time_str": "1:04",
+    "end_sec": 99
+  },
+  {
+    "num": 3,
+    "name": "Harwood",
+    "start_sec": 99,
+    "time_str": "1:39",
+    "end_sec": 122
+  },
+  {
+    "num": 4,
+    "name": "Harwood",
+    "start_sec": 122,
+    "time_str": "2:02",
+    "end_sec": 141
+  },
+  {
+    "num": 5,
+    "name": "Harwood",
+    "start_sec": 141,
+    "time_str": "2:21",
+    "end_sec": 165
+  },
+  {
+    "num": 6,
+    "name": "Portland Beach",
+    "start_sec": 165,
+    "time_str": "2:45",
+    "end_sec": 188
+  },
+  {
+    "num": 7,
+    "name": "Harwood",
+    "start_sec": 188,
+    "time_str": "3:08",
+    "end_sec": 214
+  },
+  {
+    "num": 8,
+    "name": "Harwood",
+    "start_sec": 214,
+    "time_str": "3:34",
+    "end_sec": 235
+  },
+  {
+    "num": 9,
+    "name": "Hepburn Heights",
+    "start_sec": 235,
+    "time_str": "3:55",
+    "end_sec": 254
+  },
+  {
+    "num": 10,
+    "name": "Hepburn Heights",
+    "start_sec": 254,
+    "time_str": "4:14",
+    "end_sec": 295
+  },
+  {
+    "num": 11,
+    "name": "Hepburn Heights",
+    "start_sec": 295,
+    "time_str": "4:55",
+    "end_sec": 315
+  },
+  {
+    "num": 12,
+    "name": "Red Light District",
+    "start_sec": 315,
+    "time_str": "5:15",
+    "end_sec": 336
+  },
+  {
+    "num": 13,
+    "name": "St. Mark's",
+    "start_sec": 336,
+    "time_str": "5:36",
+    "end_sec": 357
+  },
+  {
+    "num": 14,
+    "name": "St. Mark's",
+    "start_sec": 357,
+    "time_str": "5:57",
+    "end_sec": 386
+  },
+  {
+    "num": 15,
+    "name": "Portland Beach",
+    "start_sec": 386,
+    "time_str": "6:26",
+    "end_sec": 428
+  },
+  {
+    "num": 16,
+    "name": "Lighthouse Island (Open sea)",
+    "start_sec": 428,
+    "time_str": "7:08",
+    "end_sec": 453
+  },
+  {
+    "num": 17,
+    "name": "Portland Beach",
+    "start_sec": 453,
+    "time_str": "7:33",
+    "end_sec": 478
+  },
+  {
+    "num": 18,
+    "name": "Red Light District",
+    "start_sec": 478,
+    "time_str": "7:58",
+    "end_sec": 497
+  },
+  {
+    "num": 19,
+    "name": "St. Mark's",
+    "start_sec": 497,
+    "time_str": "8:17",
+    "end_sec": 519
+  },
+  {
+    "num": 20,
+    "name": "St. Mark's",
+    "start_sec": 519,
+    "time_str": "8:39",
+    "end_sec": 546
+  },
+  {
+    "num": 21,
+    "name": "Chinatown",
+    "start_sec": 546,
+    "time_str": "9:06",
+    "end_sec": 572
+  },
+  {
+    "num": 22,
+    "name": "Portland View",
+    "start_sec": 572,
+    "time_str": "9:32",
+    "end_sec": 594
+  },
+  {
+    "num": 23,
+    "name": "Portland View",
+    "start_sec": 594,
+    "time_str": "9:54",
+    "end_sec": 627
+  },
+  {
+    "num": 24,
+    "name": "Trenton / Portland View",
+    "start_sec": 627,
+    "time_str": "10:27",
+    "end_sec": 651
+  },
+  {
+    "num": 25,
+    "name": "Portland View / St. Mark's",
+    "start_sec": 651,
+    "time_str": "10:51",
+    "end_sec": 676
+  },
+  {
+    "num": 26,
+    "name": "Portland Harbor",
+    "start_sec": 676,
+    "time_str": "11:16",
+    "end_sec": 711
+  },
+  {
+    "num": 27,
+    "name": "Portland Harbor",
+    "start_sec": 711,
+    "time_str": "11:51",
+    "end_sec": 740
+  },
+  {
+    "num": 28,
+    "name": "Portland Harbor",
+    "start_sec": 740,
+    "time_str": "12:20",
+    "end_sec": 779
+  },
+  {
+    "num": 29,
+    "name": "Portland Harbor",
+    "start_sec": 779,
+    "time_str": "12:59",
+    "end_sec": 809
+  },
+  {
+    "num": 30,
+    "name": "Chinatown",
+    "start_sec": 809,
+    "time_str": "13:29",
+    "end_sec": 835
+  },
+  {
+    "num": 31,
+    "name": "Trenton",
+    "start_sec": 835,
+    "time_str": "13:55",
+    "end_sec": 861
+  },
+  {
+    "num": 32,
+    "name": "Trenton",
+    "start_sec": 861,
+    "time_str": "14:21",
+    "end_sec": 890
+  },
+  {
+    "num": 33,
+    "name": "Trenton / Atlantic Quays",
+    "start_sec": 890,
+    "time_str": "14:50",
+    "end_sec": 911
+  },
+  {
+    "num": 34,
+    "name": "Callahan Point",
+    "start_sec": 911,
+    "time_str": "15:11",
+    "end_sec": 930
+  },
+  {
+    "num": 35,
+    "name": "Atlantic Quays",
+    "start_sec": 930,
+    "time_str": "15:30",
+    "end_sec": 954
+  },
+  {
+    "num": 36,
+    "name": "Atlantic Quays",
+    "start_sec": 954,
+    "time_str": "15:54",
+    "end_sec": 974
+  },
+  {
+    "num": 37,
+    "name": "Atlantic Quays",
+    "start_sec": 974,
+    "time_str": "16:14",
+    "end_sec": 1000
+  },
+  {
+    "num": 38,
+    "name": "Callahan Point",
+    "start_sec": 1000,
+    "time_str": "16:40",
+    "end_sec": 1029
+  },
+  {
+    "num": 39,
+    "name": "Callahan Point",
+    "start_sec": 1029,
+    "time_str": "17:09",
+    "end_sec": 1062
+  },
+  {
+    "num": 40,
+    "name": "Red Light District",
+    "start_sec": 1062,
+    "time_str": "17:42",
+    "end_sec": 1087
+  },
+  {
+    "num": 41,
+    "name": "Rockford",
+    "start_sec": 1087,
+    "time_str": "18:07",
+    "end_sec": 1111
+  },
+  {
+    "num": 42,
+    "name": "Aspatria",
+    "start_sec": 1111,
+    "time_str": "18:31",
+    "end_sec": 1136
+  },
+  {
+    "num": 43,
+    "name": "Rockford",
+    "start_sec": 1136,
+    "time_str": "18:56",
+    "end_sec": 1157
+  },
+  {
+    "num": 44,
+    "name": "Rockford",
+    "start_sec": 1157,
+    "time_str": "19:17",
+    "end_sec": 1179
+  },
+  {
+    "num": 45,
+    "name": "Rockford",
+    "start_sec": 1179,
+    "time_str": "19:39",
+    "end_sec": 1200
+  },
+  {
+    "num": 46,
+    "name": "Fort Staunton",
+    "start_sec": 1200,
+    "time_str": "20:00",
+    "end_sec": 1219
+  },
+  {
+    "num": 47,
+    "name": "Subway Station",
+    "start_sec": 1219,
+    "time_str": "20:19",
+    "end_sec": 1240
+  },
+  {
+    "num": 48,
+    "name": "Fort Staunton",
+    "start_sec": 1240,
+    "time_str": "20:40",
+    "end_sec": 1265
+  },
+  {
+    "num": 49,
+    "name": "Island (Open Sea)",
+    "start_sec": 1265,
+    "time_str": "21:05",
+    "end_sec": 1286
+  },
+  {
+    "num": 50,
+    "name": "Fort Staunton",
+    "start_sec": 1286,
+    "time_str": "21:26",
+    "end_sec": 1313
+  },
+  {
+    "num": 51,
+    "name": "Fort Staunton",
+    "start_sec": 1313,
+    "time_str": "21:53",
+    "end_sec": 1334
+  },
+  {
+    "num": 52,
+    "name": "Fort Staunton",
+    "start_sec": 1334,
+    "time_str": "22:14",
+    "end_sec": 1357
+  },
+  {
+    "num": 53,
+    "name": "Fort Staunton",
+    "start_sec": 1357,
+    "time_str": "22:37",
+    "end_sec": 1377
+  },
+  {
+    "num": 54,
+    "name": "Aspatria",
+    "start_sec": 1377,
+    "time_str": "22:57",
+    "end_sec": 1400
+  },
+  {
+    "num": 55,
+    "name": "Aspatria / Torrington",
+    "start_sec": 1400,
+    "time_str": "23:20",
+    "end_sec": 1424
+  },
+  {
+    "num": 56,
+    "name": "Newport",
+    "start_sec": 1424,
+    "time_str": "23:44",
+    "end_sec": 1445
+  },
+  {
+    "num": 57,
+    "name": "Newport",
+    "start_sec": 1445,
+    "time_str": "24:05",
+    "end_sec": 1474
+  },
+  {
+    "num": 58,
+    "name": "Belleville Park",
+    "start_sec": 1474,
+    "time_str": "24:34",
+    "end_sec": 1515
+  },
+  {
+    "num": 59,
+    "name": "Belleville Park",
+    "start_sec": 1515,
+    "time_str": "25:15",
+    "end_sec": 1540
+  },
+  {
+    "num": 60,
+    "name": "Newport",
+    "start_sec": 1540,
+    "time_str": "25:40",
+    "end_sec": 1567
+  },
+  {
+    "num": 61,
+    "name": "Newport",
+    "start_sec": 1567,
+    "time_str": "26:07",
+    "end_sec": 1617
+  },
+  {
+    "num": 62,
+    "name": "Newport",
+    "start_sec": 1617,
+    "time_str": "26:57",
+    "end_sec": 1638
+  },
+  {
+    "num": 63,
+    "name": "Newport / Callahan Bridge",
+    "start_sec": 1638,
+    "time_str": "27:18",
+    "end_sec": 1661
+  },
+  {
+    "num": 64,
+    "name": "Newport",
+    "start_sec": 1661,
+    "time_str": "27:41",
+    "end_sec": 1682
+  },
+  {
+    "num": 65,
+    "name": "Bedford Point",
+    "start_sec": 1682,
+    "time_str": "28:02",
+    "end_sec": 1709
+  },
+  {
+    "num": 66,
+    "name": "Torrington",
+    "start_sec": 1709,
+    "time_str": "28:29",
+    "end_sec": 1744
+  },
+  {
+    "num": 67,
+    "name": "Torrington",
+    "start_sec": 1744,
+    "time_str": "29:04",
+    "end_sec": 1768
+  },
+  {
+    "num": 68,
+    "name": "Torrington",
+    "start_sec": 1768,
+    "time_str": "29:28",
+    "end_sec": 1789
+  },
+  {
+    "num": 69,
+    "name": "Torrington",
+    "start_sec": 1789,
+    "time_str": "29:49",
+    "end_sec": 1814
+  },
+  {
+    "num": 70,
+    "name": "Bedford Point",
+    "start_sec": 1814,
+    "time_str": "30:14",
+    "end_sec": 1846
+  },
+  {
+    "num": 71,
+    "name": "Francis International Airport",
+    "start_sec": 1846,
+    "time_str": "30:46",
+    "end_sec": 1870
+  },
+  {
+    "num": 72,
+    "name": "Francis International Airport",
+    "start_sec": 1870,
+    "time_str": "31:10",
+    "end_sec": 1894
+  },
+  {
+    "num": 73,
+    "name": "Francis International Airport",
+    "start_sec": 1894,
+    "time_str": "31:34",
+    "end_sec": 1927
+  },
+  {
+    "num": 74,
+    "name": "Francis International Airport",
+    "start_sec": 1927,
+    "time_str": "32:07",
+    "end_sec": 1968
+  },
+  {
+    "num": 75,
+    "name": "Francis International Airport",
+    "start_sec": 1968,
+    "time_str": "32:48",
+    "end_sec": 2005
+  },
+  {
+    "num": 76,
+    "name": "Francis International Airport",
+    "start_sec": 2005,
+    "time_str": "33:25",
+    "end_sec": 2032
+  },
+  {
+    "num": 77,
+    "name": "Francis International Airport",
+    "start_sec": 2032,
+    "time_str": "33:52",
+    "end_sec": 2055
+  },
+  {
+    "num": 78,
+    "name": "Francis International Airport",
+    "start_sec": 2055,
+    "time_str": "34:15",
+    "end_sec": 2083
+  },
+  {
+    "num": 79,
+    "name": "Francis International Airport",
+    "start_sec": 2083,
+    "time_str": "34:43",
+    "end_sec": 2106
+  },
+  {
+    "num": 80,
+    "name": "Pike Creek / Wichita Gardens",
+    "start_sec": 2106,
+    "time_str": "35:06",
+    "end_sec": 2131
+  },
+  {
+    "num": 81,
+    "name": "Pike Creek / Wichita Gardens",
+    "start_sec": 2131,
+    "time_str": "35:31",
+    "end_sec": 2161
+  },
+  {
+    "num": 82,
+    "name": "Pike Creek",
+    "start_sec": 2161,
+    "time_str": "36:01",
+    "end_sec": 2188
+  },
+  {
+    "num": 83,
+    "name": "Pike Creek",
+    "start_sec": 2188,
+    "time_str": "36:28",
+    "end_sec": 2223
+  },
+  {
+    "num": 84,
+    "name": "Pike Creek",
+    "start_sec": 2223,
+    "time_str": "37:03",
+    "end_sec": 2252
+  },
+  {
+    "num": 85,
+    "name": "Francis International Airport / Pike Creek",
+    "start_sec": 2252,
+    "time_str": "37:32",
+    "end_sec": 2278
+  },
+  {
+    "num": 86,
+    "name": "Pike Creek",
+    "start_sec": 2278,
+    "time_str": "37:58",
+    "end_sec": 2305
+  },
+  {
+    "num": 87,
+    "name": "Pike Creek",
+    "start_sec": 2305,
+    "time_str": "38:25",
+    "end_sec": 2327
+  },
+  {
+    "num": 88,
+    "name": "Pike Creek",
+    "start_sec": 2327,
+    "time_str": "38:47",
+    "end_sec": 2354
+  },
+  {
+    "num": 89,
+    "name": "Pike Creek",
+    "start_sec": 2354,
+    "time_str": "39:14",
+    "end_sec": 2377
+  },
+  {
+    "num": 90,
+    "name": "Cochrane Dam",
+    "start_sec": 2377,
+    "time_str": "39:37",
+    "end_sec": 2413
+  },
+  {
+    "num": 91,
+    "name": "Cochrane Dam",
+    "start_sec": 2413,
+    "time_str": "40:13",
+    "end_sec": 2436
+  },
+  {
+    "num": 92,
+    "name": "Cochrane Dam",
+    "start_sec": 2436,
+    "time_str": "40:36",
+    "end_sec": 2461
+  },
+  {
+    "num": 93,
+    "name": "Cochrane Dam",
+    "start_sec": 2461,
+    "time_str": "41:01",
+    "end_sec": 2482
+  },
+  {
+    "num": 94,
+    "name": "Cedar Grove (Tunnel)",
+    "start_sec": 2482,
+    "time_str": "41:22",
+    "end_sec": 2502
+  },
+  {
+    "num": 95,
+    "name": "Cedar Grove",
+    "start_sec": 2502,
+    "time_str": "41:42",
+    "end_sec": 2525
+  },
+  {
+    "num": 96,
+    "name": "Cedar Grove (Picknic Area)",
+    "start_sec": 2525,
+    "time_str": "42:05",
+    "end_sec": 2551
+  },
+  {
+    "num": 97,
+    "name": "Cedar Grove",
+    "start_sec": 2551,
+    "time_str": "42:31",
+    "end_sec": 2578
+  },
+  {
+    "num": 98,
+    "name": "Cedar Grove",
+    "start_sec": 2578,
+    "time_str": "42:58",
+    "end_sec": 2606
+  },
+  {
+    "num": 99,
+    "name": "Wichita Gardens",
+    "start_sec": 2606,
+    "time_str": "43:26",
+    "end_sec": 2630
+  },
+  {
+    "num": 100,
+    "name": "Wichita Gardens",
+    "start_sec": 2630,
+    "time_str": "43:50",
+    "end_sec": 2650
+  }
+]

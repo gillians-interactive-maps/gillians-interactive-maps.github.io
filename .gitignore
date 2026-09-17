@@ -1,0 +1,12 @@
+﻿# Large raw video source (258 MB - exceeds GitHub 100MB limit)
+*.webm
+
+# Python cache & temp files
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# OS metadata
+.DS_Store
+Thumbs.db

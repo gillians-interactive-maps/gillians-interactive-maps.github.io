@@ -1,0 +1,840 @@
+/* ==========================================================================
+   GTA Liberty City Stories - Authentic Minimal HUD & Pause Menu Style
+   ========================================================================== */
+
+:root {
+  --gta-bg: #0d1015;
+  --gta-surface: #151921;
+  --gta-surface-light: #1e2430;
+  --gta-border: #2b3545;
+  --gta-border-subtle: rgba(255, 255, 255, 0.08);
+  --gta-gold: #f5a623;
+  --gta-gold-dim: #c98416;
+  --gta-text-white: #ffffff;
+  --gta-text-muted: #9ba7b7;
+  --gta-text-dim: #64748b;
+  --gta-red: #d9383a;
+  --gta-green: #2ecc71;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --font-gta: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--gta-bg);
+  color: var(--gta-text-white);
+  font-family: var(--font-gta);
+  user-select: none;
+}
+
+/* ==========================================================================
+   Map Container
+   ========================================================================== */
+#map {
+  width: 100%;
+  height: 100%;
+  background-color: #0b0e13;
+  z-index: 1;
+}
+
+/* Smooth Leaflet zoom & pan performance */
+.leaflet-tile {
+  image-rendering: auto;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.leaflet-container {
+  background-color: #0b0e13;
+  outline: none;
+}
+
+/* ==========================================================================
+   Top Navigation (Minimal GTA HUD style)
+   ========================================================================== */
+.top-nav {
+  position: absolute;
+  top: max(10px, var(--safe-top));
+  left: 10px;
+  right: 10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.top-bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+/* GTA LCS Brand Badge */
+.brand-badge {
+  display: flex;
+  align-items: center;
+  background: var(--gta-surface);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  height: 36px;
+}
+
+.brand-badge .logo-tag {
+  background: var(--gta-gold);
+  color: #000;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 0 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+.brand-badge .title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gta-text-white);
+  letter-spacing: 0.5px;
+  padding: 0 10px;
+  text-transform: uppercase;
+}
+
+/* Search Input */
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 220px;
+}
+
+.search-input {
+  width: 100%;
+  height: 36px;
+  background: var(--gta-surface);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  padding: 0 12px 0 32px;
+  color: #fff;
+  font-size: 12px;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--gta-gold);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 13px;
+  height: 13px;
+  color: var(--gta-text-dim);
+  pointer-events: none;
+}
+
+/* Icon Buttons */
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gta-surface);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  color: var(--gta-text-white);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: background 0.15s;
+}
+
+.btn-icon:active {
+  background: var(--gta-surface-light);
+}
+
+/* Category Filter Bar */
+.quick-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  pointer-events: auto;
+  scrollbar-width: none;
+}
+
+.quick-chips-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--gta-surface);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  color: var(--gta-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.chip-btn.active {
+  background: var(--gta-surface-light);
+  border-color: var(--gta-gold);
+  color: var(--gta-text-white);
+}
+
+.chip-btn .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+
+.chip-btn .count-badge {
+  font-size: 10px;
+  padding: 1px 5px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  color: var(--gta-text-dim);
+}
+
+.chip-btn.active .count-badge {
+  color: var(--gta-gold);
+}
+
+/* ==========================================================================
+   Floating Bottom Controls (Progress & Island Selector)
+   ========================================================================== */
+.floating-progress {
+  position: absolute;
+  bottom: calc(10px + var(--safe-bottom));
+  left: 10px;
+  z-index: 999;
+  background: var(--gta-surface);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  padding: 7px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.progress-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.progress-info .label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--gta-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.progress-info .stats {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--gta-gold);
+}
+
+.progress-bar-bg {
+  width: 60px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--gta-gold);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Island Switcher */
+.island-controls {
+  position: absolute;
+  bottom: calc(10px + var(--safe-bottom));
+  right: 10px;
+  z-index: 999;
+  display: flex;
+  background: var(--gta-surface);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.island-btn {
+  padding: 8px 11px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--gta-border);
+  color: var(--gta-text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.island-btn:last-child {
+  border-right: none;
+}
+
+.island-btn.active {
+  background: var(--gta-gold);
+  color: #000;
+}
+
+.island-btn:active {
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   Bottom Sheet / Collectible Details Modal (Minimal GTA Card)
+   ========================================================================== */
+.bottom-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.bottom-sheet-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2001;
+  background: var(--gta-surface);
+  border-top: 2px solid var(--gta-gold);
+  padding: 10px 14px calc(14px + var(--safe-bottom)) 14px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.7);
+  transform: translateY(105%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+.sheet-handle {
+  width: 32px;
+  height: 3px;
+  background: var(--gta-border);
+  border-radius: 2px;
+  align-self: center;
+  cursor: pointer;
+}
+
+.sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sheet-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sheet-category-badge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gta-gold);
+}
+
+.sheet-title {
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+
+.sheet-subtitle {
+  font-size: 12px;
+  color: var(--gta-text-muted);
+}
+
+.sheet-close-btn {
+  background: var(--gta-surface-light);
+  border: 1px solid var(--gta-border);
+  color: var(--gta-text-white);
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* Info Box */
+.info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 8px 10px;
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+}
+
+.info-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #f87171;
+}
+
+.info-desc {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--gta-text-muted);
+}
+
+.info-reward {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gta-gold);
+}
+
+/* Media Switcher Tabs (Minimalist) */
+.media-tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.media-tab {
+  flex: 1;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gta-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.media-tab.active {
+  background: var(--gta-surface-light);
+  color: var(--gta-gold);
+}
+
+/* Media Box */
+.sheet-media-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheet-media-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.sheet-media-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+  display: block;
+}
+
+/* Actions & Stepper */
+.sheet-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-collect {
+  flex: 1;
+  height: 40px;
+  background: var(--gta-surface-light);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  color: var(--gta-text-white);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-collect.collected {
+  background: rgba(46, 204, 113, 0.15);
+  border-color: var(--gta-green);
+  color: #4ade80;
+}
+
+.stepper-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gta-surface-light);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  color: var(--gta-text-white);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.stepper-btn:disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Side Filter & Checklist Drawer
+   ========================================================================== */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.filter-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  background: var(--gta-surface);
+  border-left: 1px solid var(--gta-border);
+  z-index: 3001;
+  padding: max(16px, var(--safe-top)) 14px calc(16px + var(--safe-bottom)) 14px;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: -6px 0 24px rgba(0, 0, 0, 0.7);
+}
+
+.filter-drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--gta-border);
+}
+
+.drawer-title {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gta-gold);
+}
+
+.drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stats-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--gta-border);
+  padding: 10px 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stats-card-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--gta-gold);
+}
+
+.stats-card-val {
+  font-size: 15px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.filter-section-title {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gta-text-dim);
+  margin-bottom: 6px;
+}
+
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--gta-border-subtle);
+  border-radius: 4px;
+}
+
+.filter-item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-item-left .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.filter-item-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gta-text-white);
+}
+
+.filter-item-count {
+  font-size: 11px;
+  color: var(--gta-text-dim);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* Checkbox Toggle */
+.toggle-switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #2b3545;
+  border-radius: 2px;
+  transition: .2s;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  border-radius: 2px;
+  transition: .2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--gta-gold);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(16px);
+  background-color: #000;
+}
+
+.drawer-btn-secondary {
+  width: 100%;
+  padding: 8px;
+  background: var(--gta-surface-light);
+  border: 1px solid var(--gta-border);
+  border-radius: 4px;
+  color: var(--gta-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.drawer-btn-danger {
+  border-color: rgba(217, 56, 58, 0.4);
+  color: #fca5a5;
+}
+
+/* ==========================================================================
+   Map Markers (GTA Radar Blip Style)
+   IMPORTANT: NO transition on transform to prevent Leaflet zoom stutter!
+   ========================================================================== */
+.custom-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+  /* DO NOT add transition: transform here! */
+  opacity: 1;
+}
+
+.custom-marker.collected {
+  opacity: 0.3;
+  filter: grayscale(100%);
+  border-color: #64748b;
+}
+
+.custom-marker.collected::after {
+  content: "✓";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 13px;
+  height: 13px;
+  background: var(--gta-green);
+  color: #000;
+  font-size: 9px;
+  font-weight: 900;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+}
+
+.custom-marker.active-selected {
+  outline: 2px solid var(--gta-gold);
+  outline-offset: 2px;
+  z-index: 1000 !important;
+}
+
+/* Desktop tweaks */
+@media (min-width: 768px) {
+  .bottom-sheet {
+    left: auto;
+    right: 14px;
+    bottom: 14px;
+    width: 380px;
+    border-radius: 6px;
+    border: 1px solid var(--gta-border);
+    border-top: 2px solid var(--gta-gold);
+    transform: translateX(420px);
+  }
+
+  .bottom-sheet.open {
+    transform: translateX(0);
+  }
+
+  .bottom-sheet-backdrop {
+    display: none;
+  }
+}
