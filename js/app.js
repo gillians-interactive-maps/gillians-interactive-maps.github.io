@@ -996,9 +996,10 @@ async function init() {
   initMap();
   bindEvents();
 
-  // Instant offline loading via bundled window.MARKER_DATA
-  if (window.MARKER_DATA && window.MARKER_DATA.markers) {
-    loadMarkerDataIntoState(window.MARKER_DATA);
+  // Instant offline loading via bundled window.LCS_MARKERS_DATA or window.MARKER_DATA
+  const bundledData = window.LCS_MARKERS_DATA || window.MARKER_DATA;
+  if (bundledData && bundledData.markers) {
+    loadMarkerDataIntoState(bundledData);
     return;
   }
 
