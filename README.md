@@ -107,7 +107,7 @@ Then open your browser to **[http://localhost:8080](http://localhost:8080)**.
 
 ## 🤝 Contributing
 
-Contributions from the community are warmly welcomed! Whether you are fixing typos, improving map accuracy, or adding new tips, here is how you can help:
+Contributions from the community are warmly welcomed! Please read our [Contributing Guide](CONTRIBUTING.md) for full details on project standards, local workflows, and pull request steps.
 
 ### 1. Modifying or Adding Markers (`data/markers_data.js`)
 Marker pins are structured in `data/markers_data.js`:
