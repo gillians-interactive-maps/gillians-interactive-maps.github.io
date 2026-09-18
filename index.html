@@ -12,7 +12,7 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <!-- App CSS -->
-  <link rel="stylesheet" href="css/style.css?v=3.1" />
+  <link rel="stylesheet" href="css/style.css?v=3.3" />
 </head>
 <body>
 
@@ -91,6 +91,28 @@
         <span class="nav-item-count" id="count_unique_stunt_jumps">0/26</span>
       </button>
 
+      <!-- Vehicle Sub-Missions -->
+      <button class="nav-item" data-cat="vehicle_missions">
+        <div class="nav-item-left">
+          <span class="cat-icon-badge" style="background-color: #c05621;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-2V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9zm-5 8v2h16v-2H4z"/></svg>
+          </span>
+          <span class="nav-item-name">Vehicle Sub-Missions</span>
+        </div>
+        <span class="nav-item-count" id="count_vehicle_missions">0/6</span>
+      </button>
+
+      <!-- Odd Jobs -->
+      <button class="nav-item" data-cat="odd_jobs">
+        <div class="nav-item-left">
+          <span class="cat-icon-badge" style="background-color: #2b6cb0;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8-2h4v2h-4V4zm8 15H4V8h16v11z"/></svg>
+          </span>
+          <span class="nav-item-name">Odd Jobs</span>
+        </div>
+        <span class="nav-item-count" id="count_odd_jobs">0/7</span>
+      </button>
+
       <!-- Races (All Car, Bike, RC Races) -->
       <button class="nav-item" data-cat="races">
         <div class="nav-item-left">
@@ -99,7 +121,7 @@
           </span>
           <span class="nav-item-name">Races</span>
         </div>
-        <span class="nav-item-count" id="count_races">0/9</span>
+        <span class="nav-item-count" id="count_races">0/10</span>
       </button>
 
       <!-- Side Challenges -->
@@ -110,7 +132,7 @@
           </span>
           <span class="nav-item-name">Side Challenges</span>
         </div>
-        <span class="nav-item-count" id="count_challenges">0/11</span>
+        <span class="nav-item-count" id="count_challenges">0/9</span>
       </button>
     </nav>
 
@@ -319,10 +341,10 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <!-- Offline/Instant Bundled Marker Data -->
-  <script src="data/markers_data.js?v=3.1"></script>
-  <!-- 100% & Optional Checklist Database -->
-  <script src="data/checklist_data.js?v=3.1"></script>
-  <!-- Application JS -->
-  <script src="js/app.js?v=3.1"></script>
+  <script src="data/markers_data.js?v=3.3"></script>
+  <!-- 100% Checklist & Optional Tasks Canonical Database -->
+  <script src="data/checklist_data.js?v=3.3"></script>
+  <!-- Main Application Logic -->
+  <script src="js/app.js?v=3.3"></script>
 </body>
 </html>

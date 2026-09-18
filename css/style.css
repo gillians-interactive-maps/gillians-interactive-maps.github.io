@@ -1466,6 +1466,15 @@ html, body {
   color: var(--text-dim);
 }
 
+.cl-counter-item.completed {
+  opacity: 0.88;
+}
+
+.cl-counter-item.completed .cl-item-title {
+  text-decoration: none;
+  color: var(--text-main);
+}
+
 .cl-checkbox {
   margin-top: 2px;
   cursor: pointer;
@@ -1494,6 +1503,28 @@ html, body {
   font-weight: 600;
   color: var(--text-main);
   line-height: 1.3;
+}
+
+.cl-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.cl-subgroup-header {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  padding: 8px 4px 4px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 6px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .cl-item-meta {
@@ -1531,12 +1562,48 @@ html, body {
   align-items: center;
   gap: 3px;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .cl-map-btn:hover {
   background: rgba(59, 130, 246, 0.25);
   color: #fff;
   border-color: #3b82f6;
+}
+
+.cl-found-all-btn {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none !important;
+}
+
+.cl-found-all-btn:hover {
+  background: rgba(16, 185, 129, 0.28);
+  border-color: #10b981;
+  color: #fff;
+}
+
+.cl-found-all-btn.all-found {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.cl-found-all-btn.all-found:hover {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: #ef4444;
+  color: #fff;
 }
 
 .cl-item-desc {

@@ -3,7 +3,7 @@ const CHECKLIST_DATA = {
   categories: [
     {
       id: "story_portland",
-      name: "Story Missions — Portland (22)",
+      name: "Story Missions — Portland (27)",
       icon: `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.8L19.5 19h-15L12 5.8zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>`,
       requiredFor100: true,
       items: [
@@ -22,6 +22,11 @@ const CHECKLIST_DATA = {
         { id: "sm_grease_sucho", title: "Grease Sucho", giver: "Ma Cipriani", island: "Portland", required: true, reward: "$1,000, Low Rider Rumble Unlocked" },
         { id: "sm_dead_meat", title: "Dead Meat", giver: "Ma Cipriani", island: "Portland", required: true, reward: "$500" },
         { id: "sm_no_son_of_mine", title: "No Son of Mine", giver: "Ma Cipriani", island: "Portland", required: true, reward: "Hitmen Sent After Toni" },
+        { id: "sm_shop_til_you_strop", title: "Shop 'Til You Strop", giver: "Maria Latore", island: "Portland", required: true, reward: "$100" },
+        { id: "sm_taken_for_a_ride", title: "Taken for a Ride", giver: "Maria Latore", island: "Portland", required: true, reward: "$500" },
+        { id: "sm_booby_prize", title: "Booby Prize", giver: "Maria Latore", island: "Portland", required: true, reward: "Street Races Unlocked" },
+        { id: "sm_biker_heat", title: "Biker Heat", giver: "Maria Latore", island: "Portland", required: true, reward: "$1,500" },
+        { id: "sm_overdose_of_trouble", title: "Overdose of Trouble", giver: "Maria Latore", island: "Portland", required: true, reward: "Good Clothes Outfit" },
         { id: "sm_salvatores_salvation", title: "Salvatore's Salvation", giver: "JD O'Toole", island: "Portland", required: true, reward: "$1,500" },
         { id: "sm_the_guns_of_leone", title: "The Guns of Leone", giver: "JD O'Toole", island: "Portland", required: true, reward: "$3,000" },
         { id: "sm_calm_before_the_storm", title: "Calm Before the Storm", giver: "JD O'Toole", island: "Portland", required: true, reward: "$1,000" },
@@ -91,49 +96,44 @@ const CHECKLIST_DATA = {
       ]
     },
     {
-      id: "vehicle_missions",
-      name: "Vehicle Sub-Missions (10)",
+      id: "side_activities",
+      name: "Side Activities (26)",
       icon: `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/></svg>`,
       requiredFor100: true,
       items: [
-        { id: "vm_paramedic", title: "Paramedic (Level 12)", giver: "Ambulance", island: "All", required: true, reward: "Infinite Sprint", desc: "Complete Level 12 in an ambulance in one continuous run." },
-        { id: "vm_firefighter_portland", title: "Firefighter — Portland (Level 12)", giver: "Fire Truck", island: "Portland", required: true, reward: "Progress toward Fireproof", desc: "Extinguish 12 vehicle fires on Portland." },
-        { id: "vm_firefighter_staunton", title: "Firefighter — Staunton Island (Level 12)", giver: "Fire Truck", island: "Staunton", required: true, reward: "Progress toward Fireproof", desc: "Extinguish 12 vehicle fires on Staunton." },
-        { id: "vm_firefighter_shoreside", title: "Firefighter — Shoreside Vale (Level 12)", giver: "Fire Truck", island: "Shoreside", required: true, reward: "Fireproof Toni (Complete all 3 islands)", desc: "Extinguish 12 vehicle fires on Shoreside." },
-        { id: "vm_vigilante_portland", title: "Vigilante — Portland (Level 12)", giver: "Police Car / Enforcer", island: "Portland", required: true, reward: "Progress toward 150 Armor", desc: "Kill criminals up to Level 12 on Portland." },
-        { id: "vm_vigilante_staunton", title: "Vigilante — Staunton Island (Level 12)", giver: "Police Car / Enforcer", island: "Staunton", required: true, reward: "Progress toward 150 Armor", desc: "Kill criminals up to Level 12 on Staunton." },
-        { id: "vm_vigilante_shoreside", title: "Vigilante — Shoreside Vale (Level 12)", giver: "Police Car / Enforcer", island: "Shoreside", required: true, reward: "150 Maximum Armor (Complete all 3 islands)", desc: "Kill criminals up to Level 12 on Shoreside." },
-        { id: "vm_taxi", title: "Taxi Driver (100 Total Fares)", giver: "Taxi / Cabbie", island: "All", required: true, reward: "Bickle '76 Taxi Unlocked at Mean Street Taxis", desc: "Accumulate 100 fares total." },
-        { id: "vm_pizza_delivery", title: "Pizza Delivery (Level 10)", giver: "Joe's Pizza (St. Mark's)", island: "Portland", required: true, reward: "+25 Max Health (Total 125)", coords: [-81.28, 104.16], desc: "Deliver pizzas on the Pizza Boy scooter behind Joe's Pizza." },
-        { id: "vm_noodle_delivery", title: "Noodle Delivery (Level 10)", giver: "Punk Noodles (Chinatown)", island: "Portland", required: true, reward: "+25 Max Health (Total 150 with Pizza)", coords: [-88.75, 94.62], desc: "Deliver noodles on the Noodle Faggio in Chinatown." }
-      ]
-    },
-    {
-      id: "side_jobs",
-      name: "Odd Jobs, Challenges & Races (20)",
-      icon: `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.88V13h4.88c-.49 3.95-3.85 7-7.93 7-.33 0-.64-.04-.95-.12z"/></svg>`,
-      requiredFor100: true,
-      items: [
-        { id: "sj_car_salesman", title: "Car Salesman (Level 6)", giver: "Capital Autos (Harwood)", island: "Portland", required: true, reward: "Capital Autos generates $4,000/day, Hellenbach GT", coords: [-65.20, 96.84], desc: "Sell 4 of each vehicle category (Fast, Normal, Tough, Cheap) up to Level 6." },
-        { id: "sj_trashmaster_portland", title: "Trashmaster — Portland", giver: "Harwood Depot", island: "Portland", required: true, reward: "$2,000", coords: [-63.98, 101.20], desc: "Collect all dumpsters on Portland within the time limit." },
-        { id: "sj_trashmaster_staunton", title: "Trashmaster — Staunton Island", giver: "Aspatria Depot", island: "Staunton", required: true, reward: "$3,000", coords: [-76.40, 68.20], desc: "Collect all dumpsters on Staunton within the time limit." },
-        { id: "sj_trashmaster_shoreside", title: "Trashmaster — Shoreside Vale", giver: "Pike Creek Depot", island: "Shoreside", required: true, reward: "$4,000, Trashmaster Asset", coords: [-88.10, 38.40], desc: "Collect all dumpsters on Shoreside within the time limit." },
-        { id: "sj_slash_tv", title: "Slash TV (Level 5 Chainsaw Survival)", giver: "Sawmill (Trenton)", island: "Portland", required: true, reward: "Cox Mascot Outfit", coords: [-100.32, 114.72], desc: "Survive 5 waves of chainsaw attackers inside the sawmill." },
-        { id: "sj_see_the_sights", title: "See the Sights Before Your Flight", giver: "Francis Int. Airport", island: "Shoreside", required: true, reward: "$10,000", coords: [-87.99, 43.24], desc: "Drive tourists around 12 Liberty City landmarks and take photos." },
-        { id: "sj_bumps_and_grinds", title: "Bumps & Grinds (10 Courses)", giver: "Harwood Dirt Track", island: "Portland", required: true, reward: "Manchez Dirt Bike Unlocked", coords: [-63.52, 89.49], desc: "Complete all 10 timed courses on the Sanchez dirt bike." },
-        { id: "sj_avenging_portland", title: "Avenging Angels — Portland (Level 8)", giver: "Guardian Angels", island: "Portland", required: true, reward: "$1,500", desc: "Patrol the streets of Portland and eliminate gang crime up to Level 8." },
-        { id: "sj_avenging_staunton", title: "Avenging Angels — Staunton (Level 8)", giver: "Guardian Angels", island: "Staunton", required: true, reward: "Avenging Angel Custom Motorcycle", desc: "Patrol Staunton up to Level 8." },
-        { id: "sj_avenging_shoreside", title: "Avenging Angels — Shoreside (Level 8)", giver: "Guardian Angels", island: "Shoreside", required: true, reward: "Hero Outfit (Angels friendly, immunity)", desc: "Patrol Shoreside Vale up to Level 8." },
-        { id: "race_low_rider", title: "Street Race: Low Rider Rumble", giver: "Payphone (Trenton)", island: "Portland", required: true, reward: "$1,500", coords: [-90.88, 103.20] },
-        { id: "race_red_light", title: "Street Race: Red-Light Rush", giver: "Payphone (Chinatown)", island: "Portland", required: true, reward: "$1,500", coords: [-84.53, 91.01] },
-        { id: "race_de_rail", title: "Street Race: De-Rail Road", giver: "Payphone (Belleville Park)", island: "Staunton", required: true, reward: "$2,000", coords: [-74.74, 63.79] },
-        { id: "race_torrington_tt", title: "Street Race: Torrington T.T.", giver: "Payphone (Torrington)", island: "Staunton", required: true, reward: "$2,000", coords: [-114.98, 65.77] },
-        { id: "race_gangsta_gp", title: "Street Race: Gangsta GP", giver: "Payphone (Wichita Gardens)", island: "Shoreside", required: true, reward: "$2,500", coords: [-64.18, 49.81] },
-        { id: "race_wi_cheetah", title: "Street Race: Wi-Cheetah Run", giver: "Payphone (Pike Creek)", island: "Shoreside", required: true, reward: "$2,500", coords: [-65.30, 32.09] },
-        { id: "rc_thrashing", title: "RC Race: Thrashing RC Buggies", giver: "Toyz Van (Hepburn Heights)", island: "Portland", required: true, reward: "$1,000", coords: [-69.67, 94.49] },
-        { id: "rc_triad_take_down", title: "RC Race: RC Triad Take-Down", giver: "Toyz Van (Chinatown)", island: "Portland", required: true, reward: "$1,000", coords: [-89.09, 96.75] },
-        { id: "rc_ragin", title: "RC Race: Ragin' RC Buggies", giver: "Toyz Van (Belleville Park)", island: "Staunton", required: true, reward: "$1,500", coords: [-83.16, 66.68] },
-        { id: "rc_chasin", title: "RC Race: Chasin' RC Buggies", giver: "Toyz Van (Francis Airport)", island: "Shoreside", required: true, reward: "$2,000", coords: [-88.23, 37.23] }
+        // --- Vehicle Sub-Missions (6) ---
+        { id: "vm_paramedic", markerId: "vm_paramedic", subGroup: "Vehicle Sub-Missions", title: "Paramedic (Level 12)", giver: "Ambulance", island: "All", required: true, reward: "Infinite Sprint", coords: [-88.50, 107.80], desc: "Complete Level 12 in an ambulance in one continuous run on any island." },
+        { id: "vm_firefighter", markerId: "vm_firefighter", subGroup: "Vehicle Sub-Missions", title: "Firefighter (Level 12)", giver: "Fire Truck", island: "All", required: true, reward: "Fireproof Toni", coords: [-62.10, 98.40], desc: "Extinguish 12 vehicle fires in a row in a fire truck on any island." },
+        { id: "vm_vigilante", markerId: "vm_vigilante", subGroup: "Vehicle Sub-Missions", title: "Vigilante (Level 12)", giver: "Police Car / Enforcer", island: "All", required: true, reward: "150 Maximum Armor", coords: [-92.30, 108.50], desc: "Eliminate criminals up to Level 12 in a row in a police vehicle on any island." },
+        { id: "vm_taxi", markerId: "vm_taxi", subGroup: "Vehicle Sub-Missions", title: "Taxi Driver (100 Total Fares)", giver: "Taxi / Cabbie", island: "All", required: true, reward: "Bickle '76 Taxi Unlocked at Mean Street Taxis", coords: [-102.10, 107.40], desc: "Accumulate 100 fares total." },
+        { id: "vm_pizza_delivery", markerId: "vm_pizza_delivery", subGroup: "Vehicle Sub-Missions", title: "Pizza Delivery (Level 10)", giver: "Joe's Pizza (St. Mark's)", island: "Portland", required: true, reward: "+25 Max Health (Total 125)", coords: [-81.28, 104.16], desc: "Deliver pizzas on the Pizza Boy scooter behind Joe's Pizza." },
+        { id: "vm_noodle_delivery", markerId: "vm_noodle_delivery", subGroup: "Vehicle Sub-Missions", title: "Noodle Delivery (Level 10)", giver: "Punk Noodles (Chinatown)", island: "Portland", required: true, reward: "+25 Max Health (Total 150 with Pizza)", coords: [-88.75, 94.62], desc: "Deliver noodles on the Noodle Faggio in Chinatown." },
+
+        // --- Odd Jobs (7) ---
+        { id: "sj_car_salesman", markerId: "sj_car_salesman", subGroup: "Odd Jobs", title: "Car Salesman (Level 6)", giver: "Capital Autos (Harwood)", island: "Portland", required: true, reward: "Capital Autos generates $4,000/day, Hellenbach GT", coords: [-65.20, 96.84], desc: "Sell 4 of each vehicle category (Fast, Normal, Tough, Cheap) up to Level 6." },
+        { id: "sj_trashmaster_portland", markerId: "sj_trashmaster_portland", subGroup: "Odd Jobs", title: "Trashmaster — Portland", giver: "Harwood Depot", island: "Portland", required: true, reward: "$2,000", coords: [-63.98, 101.20], desc: "Collect all dumpsters on Portland within the time limit." },
+        { id: "sj_trashmaster_staunton", markerId: "sj_trashmaster_staunton", subGroup: "Odd Jobs", title: "Trashmaster — Staunton Island", giver: "Aspatria Depot", island: "Staunton", required: true, reward: "$3,000", coords: [-76.40, 68.20], desc: "Collect all dumpsters on Staunton within the time limit." },
+        { id: "sj_trashmaster_shoreside", markerId: "sj_trashmaster_shoreside", subGroup: "Odd Jobs", title: "Trashmaster — Shoreside Vale", giver: "Pike Creek Depot", island: "Shoreside", required: true, reward: "$4,000, Trashmaster Asset", coords: [-88.10, 38.40], desc: "Collect all dumpsters on Shoreside within the time limit." },
+        { id: "sj_avenging_portland", markerId: "sj_avenging_portland", subGroup: "Odd Jobs", title: "Avenging Angels — Portland (Level 15)", giver: "Guardian Angels", island: "Portland", required: true, reward: "$1,500, Avenger motorcycle at Saint Mark's safehouse", coords: [-85.20, 93.50], desc: "Complete 15 levels of vigilante justice with the Angels on Portland." },
+        { id: "sj_avenging_staunton", markerId: "sj_avenging_staunton", subGroup: "Odd Jobs", title: "Avenging Angels — Staunton (Level 15)", giver: "Guardian Angels", island: "Staunton", required: true, reward: "$1,500, Never lose money when busted", coords: [-82.30, 65.40], desc: "Complete 15 levels of vigilante justice with the Angels on Staunton." },
+        { id: "sj_avenging_shoreside", markerId: "sj_avenging_shoreside", subGroup: "Odd Jobs", title: "Avenging Angels — Shoreside (Level 15)", giver: "Guardian Angels", island: "Shoreside", required: true, reward: "$1,500, Hero Garb Outfit at all safehouses", coords: [-65.80, 44.20], desc: "Complete 15 levels of vigilante justice with the Angels on Shoreside Vale." },
+
+        // --- Challenges (3) ---
+        { id: "sj_slash_tv", markerId: "slash_tv_lcs_stv_0", subGroup: "Challenges", title: "Slash TV (Level 5 Chainsaw Survival)", giver: "Sawmill (Trenton)", island: "Portland", required: true, reward: "Cox Mascot Outfit", coords: [-100.32, 114.72], desc: "Survive 5 waves of chainsaw attackers inside the sawmill." },
+        { id: "sj_see_the_sights", markerId: "see_the_sight_before_your_flight_lcs_ssbyf_0", subGroup: "Challenges", title: "See the Sights Before Your Flight", giver: "Francis Int. Airport", island: "Shoreside", required: true, reward: "$10,000", coords: [-87.99, 43.24], desc: "Drive tourists around 12 Liberty City landmarks and take photos." },
+        { id: "sj_bumps_and_grinds", markerId: "bumps_and_grinds_lcs_bng_0", subGroup: "Challenges", title: "Bumps & Grinds (10 Courses)", giver: "Harwood Dirt Track", island: "Portland", required: true, reward: "Manchez Dirt Bike Unlocked", coords: [-63.52, 89.49], desc: "Complete all 10 timed courses on the Sanchez dirt bike." },
+
+        // --- Races (10) ---
+        { id: "race_low_rider", markerId: "car_races_lcs_car_races_0", subGroup: "Races", title: "Street Race: Low Rider Rumble", giver: "Payphone (Trenton)", island: "Portland", required: true, reward: "$1,500", coords: [-90.88, 103.20] },
+        { id: "race_red_light", markerId: "bike_races_lcs_bike_races_0", subGroup: "Races", title: "Street Race: Red-Light Rush", giver: "Payphone (Chinatown)", island: "Portland", required: true, reward: "$1,500", coords: [-84.53, 91.01] },
+        { id: "race_de_rail", markerId: "car_races_lcs_car_races_1", subGroup: "Races", title: "Street Race: De-Rail Road", giver: "Payphone (Belleville Park)", island: "Staunton", required: true, reward: "$2,000", coords: [-74.74, 63.79] },
+        { id: "race_torrington_tt", markerId: "bike_races_lcs_bike_races_1", subGroup: "Races", title: "Street Race: Torrington T.T.", giver: "Payphone (Torrington)", island: "Staunton", required: true, reward: "$2,000", coords: [-114.98, 65.77] },
+        { id: "race_gangsta_gp", markerId: "car_races_lcs_car_races_2", subGroup: "Races", title: "Street Race: Gangsta GP", giver: "Payphone (Wichita Gardens)", island: "Shoreside", required: true, reward: "$2,500", coords: [-64.18, 49.81] },
+        { id: "race_wi_cheetah", markerId: "bike_races_lcs_bike_races_2", subGroup: "Races", title: "Street Race: Wi-Cheetah Run", giver: "Payphone (Pike Creek)", island: "Shoreside", required: true, reward: "$2,500", coords: [-65.30, 32.09] },
+        { id: "rc_thrashing", markerId: "rc_races_lcs_rc_races_0", subGroup: "Races", title: "RC Race: Thrashing RC Buggies", giver: "Toyz Van (Hepburn Heights)", island: "Portland", required: true, reward: "$1,000", coords: [-69.67, 94.49] },
+        { id: "rc_triad_take_down", markerId: "rc_triad_take_down_lcs_rc_ttd_0", subGroup: "Races", title: "RC Race: RC Triad Take-Down", giver: "Toyz Van (Chinatown)", island: "Portland", required: true, reward: "$1,000", coords: [-89.09, 96.75] },
+        { id: "rc_ragin", markerId: "rc_races_lcs_rc_races_1", subGroup: "Races", title: "RC Race: Ragin' RC Buggies", giver: "Toyz Van (Belleville Park)", island: "Staunton", required: true, reward: "$1,500", coords: [-83.16, 66.68] },
+        { id: "rc_chasin", markerId: "rc_races_lcs_rc_races_2", subGroup: "Races", title: "RC Race: Chasin' RC Buggies", giver: "Toyz Van (Francis Airport)", island: "Shoreside", required: true, reward: "$2,000", coords: [-88.23, 37.23] }
       ]
     },
     {
@@ -142,11 +142,11 @@ const CHECKLIST_DATA = {
       icon: `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`,
       requiredFor100: false,
       items: [
-        { id: "opt_9mm_mayhem", title: "9mm Mayhem (Drive-By Challenge)", giver: "Freeway Bike (Red Light)", island: "Portland", required: false, reward: "$2,000", coords: [-77.40, 94.28], desc: "Shoot targets as passenger on a motorcycle." },
-        { id: "opt_scooter_shooter", title: "Scooter Shooter (Drive-By Challenge)", giver: "Faggio (Chinatown)", island: "Portland", required: false, reward: "$2,000", coords: [-89.78, 92.02], desc: "Shoot targets from the back of a Faggio scooter." },
-        { id: "opt_awol_angel", title: "AWOL Angel (Drive-By Challenge)", giver: "Angel Bike (Wichita Gardens)", island: "Shoreside", required: false, reward: "$2,500", coords: [-62.27, 42.66], desc: "Eliminate gang members during a fast bike chase." },
-        { id: "opt_scrapyard", title: "Scrapyard Motorcycle Challenge", giver: "Sanchez (Junkyard)", island: "Portland", required: false, reward: "$1,000", coords: [-63.98, 101.20] },
-        { id: "opt_go_go_faggio", title: "Go-Go Faggio Checkpoint Challenge", giver: "Faggio (Newport)", island: "Staunton", required: false, reward: "$1,000", coords: [-87.54, 78.36] },
+        { id: "opt_9mm_mayhem", markerId: "drive_by_challenges_lcs_dbc_freeway_0", title: "9mm Mayhem (Drive-By Challenge)", giver: "Freeway Bike (Red Light)", island: "Portland", required: false, reward: "$2,000", coords: [-77.40, 94.28], desc: "Shoot targets as passenger on a motorcycle." },
+        { id: "opt_scooter_shooter", markerId: "drive_by_challenges_lcs_dbc_faggio_0", title: "Scooter Shooter (Drive-By Challenge)", giver: "Faggio (Chinatown)", island: "Portland", required: false, reward: "$2,000", coords: [-89.78, 92.02], desc: "Shoot targets from the back of a Faggio scooter." },
+        { id: "opt_awol_angel", markerId: "drive_by_challenges_lcs_dbc_angel_0", title: "AWOL Angel (Drive-By Challenge)", giver: "Angel Bike (Wichita Gardens)", island: "Shoreside", required: false, reward: "$2,500", coords: [-62.27, 42.66], desc: "Eliminate gang members during a fast bike chase." },
+        { id: "opt_scrapyard", markerId: "checkpoint_challenges_lcs_cc_scrap_0", title: "Scrapyard Motorcycle Challenge", giver: "Sanchez (Junkyard)", island: "Portland", required: false, reward: "$1,000", coords: [-63.98, 101.20] },
+        { id: "opt_go_go_faggio", markerId: "checkpoint_challenges_lcs_cc_gogo_0", title: "Go-Go Faggio Checkpoint Challenge", giver: "Faggio (Newport)", island: "Staunton", required: false, reward: "$1,000", coords: [-87.54, 78.36] },
         { id: "opt_slash_tv_extra", title: "Slash TV Level 6+ (Endless Mode)", giver: "Sawmill", island: "Portland", required: false, reward: "Cash bonus per kill", coords: [-100.32, 114.72] },
         { id: "opt_morgue_party_deliveries", title: "Love Media Corpse Deliveries", giver: "Donald Love Hearse", island: "Shoreside", required: false, reward: "Extra Cash" },
         { id: "opt_hidden_easter_eggs", title: "Discover 8 Hidden Easter Eggs", giver: "Liberty City", island: "All", required: false, reward: "Trophy & bragging rights" }

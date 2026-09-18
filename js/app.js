@@ -27,6 +27,8 @@ const PALETTES = {
     hidden_packages: "#c88219",
     rampages: "#b83232",
     unique_stunt_jumps: "#b89628",
+    vehicle_missions: "#c05621",
+    odd_jobs: "#2b6cb0",
     races: "#466e9b",
     challenges: "#327f5b"
   },
@@ -35,6 +37,8 @@ const PALETTES = {
     hidden_packages: "#e69f00",   // Warm Orange
     rampages: "#d55e00",          // Vermilion
     unique_stunt_jumps: "#f0e442",// Golden Yellow
+    vehicle_missions: "#d55e00",  // Vermilion
+    odd_jobs: "#0072b2",          // Blue
     races: "#56b4e9",             // Sky Blue
     challenges: "#cc79a7"         // Magenta / Reddish Purple
   },
@@ -43,6 +47,8 @@ const PALETTES = {
     hidden_packages: "#e66101",
     rampages: "#ca0020",
     unique_stunt_jumps: "#fdb863",
+    vehicle_missions: "#e66101",
+    odd_jobs: "#0571b0",
     races: "#0571b0",
     challenges: "#92c5de"
   },
@@ -51,6 +57,8 @@ const PALETTES = {
     hidden_packages: "#ffb000",
     rampages: "#ff0055",
     unique_stunt_jumps: "#ffe600",
+    vehicle_missions: "#ff7b00",
+    odd_jobs: "#00f5d4",
     races: "#00b4d8",
     challenges: "#00f5d4"
   }
@@ -58,9 +66,11 @@ const PALETTES = {
 
 // Clean, minimalist vector paths (24px viewBox)
 const CATEGORY_ICONS = {
-  hidden_packages: `<path fill-rule="evenodd" clip-rule="evenodd" stroke="currentColor" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round" d="M 18.80 2.40 c -0.28 -0.36 -0.68 -0.58 -1.13 -0.63 c -0.45 -0.05 -0.89 0.07 -1.25 0.35 c -0.36 0.28 -0.58 0.68 -0.63 1.13 l -0.63 4.52 v -0.18 c 0.00 -0.93 -0.76 -1.69 -1.69 -1.69 c -0.63 0.00 -1.17 0.34 -1.47 0.85 c -0.29 -0.51 -0.84 -0.85 -1.47 -0.85 c -0.93 0.00 -1.69 0.76 -1.69 1.69 v 0.94 L 8.21 3.24 c -0.05 -0.45 -0.28 -0.85 -0.63 -1.13 c -0.36 -0.28 -0.80 -0.40 -1.25 -0.35 c -0.45 0.05 -0.85 0.28 -1.13 0.63 c -0.28 0.36 -0.41 0.80 -0.35 1.25 l 1.16 9.32 c -0.61 1.18 -0.80 2.49 -0.64 3.65 c 0.25 1.78 1.25 3.10 2.69 3.66 V 22.02 c 0.00 0.13 0.10 0.23 0.23 0.23 h 8.24 c 0.13 0.00 0.23 -0.10 0.23 -0.23 V 20.15 c 0.70 -0.48 1.15 -1.32 1.15 -2.31 l 0.17 -5.07 L 19.15 3.64 C 19.20 3.20 19.08 2.75 18.80 2.40 z M 13.46 6.34 c 0.68 0.00 1.24 0.56 1.24 1.24 v 4.04 c 0.00 0.68 -0.56 1.24 -1.24 1.24 c -0.45 0.00 -0.85 -0.24 -1.07 -0.62 c 0.12 -0.48 0.09 -0.99 -0.09 -1.44 c -0.02 -0.05 -0.05 -0.11 -0.07 -0.16 v -3.06 C 12.22 6.89 12.78 6.34 13.46 6.34 z M 10.53 6.34 c 0.68 0.00 1.24 0.56 1.24 1.24 v 2.47 c -0.43 -0.37 -1.01 -0.49 -1.63 -0.31 c -0.30 0.08 -0.58 0.18 -0.84 0.29 V 7.58 C 9.29 6.89 9.85 6.34 10.53 6.34 z M 5.30 3.58 c -0.04 -0.33 0.05 -0.65 0.26 -0.91 c 0.20 -0.26 0.50 -0.42 0.83 -0.46 c 0.33 -0.04 0.65 0.05 0.91 0.26 c 0.26 0.20 0.42 0.50 0.46 0.83 l 0.83 7.06 c -0.95 0.52 -1.68 1.20 -2.21 1.97 L 5.30 3.58 z M 18.70 3.59 l -1.08 9.14 l -0.17 5.10 c 0.00 1.31 -0.91 2.30 -2.13 2.30 c -0.13 0.00 -0.23 0.10 -0.23 0.23 s 0.10 0.23 0.23 0.23 c 0.35 0.00 0.68 -0.07 0.98 -0.19 V 21.79 H 8.51 v -1.37 c 0.39 0.10 0.80 0.16 1.23 0.16 c 0.13 0.00 0.23 -0.10 0.23 -0.23 s -0.10 -0.23 -0.23 -0.23 c -2.08 0.00 -3.62 -1.41 -3.92 -3.58 c -0.15 -1.07 0.03 -2.27 0.58 -3.35 c 0.04 -0.03 0.06 -0.08 0.07 -0.13 c 0.51 -0.94 1.33 -1.79 2.48 -2.38 c 0.00 -0.00 0.01 -0.00 0.01 -0.01 c 0.06 -0.03 0.13 -0.06 0.20 -0.10 c 0.00 -0.00 0.00 -0.00 0.00 -0.00 c 0.34 -0.16 0.71 -0.30 1.10 -0.41 c 0.63 -0.17 1.17 0.03 1.50 0.56 c 0.01 0.02 0.03 0.05 0.04 0.08 c 0.02 0.04 0.04 0.09 0.06 0.13 c 0.00 0.01 0.01 0.02 0.01 0.02 c 0.02 0.04 0.03 0.09 0.05 0.13 c 0.01 0.04 0.02 0.08 0.03 0.12 c 0.00 0.01 0.00 0.01 0.01 0.02 c 0.04 0.18 0.06 0.37 0.04 0.56 c -0.00 0.00 -0.00 0.01 -0.00 0.01 c -0.00 0.03 -0.01 0.06 -0.01 0.09 c -0.00 0.03 -0.01 0.06 -0.01 0.09 c -0.00 0.02 -0.01 0.04 -0.01 0.06 c -0.01 0.04 -0.02 0.08 -0.03 0.13 c -0.08 0.27 -0.22 0.54 -0.44 0.78 c -0.68 0.69 -1.57 1.26 -2.80 1.78 c -0.12 0.05 -0.17 0.18 -0.12 0.30 c 0.05 0.12 0.18 0.17 0.30 0.12 c 0.33 -0.14 0.64 -0.29 0.93 -0.44 c 0.18 -0.09 0.34 -0.18 0.49 -0.27 c 0.60 -0.36 1.11 -0.74 1.53 -1.18 c 0.15 -0.17 0.28 -0.34 0.37 -0.53 c 0.32 0.36 0.77 0.57 1.27 0.57 c 0.93 0.00 1.69 -0.76 1.69 -1.69 v -0.57 L 16.24 3.30 c 0.04 -0.33 0.20 -0.62 0.46 -0.83 c 0.26 -0.20 0.58 -0.30 0.91 -0.26 c 0.33 0.04 0.62 0.20 0.83 0.46 C 18.64 2.94 18.73 3.26 18.70 3.59 z"/>`,
+  hidden_packages: `<path fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-linecap="round" d="M 18.80 2.40 c -0.28 -0.36 -0.68 -0.58 -1.13 -0.63 c -0.45 -0.05 -0.89 0.07 -1.25 0.35 c -0.36 0.28 -0.58 0.68 -0.63 1.13 l -0.63 4.52 v -0.18 c 0.00 -0.93 -0.76 -1.69 -1.69 -1.69 c -0.63 0.00 -1.17 0.34 -1.47 0.85 c -0.29 -0.51 -0.84 -0.85 -1.47 -0.85 c -0.93 0.00 -1.69 0.76 -1.69 1.69 v 0.94 L 8.21 3.24 c -0.05 -0.45 -0.28 -0.85 -0.63 -1.13 c -0.36 -0.28 -0.80 -0.40 -1.25 -0.35 c -0.45 0.05 -0.85 0.28 -1.13 0.63 c -0.28 0.36 -0.41 0.80 -0.35 1.25 l 1.16 9.32 c -0.61 1.18 -0.80 2.49 -0.64 3.65 c 0.25 1.78 1.25 3.10 2.69 3.66 V 22.02 c 0.00 0.13 0.10 0.23 0.23 0.23 h 8.24 c 0.13 0.00 0.23 -0.10 0.23 -0.23 V 20.15 c 0.70 -0.48 1.15 -1.32 1.15 -2.31 l 0.17 -5.07 L 19.15 3.64 C 19.20 3.20 19.08 2.75 18.80 2.40 z M 13.46 6.34 c 0.68 0.00 1.24 0.56 1.24 1.24 v 4.04 c 0.00 0.68 -0.56 1.24 -1.24 1.24 c -0.45 0.00 -0.85 -0.24 -1.07 -0.62 c 0.12 -0.48 0.09 -0.99 -0.09 -1.44 c -0.02 -0.05 -0.05 -0.11 -0.07 -0.16 v -3.06 C 12.22 6.89 12.78 6.34 13.46 6.34 z M 10.53 6.34 c 0.68 0.00 1.24 0.56 1.24 1.24 v 2.47 c -0.43 -0.37 -1.01 -0.49 -1.63 -0.31 c -0.30 0.08 -0.58 0.18 -0.84 0.29 V 7.58 C 9.29 6.89 9.85 6.34 10.53 6.34 z M 5.30 3.58 c -0.04 -0.33 0.05 -0.65 0.26 -0.91 c 0.20 -0.26 0.50 -0.42 0.83 -0.46 c 0.33 -0.04 0.65 0.05 0.91 0.26 c 0.26 0.20 0.42 0.50 0.46 0.83 l 0.83 7.06 c -0.95 0.52 -1.68 1.20 -2.21 1.97 L 5.30 3.58 z M 18.70 3.59 l -1.08 9.14 l -0.17 5.10 c 0.00 1.31 -0.91 2.30 -2.13 2.30 c -0.13 0.00 -0.23 0.10 -0.23 0.23 s 0.10 0.23 0.23 0.23 c 0.35 0.00 0.68 -0.07 0.98 -0.19 V 21.79 H 8.51 v -1.37 c 0.39 0.10 0.80 0.16 1.23 0.16 c 0.13 0.00 0.23 -0.10 0.23 -0.23 s -0.10 -0.23 -0.23 -0.23 c -2.08 0.00 -3.62 -1.41 -3.92 -3.58 c -0.15 -1.07 0.03 -2.27 0.58 -3.35 c 0.04 -0.03 0.06 -0.08 0.07 -0.13 c 0.51 -0.94 1.33 -1.79 2.48 -2.38 c 0.00 -0.00 0.01 -0.00 0.01 -0.01 c 0.06 -0.03 0.13 -0.06 0.20 -0.10 c 0.00 -0.00 0.00 -0.00 0.00 -0.00 c 0.34 -0.16 0.71 -0.30 1.10 -0.41 c 0.63 -0.17 1.17 0.03 1.50 0.56 c 0.01 0.02 0.03 0.05 0.04 0.08 c 0.02 0.04 0.04 0.09 0.06 0.13 c 0.00 0.01 0.01 0.02 0.01 0.02 c 0.02 0.04 0.03 0.09 0.05 0.13 c 0.01 0.04 0.02 0.08 0.03 0.12 c 0.00 0.01 0.00 0.01 0.01 0.02 c 0.04 0.18 0.06 0.37 0.04 0.56 c -0.00 0.00 -0.00 0.01 -0.00 0.01 c -0.00 0.03 -0.01 0.06 -0.01 0.09 c -0.00 0.03 -0.01 0.06 -0.01 0.09 c -0.00 0.02 -0.01 0.04 -0.01 0.06 c -0.01 0.04 -0.02 0.08 -0.03 0.13 c -0.08 0.27 -0.22 0.54 -0.44 0.78 c -0.68 0.69 -1.57 1.26 -2.80 1.78 c -0.12 0.05 -0.17 0.18 -0.12 0.30 c 0.05 0.12 0.18 0.17 0.30 0.12 c 0.33 -0.14 0.64 -0.29 0.93 -0.44 c 0.18 -0.09 0.34 -0.18 0.49 -0.27 c 0.60 -0.36 1.11 -0.74 1.53 -1.18 c 0.15 -0.17 0.28 -0.34 0.37 -0.53 c 0.32 0.36 0.77 0.57 1.27 0.57 c 0.93 0.00 1.69 -0.76 1.69 -1.69 v -0.57 L 16.24 3.30 c 0.04 -0.33 0.20 -0.62 0.46 -0.83 c 0.26 -0.20 0.58 -0.30 0.91 -0.26 c 0.33 0.04 0.62 0.20 0.83 0.46 C 18.64 2.94 18.73 3.26 18.70 3.59 z"/>`,
   rampages: `<path d="M12 2C7.58 2 4 5.58 4 10c0 2.7 1.34 5.08 3.4 6.53V19h2v2h2v-2h2v2h2v-2h2v-2.47c2.06-1.45 3.4-3.83 3.4-6.53 0-4.42-3.58-8-8-8zm-3 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm6 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`,
   unique_stunt_jumps: `<path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/>`,
+  vehicle_missions: `<path d="M12 2a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-2V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9zm-5 8v2h16v-2H4z"/>`,
+  odd_jobs: `<path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8-2h4v2h-4V4zm8 15H4V8h16v11z"/>`,
   races: `<path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/>`,
   challenges: `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h6v-2h-4z"/>`
 };
@@ -214,7 +224,7 @@ function initMap() {
   });
 
   // 1. High-Resolution Clean WebP Map Layer with Dynamic 8K Zoom-In LOD Rendering
-  state.currentMapUrl = "assets/map/lcs_map_4096.webp?v=3.1";
+  state.currentMapUrl = "assets/map/lcs_map_4096.webp?v=3.2";
   state.vectorLayer = L.imageOverlay(state.currentMapUrl, [[-128, 0], [0, 128]], {
     opacity: 1,
     interactive: false,
@@ -224,13 +234,13 @@ function initMap() {
   // Preload 8K WebP in background so zooming in is completely seamless with zero lag
   setTimeout(() => {
     const preloader = new Image();
-    preloader.src = "assets/map/lcs_map_8192.webp?v=3.1";
+    preloader.src = "assets/map/lcs_map_8192.webp?v=3.2";
   }, 1000);
 
   // Dynamic Level of Detail: swap to 8192x8192 WebP on zoom-in
   state.map.on("zoom", () => {
     const z = state.map.getZoom();
-    const targetUrl = (z >= 3.5) ? "assets/map/lcs_map_8192.webp?v=3.1" : "assets/map/lcs_map_4096.webp?v=3.1";
+    const targetUrl = (z >= 3.5) ? "assets/map/lcs_map_8192.webp?v=3.2" : "assets/map/lcs_map_4096.webp?v=3.2";
     if (state.currentMapUrl !== targetUrl) {
       state.currentMapUrl = targetUrl;
       state.vectorLayer.setUrl(targetUrl);
@@ -290,6 +300,10 @@ function createMarkerIcon(marker) {
   const color = (state.categories[marker.category] && state.categories[marker.category].color) || marker.color || "#c88219";
   const iconPath = CATEGORY_ICONS[marker.category] || CATEGORY_ICONS.hidden_packages;
   const isSelected = state.currentMarker && state.currentMarker.id === marker.id;
+  const isColorblind = state.palette && state.palette !== "standard";
+  const iconAttrs = isColorblind
+    ? 'fill="#ffffff" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="paint-order: stroke fill;"'
+    : 'fill="#ffffff" color="#ffffff"';
 
   const html = `
     <div class="map-pin ${isCollected ? 'collected' : ''} ${isSelected ? 'selected' : ''}">
@@ -300,8 +314,8 @@ function createMarkerIcon(marker) {
         <path d="M13 0C5.82 0 0 5.82 0 13c0 9.75 13 21 13 21s13-11.25 13-21c0-7.18-5.82-13-13-13z" fill="${color}" stroke="#000000" stroke-width="1.4"/>
         <!-- Inner Head Tone -->
         <circle cx="13" cy="13" r="8.5" fill="#000000" opacity="0.2"/>
-        <!-- White Collectible Silhouette -->
-        <g transform="translate(6, 6) scale(0.58)" fill="#ffffff" color="#ffffff">
+        <!-- Collectible Silhouette (High-Contrast Black Outline in Colorblind Modes) -->
+        <g transform="translate(6, 6) scale(0.58)" ${iconAttrs}>
           ${iconPath}
         </g>
       </svg>
@@ -321,6 +335,10 @@ function createClusterIcon(cluster) {
   const color = cluster.color;
   const iconPath = CATEGORY_ICONS[cluster.category] || CATEGORY_ICONS.hidden_packages;
   const allCollected = cluster.items.every(m => state.collected.has(m.id));
+  const isColorblind = state.palette && state.palette !== "standard";
+  const iconAttrs = isColorblind
+    ? 'fill="#ffffff" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="paint-order: stroke fill;"'
+    : 'fill="#ffffff" color="#ffffff"';
 
   const html = `
     <div class="map-pin cluster-pin ${allCollected ? 'collected' : ''}">
@@ -331,8 +349,8 @@ function createClusterIcon(cluster) {
         <path d="M13 0C5.82 0 0 5.82 0 13c0 9.75 13 21 13 21s13-11.25 13-21c0-7.18-5.82-13-13-13z" fill="${color}" stroke="#000000" stroke-width="1.4"/>
         <!-- Inner Head Tone -->
         <circle cx="13" cy="13" r="8.5" fill="#000000" opacity="0.2"/>
-        <!-- White Collectible Silhouette -->
-        <g transform="translate(6, 6) scale(0.58)" fill="#ffffff" color="#ffffff">
+        <!-- Collectible Silhouette (High-Contrast Black Outline in Colorblind Modes) -->
+        <g transform="translate(6, 6) scale(0.58)" ${iconAttrs}>
           ${iconPath}
         </g>
         <!-- Integrated Cluster Count Badge on Pin Shoulder -->
@@ -576,6 +594,21 @@ function getDynamicRewardText() {
   return `All safehouse weapons unlocked (100/100)!`;
 }
 
+// --- Marker Sibling Navigation for Stepper Buttons ---
+function getMarkerNavSiblings(marker) {
+  if (!marker) return { prev: null, next: null, currentIdx: -1, total: 0 };
+  const catMarkers = state.markers.filter(m => m.category === marker.category);
+  const nums = catMarkers.map(m => m.number);
+  const isDistinctNums = new Set(nums).size === catMarkers.length && nums.every(n => typeof n === "number");
+  if (isDistinctNums) {
+    catMarkers.sort((a, b) => a.number - b.number);
+  }
+  const idx = catMarkers.findIndex(m => m.id === marker.id);
+  const prev = idx > 0 ? catMarkers[idx - 1] : null;
+  const next = idx >= 0 && idx < catMarkers.length - 1 ? catMarkers[idx + 1] : null;
+  return { prev, next, currentIdx: idx, total: catMarkers.length };
+}
+
 // --- Attached Marker Popup Controller & Auto-Zoom ---
 function openMarkerPopup(marker) {
   const prevId = state.currentMarker ? state.currentMarker.id : null;
@@ -599,6 +632,11 @@ function openMarkerPopup(marker) {
   const catMeta = state.categories[marker.category] || { name: marker.category, color: marker.color };
   const isFound = state.collected.has(marker.id);
   const isPkg = marker.category === "hidden_packages";
+  const nav = getMarkerNavSiblings(marker);
+  const prevDisabled = !nav.prev ? 'disabled' : '';
+  const nextDisabled = !nav.next ? 'disabled' : '';
+  const prevTitle = nav.prev ? `Previous: ${nav.prev.title}` : 'No previous marker';
+  const nextTitle = nav.next ? `Next: ${nav.next.title}` : 'No next marker';
 
   // Build attached popup HTML
   const popupHtml = `
@@ -638,11 +676,11 @@ function openMarkerPopup(marker) {
 
       <!-- Popup Action Toolbar: Found Button + Stepper -->
       <div class="popup-actions">
-        <button class="popup-stepper-btn" id="popupBtnPrev" title="Previous Package" onclick="handlePopupAction(event, 'prev')" ${(!isPkg || marker.number <= 1) ? 'disabled' : ''}>◀</button>
+        <button class="popup-stepper-btn" id="popupBtnPrev" title="${prevTitle}" onclick="handlePopupAction(event, 'prev')" ${prevDisabled}>◀</button>
         <button class="btn-mark-found ${isFound ? 'collected' : ''}" id="popupBtnFound" onclick="handlePopupAction(event, 'found')">
           <span class="check-box-icon">${isFound ? '☑' : '☐'}</span> Found
         </button>
-        <button class="popup-stepper-btn" id="popupBtnNext" title="Next Package" onclick="handlePopupAction(event, 'next')" ${(!isPkg || marker.number >= 100) ? 'disabled' : ''}>▶</button>
+        <button class="popup-stepper-btn" id="popupBtnNext" title="${nextTitle}" onclick="handlePopupAction(event, 'next')" ${nextDisabled}>▶</button>
       </div>
     </div>
   `;
@@ -687,9 +725,9 @@ window.handlePopupAction = function(event, action) {
   } else if (action === "found") {
     toggleCurrentCollected();
   } else if (action === "prev") {
-    navigatePackage(-1);
+    navigateMarker(-1);
   } else if (action === "next") {
-    navigatePackage(1);
+    navigateMarker(1);
   } else if (action === "tab-img") {
     switchPopupMedia("image");
   } else if (action === "tab-vid") {
@@ -752,6 +790,23 @@ function toggleCurrentCollected() {
     state.collected.add(mId);
   }
 
+  // Two-way sync: reflect on checklist task if mapped to this marker
+  const checklist = window.CHECKLIST_DATA || (typeof CHECKLIST_DATA !== "undefined" ? CHECKLIST_DATA : null);
+  if (checklist) {
+    for (const cat of checklist.categories) {
+      const it = cat.items.find(i => i.markerId === mId || i.id === mId);
+      if (it) {
+        if (state.collected.has(mId)) {
+          state.checklistTasks.add(it.id);
+        } else {
+          state.checklistTasks.delete(it.id);
+        }
+        saveChecklistProgress();
+        break;
+      }
+    }
+  }
+
   saveCollected();
   renderMarkers();
 
@@ -768,11 +823,10 @@ function toggleCurrentCollected() {
   }
 }
 
-function navigatePackage(offset) {
-  if (!state.currentMarker || state.currentMarker.category !== "hidden_packages") return;
-  const nextNum = state.currentMarker.number + offset;
-  const target = state.markers.find(m => m.category === "hidden_packages" && m.number === nextNum);
-
+function navigateMarker(offset) {
+  if (!state.currentMarker) return;
+  const nav = getMarkerNavSiblings(state.currentMarker);
+  const target = offset > 0 ? nav.next : nav.prev;
   if (target) {
     setTimeout(() => {
       openMarkerPopup(target);
@@ -799,17 +853,64 @@ function saveChecklistProgress() {
 }
 
 function toggleTaskCompleted(taskId) {
+  const checklist = window.CHECKLIST_DATA || (typeof CHECKLIST_DATA !== "undefined" ? CHECKLIST_DATA : null);
+  let linkedMarkerId = null;
+  if (checklist) {
+    for (const cat of checklist.categories) {
+      const it = cat.items.find(i => i.id === taskId);
+      if (it && it.markerId) {
+        linkedMarkerId = it.markerId;
+        break;
+      }
+    }
+  }
+
   if (state.checklistTasks.has(taskId)) {
     state.checklistTasks.delete(taskId);
+    if (linkedMarkerId) {
+      state.collected.delete(linkedMarkerId);
+      saveCollected();
+      updateMarkerVisual(linkedMarkerId);
+    }
   } else {
     state.checklistTasks.add(taskId);
+    if (linkedMarkerId) {
+      state.collected.add(linkedMarkerId);
+      saveCollected();
+      updateMarkerVisual(linkedMarkerId);
+    }
   }
   saveChecklistProgress();
+
+  if (state.currentMarker && state.currentMarker.id === linkedMarkerId) {
+    const isFound = state.collected.has(linkedMarkerId);
+    const btn = document.getElementById("popupBtnFound");
+    if (btn) {
+      btn.classList.toggle("collected", isFound);
+      btn.innerHTML = `<span class="check-box-icon">${isFound ? '☑' : '☐'}</span> Found`;
+    }
+  }
 }
 
 window.toggleTaskCompleted = toggleTaskCompleted;
 
-window.goToMapCoords = function(lat, lng, title) {
+window.goToMarker = function(markerId) {
+  toggleChecklistDrawer(false);
+  const target = state.markers.find(m => m.id === markerId);
+  if (target) {
+    if (state.activeCategory !== "all" && state.activeCategory !== target.category) {
+      setCategoryFilter(target.category);
+    }
+    state.map.flyTo([target.lat, target.lng], 4.75, { animate: true, duration: 0.8 });
+    setTimeout(() => openMarkerPopup(target), 850);
+  }
+};
+
+window.goToMapCoords = function(lat, lng, title, markerId) {
+  if (markerId) {
+    window.goToMarker(markerId);
+    return;
+  }
   toggleChecklistDrawer(false);
   state.map.flyTo([lat, lng], 4.75, { animate: true, duration: 0.8 });
   const existing = state.markers.find(m => Math.abs(m.lat - lat) < 0.5 && Math.abs(m.lng - lng) < 0.5);
@@ -821,6 +922,20 @@ window.goToMapCoords = function(lat, lng, title) {
       .setContent(`<div style="padding: 8px 12px; font-weight: 700; color: #fbbf24; font-size: 12px;">📍 ${title}</div>`)
       .openOn(state.map);
   }
+};
+
+window.toggleAllCategoryCollectibles = function(catKey) {
+  const catMarkers = state.markers.filter(m => m.category === catKey);
+  if (catMarkers.length === 0) return;
+  const allFound = catMarkers.every(m => state.collected.has(m.id));
+  if (allFound) {
+    catMarkers.forEach(m => state.collected.delete(m.id));
+  } else {
+    catMarkers.forEach(m => state.collected.add(m.id));
+  }
+  saveCollected();
+  renderMarkers();
+  updateProgressUI();
 };
 
 window.toggleCreditsModal = function(open) {
@@ -860,6 +975,8 @@ function renderFullChecklist() {
       } else if (item.isCategoryLink === "unique_stunt_jumps") {
         const jCount = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
         isDone = jCount >= 26;
+      } else if (item.markerId && state.collected.has(item.markerId)) {
+        isDone = true;
       } else {
         isDone = state.checklistTasks.has(item.id);
       }
@@ -945,6 +1062,9 @@ function renderFullChecklist() {
         const jCount = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
         return jCount >= 26 || state.checklistTasks.has(item.id);
       }
+      if (item.markerId && state.collected.has(item.markerId)) {
+        return true;
+      }
       return state.checklistTasks.has(item.id);
     }).length;
 
@@ -960,7 +1080,7 @@ function renderFullChecklist() {
           </div>
         </div>
         <div class="cl-group-items">
-          ${filteredItems.map(item => {
+          ${filteredItems.map((item, idx, arr) => {
             if (item.isCategoryLink) {
               let current = 0;
               let total = item.count || 100;
@@ -990,7 +1110,12 @@ function renderFullChecklist() {
                   <div class="cl-item-body">
                     <div class="cl-item-title-row">
                       <span class="cl-item-title">${item.title}</span>
-                      <button class="cl-map-btn" onclick="setCategoryFilter('${item.isCategoryLink}'); toggleChecklistDrawer(false);">Show on Map</button>
+                      <div class="cl-item-actions">
+                        <button class="cl-found-all-btn ${isDone ? 'all-found' : ''}" onclick="toggleAllCategoryCollectibles('${item.isCategoryLink}')" title="${isDone ? 'Reset ' + item.title : 'Mark all ' + item.title + ' as found'}">
+                          ${isDone ? 'Reset All ✕' : 'Found All ✓'}
+                        </button>
+                        <button class="cl-map-btn" onclick="setCategoryFilter('${item.isCategoryLink}'); toggleChecklistDrawer(false);">Show on Map</button>
+                      </div>
                     </div>
                     <div class="cl-item-meta">
                       <span class="cl-item-tag" style="color: ${isDone ? 'var(--color-green)' : '#fbbf24'}; font-weight: 600;">
@@ -1006,16 +1131,24 @@ function renderFullChecklist() {
               `;
             }
 
-            const isDone = state.checklistTasks.has(item.id);
-            const mapBtn = item.coords
-              ? `<button class="cl-map-btn" onclick="goToMapCoords(${item.coords[0]}, ${item.coords[1]}, '${item.title.replace(/'/g, "\\'")}')">📍 Map</button>`
-              : "";
+            let subGroupHtml = "";
+            if (item.subGroup && (idx === 0 || arr[idx - 1].subGroup !== item.subGroup)) {
+              subGroupHtml = `<div class="cl-subgroup-header">${item.subGroup}</div>`;
+            }
+
+            const isDone = (item.markerId && state.collected.has(item.markerId)) || state.checklistTasks.has(item.id);
+            const mapBtn = item.markerId
+              ? `<button class="cl-map-btn" onclick="goToMarker('${item.markerId}')">📍 Map</button>`
+              : (item.coords
+                ? `<button class="cl-map-btn" onclick="goToMapCoords(${item.coords[0]}, ${item.coords[1]}, '${item.title.replace(/'/g, "\\'")}')">📍 Map</button>`
+                : "");
 
             const optTag = !item.required ? `<span class="cl-item-tag cl-optional-tag">Optional</span>` : "";
             const rewardTag = item.reward ? `<span class="cl-item-tag" title="Reward">🏆 ${item.reward}</span>` : "";
             const giverTag = item.giver ? `<span class="cl-item-tag">${item.giver}</span>` : "";
 
             return `
+              ${subGroupHtml}
               <div class="cl-item ${isDone ? 'completed' : ''}">
                 <input type="checkbox" class="cl-checkbox" data-task-id="${item.id}" ${isDone ? 'checked' : ''} onchange="toggleTaskCompleted('${item.id}')" />
                 <div class="cl-item-body">
@@ -1043,7 +1176,7 @@ function renderFullChecklist() {
 
 // --- Progress & UI Stats (100% Completion Tracker) ---
 function updateProgressUI() {
-  const totalPins = state.markers.length || 166;
+  const totalPins = state.markers.length || 178;
   const countAll = document.getElementById("count_all");
   if (countAll) countAll.textContent = `${state.collected.size}/${totalPins}`;
 
@@ -1315,14 +1448,29 @@ function bindEvents() {
       toggleChecklistDrawer(false);
       toggleCreditsModal(false);
     }
-    if (state.currentMarker && state.currentMarker.category === "hidden_packages") {
-      if (e.key === "ArrowLeft") navigatePackage(-1);
-      if (e.key === "ArrowRight") navigatePackage(1);
+    if (state.currentMarker) {
+      if (e.key === "ArrowLeft") navigateMarker(-1);
+      if (e.key === "ArrowRight") navigateMarker(1);
       if (e.key === " ") {
         e.preventDefault();
         toggleCurrentCollected();
       }
     }
+  });
+}
+
+function syncChecklistAndMarkers() {
+  const checklist = window.CHECKLIST_DATA || (typeof CHECKLIST_DATA !== "undefined" ? CHECKLIST_DATA : null);
+  if (!checklist) return;
+  checklist.categories.forEach(cat => {
+    cat.items.forEach(item => {
+      if (!item.markerId) return;
+      if (state.checklistTasks.has(item.id)) {
+        state.collected.add(item.markerId);
+      } else if (state.collected.has(item.markerId)) {
+        state.checklistTasks.add(item.id);
+      }
+    });
   });
 }
 
@@ -1354,6 +1502,7 @@ function loadMarkerDataIntoState(data) {
 async function init() {
   loadCollected();
   loadChecklistProgress();
+  syncChecklistAndMarkers();
   loadSettings();
   initMap();
   bindEvents();
