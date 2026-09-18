@@ -223,29 +223,12 @@ function initMap() {
     }
   });
 
-  // 1. High-Resolution Clean WebP Map Layer with Dynamic 8K Zoom-In LOD Rendering
-  state.currentMapUrl = "assets/map/lcs_map_4096.webp?v=3.2";
-  state.vectorLayer = L.imageOverlay(state.currentMapUrl, [[-128, 0], [0, 128]], {
+  // 1. High-Resolution 4K Clean Map Layer (Smooth, anti-aliased, zero aliasing)
+  state.vectorLayer = L.imageOverlay("assets/map/lcs_map_4096.png?v=3.4", [[-128, 0], [0, 128]], {
     opacity: 1,
     interactive: false,
     zIndex: 1
   }).addTo(state.map);
-
-  // Preload 8K WebP in background so zooming in is completely seamless with zero lag
-  setTimeout(() => {
-    const preloader = new Image();
-    preloader.src = "assets/map/lcs_map_8192.webp?v=3.2";
-  }, 1000);
-
-  // Dynamic Level of Detail: swap to 8192x8192 WebP on zoom-in
-  state.map.on("zoom", () => {
-    const z = state.map.getZoom();
-    const targetUrl = (z >= 3.5) ? "assets/map/lcs_map_8192.webp?v=3.2" : "assets/map/lcs_map_4096.webp?v=3.2";
-    if (state.currentMapUrl !== targetUrl) {
-      state.currentMapUrl = targetUrl;
-      state.vectorLayer.setUrl(targetUrl);
-    }
-  });
 
   // 2. Single reusable attached Leaflet popup with pointer tip
   state.popup = L.popup({
@@ -295,15 +278,49 @@ function initMap() {
 }
 
 // --- Marker Pin Generators ---
+function renderPinIconSvg(category, isColorblind) {
+  const iconPath = CATEGORY_ICONS[category] || CATEGORY_ICONS.hidden_packages;
+  if (category === "hidden_packages") {
+    if (isColorblind) {
+      return `
+        <g transform="translate(6, 6) scale(0.58)">
+          <g fill="#000000" stroke="#000000" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+            ${iconPath}
+          </g>
+          <g fill="#ffffff" stroke="#ffffff" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+            ${iconPath}
+          </g>
+        </g>
+      `;
+    } else {
+      return `
+        <g transform="translate(6, 6) scale(0.58)" fill="#ffffff" stroke="#ffffff" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+          ${iconPath}
+        </g>
+      `;
+    }
+  } else {
+    if (isColorblind) {
+      return `
+        <g transform="translate(6, 6) scale(0.58)" fill="#ffffff" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="paint-order: stroke fill;">
+          ${iconPath}
+        </g>
+      `;
+    } else {
+      return `
+        <g transform="translate(6, 6) scale(0.58)" fill="#ffffff">
+          ${iconPath}
+        </g>
+      `;
+    }
+  }
+}
+
 function createMarkerIcon(marker) {
   const isCollected = state.collected.has(marker.id);
   const color = (state.categories[marker.category] && state.categories[marker.category].color) || marker.color || "#c88219";
-  const iconPath = CATEGORY_ICONS[marker.category] || CATEGORY_ICONS.hidden_packages;
   const isSelected = state.currentMarker && state.currentMarker.id === marker.id;
   const isColorblind = state.palette && state.palette !== "standard";
-  const iconAttrs = isColorblind
-    ? 'fill="#ffffff" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="paint-order: stroke fill;"'
-    : 'fill="#ffffff" color="#ffffff"';
 
   const html = `
     <div class="map-pin ${isCollected ? 'collected' : ''} ${isSelected ? 'selected' : ''}">
@@ -315,9 +332,7 @@ function createMarkerIcon(marker) {
         <!-- Inner Head Tone -->
         <circle cx="13" cy="13" r="8.5" fill="#000000" opacity="0.2"/>
         <!-- Collectible Silhouette (High-Contrast Black Outline in Colorblind Modes) -->
-        <g transform="translate(6, 6) scale(0.58)" ${iconAttrs}>
-          ${iconPath}
-        </g>
+        ${renderPinIconSvg(marker.category, isColorblind)}
       </svg>
     </div>
   `;
@@ -333,12 +348,8 @@ function createMarkerIcon(marker) {
 function createClusterIcon(cluster) {
   const count = cluster.items.length;
   const color = cluster.color;
-  const iconPath = CATEGORY_ICONS[cluster.category] || CATEGORY_ICONS.hidden_packages;
   const allCollected = cluster.items.every(m => state.collected.has(m.id));
   const isColorblind = state.palette && state.palette !== "standard";
-  const iconAttrs = isColorblind
-    ? 'fill="#ffffff" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" style="paint-order: stroke fill;"'
-    : 'fill="#ffffff" color="#ffffff"';
 
   const html = `
     <div class="map-pin cluster-pin ${allCollected ? 'collected' : ''}">
@@ -350,9 +361,7 @@ function createClusterIcon(cluster) {
         <!-- Inner Head Tone -->
         <circle cx="13" cy="13" r="8.5" fill="#000000" opacity="0.2"/>
         <!-- Collectible Silhouette (High-Contrast Black Outline in Colorblind Modes) -->
-        <g transform="translate(6, 6) scale(0.58)" ${iconAttrs}>
-          ${iconPath}
-        </g>
+        ${renderPinIconSvg(cluster.category, isColorblind)}
         <!-- Integrated Cluster Count Badge on Pin Shoulder -->
         <circle cx="22" cy="6" r="6" fill="#0b0f19" stroke="#ffffff" stroke-width="1.4"/>
         <text x="22" y="6.5" text-anchor="middle" dominant-baseline="central" fill="#ffffff" font-size="7.5" font-weight="900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">${count}</text>

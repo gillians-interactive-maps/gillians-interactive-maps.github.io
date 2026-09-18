@@ -59,8 +59,7 @@ html, body {
 
 .leaflet-image-layer {
   will-change: transform;
-  image-rendering: high-quality;
-  image-rendering: -webkit-optimize-contrast;
+  image-rendering: auto;
 }
 
 /* ==========================================================================
