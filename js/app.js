@@ -85,6 +85,10 @@ const state = {
   currentMarker: null,
   currentMediaTab: "image",
   collected: new Set(),
+  checklistTasks: new Set(),
+  showOptionalTasks: false,
+  activeChecklistIsland: "all",
+  checklistSearchQuery: "",
   leafletMarkers: new Map(),
   map: null,
   markerLayer: null,
@@ -163,11 +167,25 @@ function applyPalette(palKey) {
   saveSettings();
 }
 
+// --- Dynamic Zoom Clamping (Fit full map to viewport without excess void) ---
+function calculateMinFitZoom() {
+  const mapEl = document.getElementById("map");
+  if (!mapEl) return 1.75;
+  const w = mapEl.clientWidth || window.innerWidth;
+  const h = mapEl.clientHeight || window.innerHeight;
+  // In L.CRS.Simple, map coordinates span 128 x 128 units.
+  // We want the entire map (128 units) to comfortably fit the viewport.
+  const fitZoom = Math.log2(Math.min(w, h) / 128);
+  return Math.max(1.5, Math.min(2.75, Math.floor(fitZoom * 4) / 4));
+}
+
 // --- Map Initialization ---
 function initMap() {
+  const minFitZoom = calculateMinFitZoom();
+
   state.map = L.map("map", {
     crs: L.CRS.Simple,
-    minZoom: 0,
+    minZoom: minFitZoom,
     maxZoom: 6,
     zoomSnap: 0.25,
     zoomDelta: 0.5,
@@ -177,8 +195,18 @@ function initMap() {
     bounceAtZoomLimits: false,
     fadeAnimation: true,
     markerZoomAnimation: true,
-    maxBounds: [[-136, -6], [6, 136]],
-    maxBoundsViscosity: 0.85
+    maxBounds: [[-129, -1], [1, 129]],
+    maxBoundsViscosity: 1.0
+  });
+
+  window.addEventListener("resize", () => {
+    if (state.map) {
+      const z = calculateMinFitZoom();
+      state.map.setMinZoom(z);
+      if (state.map.getZoom() < z) {
+        state.map.setZoom(z);
+      }
+    }
   });
 
   // 1. High-Resolution 4K Clean Map Layer (Zero-lag, GPU texture cached, seamless)
@@ -840,10 +868,335 @@ function initDrawerCategories() {
   });
 }
 
+const CHECKLIST_STORAGE_KEY = "gta_lcs_checklist_progress";
+
+function loadChecklistProgress() {
+  try {
+    const raw = localStorage.getItem(CHECKLIST_STORAGE_KEY);
+    if (raw) state.checklistTasks = new Set(JSON.parse(raw));
+  } catch (e) {
+    state.checklistTasks = new Set();
+  }
+}
+
+function saveChecklistProgress() {
+  try {
+    localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify([...state.checklistTasks]));
+  } catch (e) {}
+  updateProgressUI();
+}
+
+function toggleTaskCompleted(taskId) {
+  if (state.checklistTasks.has(taskId)) {
+    state.checklistTasks.delete(taskId);
+  } else {
+    state.checklistTasks.add(taskId);
+  }
+  saveChecklistProgress();
+}
+
+window.toggleTaskCompleted = toggleTaskCompleted;
+
+window.goToMapCoords = function(lat, lng, title) {
+  toggleChecklistDrawer(false);
+  state.map.flyTo([lat, lng], 4.75, { animate: true, duration: 0.8 });
+  const existing = state.markers.find(m => Math.abs(m.lat - lat) < 0.5 && Math.abs(m.lng - lng) < 0.5);
+  if (existing) {
+    setTimeout(() => openMarkerPopup(existing), 850);
+  } else {
+    L.popup({ offset: [0, -10], className: "custom-leaflet-popup" })
+      .setLatLng([lat, lng])
+      .setContent(`<div style="padding: 8px 12px; font-weight: 700; color: #fbbf24; font-size: 12px;">📍 ${title}</div>`)
+      .openOn(state.map);
+  }
+};
+
+function toggleCreditsModal(open) {
+  const modal = document.getElementById("creditsModal");
+  const backdrop = document.getElementById("creditsModalBackdrop");
+  if (!modal || !backdrop) return;
+  if (open === undefined) open = !modal.classList.contains("active");
+  modal.classList.toggle("active", open);
+  backdrop.classList.toggle("active", open);
+}
+
+// --- Render Complete 100% and Optional Checklist ---
+function renderFullChecklist() {
+  const container = document.getElementById("fullChecklistContainer");
+  if (!container || typeof CHECKLIST_DATA === "undefined") return;
+
+  const island = state.activeChecklistIsland;
+  const query = state.checklistSearchQuery.trim().toLowerCase();
+  const showOpt = state.showOptionalTasks;
+
+  let totalMandatory = 0;
+  let completedMandatory = 0;
+  let totalOptional = 0;
+  let completedOptional = 0;
+
+  // Calculate live completion counts across all categories
+  CHECKLIST_DATA.categories.forEach(cat => {
+    cat.items.forEach(item => {
+      let isDone = false;
+      if (item.isCategoryLink === "hidden_packages") {
+        const hpCount = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
+        isDone = hpCount >= 100;
+      } else if (item.isCategoryLink === "rampages") {
+        const rCount = state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length;
+        isDone = rCount >= 20;
+      } else if (item.isCategoryLink === "unique_stunt_jumps") {
+        const jCount = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
+        isDone = jCount >= 26;
+      } else {
+        isDone = state.checklistTasks.has(item.id);
+      }
+
+      if (item.required) {
+        totalMandatory++;
+        if (isDone) completedMandatory++;
+      } else {
+        totalOptional++;
+        if (isDone) completedOptional++;
+      }
+    });
+  });
+
+  const mandatoryPct = totalMandatory > 0 ? ((completedMandatory / totalMandatory) * 100).toFixed(1) : "0.0";
+
+  // Update Drawer Stats & Progress Bar
+  const drawerStats = document.getElementById("drawerStats");
+  if (drawerStats) drawerStats.textContent = `${completedMandatory} / ${totalMandatory}`;
+
+  const drawerBadge = document.getElementById("drawerPercentBadge");
+  if (drawerBadge) drawerBadge.textContent = `${mandatoryPct}%`;
+
+  const progressBar = document.getElementById("checklistProgressBar");
+  if (progressBar) progressBar.style.width = `${mandatoryPct}%`;
+
+  const drawerSub = document.getElementById("drawerSubStats");
+  if (drawerSub) {
+    drawerSub.textContent = showOpt
+      ? `100%: ${completedMandatory}/${totalMandatory} | Optional: ${completedOptional}/${totalOptional}`
+      : `Mandatory 100% Tasks (${mandatoryPct}%)`;
+  }
+
+  const mobileProg = document.getElementById("mobileProgressText");
+  if (mobileProg) mobileProg.textContent = `${Math.round(mandatoryPct)}%`;
+
+  // Render Category Groups
+  let html = "";
+  CHECKLIST_DATA.categories.forEach(cat => {
+    // Skip optional category if toggle is off
+    if (!cat.requiredFor100 && !showOpt) return;
+
+    // Filter category items by island and search query
+    const filteredItems = cat.items.filter(item => {
+      // Island filter
+      if (island !== "all") {
+        const itemIsland = (item.island || "").toLowerCase();
+        if (itemIsland !== "all" && !itemIsland.includes(island)) return false;
+      }
+      // Optional toggle check
+      if (!item.required && !showOpt) return false;
+      // Search query filter
+      if (query) {
+        const matchTitle = (item.title || "").toLowerCase().includes(query);
+        const matchGiver = (item.giver || "").toLowerCase().includes(query);
+        const matchReward = (item.reward || "").toLowerCase().includes(query);
+        const matchDesc = (item.desc || "").toLowerCase().includes(query);
+        if (!matchTitle && !matchGiver && !matchReward && !matchDesc) return false;
+      }
+      return true;
+    });
+
+    if (filteredItems.length === 0) return;
+
+    // Count done in this category
+    const catDone = filteredItems.filter(item => {
+      if (item.isCategoryLink === "hidden_packages") {
+        return state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length >= 100;
+      }
+      if (item.isCategoryLink === "rampages") {
+        return state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length >= 20;
+      }
+      if (item.isCategoryLink === "unique_stunt_jumps") {
+        return state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length >= 26;
+      }
+      return state.checklistTasks.has(item.id);
+    }).length;
+
+    html += `
+      <div class="cl-group">
+        <div class="cl-group-header" onclick="this.parentElement.querySelector('.cl-group-items').classList.toggle('collapsed')">
+          <div class="cl-group-title-row">
+            <span class="cl-group-icon">${cat.icon || "★"}</span>
+            <span class="cl-group-title">${cat.name}</span>
+          </div>
+          <span class="cl-group-count">${catDone}/${filteredItems.length}</span>
+        </div>
+        <div class="cl-group-items">
+          ${filteredItems.map(item => {
+            let isDone = false;
+            let subStatus = "";
+            if (item.isCategoryLink === "hidden_packages") {
+              const hpCount = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
+              isDone = hpCount >= 100;
+              subStatus = `<span class="cl-item-tag" style="color: #fbbf24; cursor: pointer;" onclick="setCategoryFilter('hidden_packages'); toggleChecklistDrawer(false);">${hpCount}/100 Found ↗</span>`;
+            } else if (item.isCategoryLink === "rampages") {
+              const rCount = state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length;
+              isDone = rCount >= 20;
+              subStatus = `<span class="cl-item-tag" style="color: #f87171; cursor: pointer;" onclick="setCategoryFilter('rampages'); toggleChecklistDrawer(false);">${rCount}/20 Beaten ↗</span>`;
+            } else if (item.isCategoryLink === "unique_stunt_jumps") {
+              const jCount = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
+              isDone = jCount >= 26;
+              subStatus = `<span class="cl-item-tag" style="color: #fbbf24; cursor: pointer;" onclick="setCategoryFilter('unique_stunt_jumps'); toggleChecklistDrawer(false);">${jCount}/26 Landed ↗</span>`;
+            } else {
+              isDone = state.checklistTasks.has(item.id);
+            }
+
+            const mapBtn = item.coords
+              ? `<button class="cl-map-btn" onclick="goToMapCoords(${item.coords[0]}, ${item.coords[1]}, '${item.title.replace(/'/g, "\\'")}')">📍 Map</button>`
+              : "";
+
+            const optTag = !item.required ? `<span class="cl-item-tag cl-optional-tag">Optional</span>` : "";
+            const rewardTag = item.reward ? `<span class="cl-item-tag" title="Reward">🏆 ${item.reward}</span>` : "";
+            const giverTag = item.giver ? `<span class="cl-item-tag">${item.giver}</span>` : "";
+
+            return `
+              <div class="cl-item ${isDone ? 'completed' : ''}">
+                <input type="checkbox" class="cl-checkbox" data-task-id="${item.id}" ${isDone ? 'checked' : ''} onchange="toggleTaskCompleted('${item.id}')" />
+                <div class="cl-item-body">
+                  <div class="cl-item-title-row">
+                    <span class="cl-item-title">${item.title}</span>
+                    ${mapBtn}
+                  </div>
+                  <div class="cl-item-meta">
+                    ${optTag}
+                    ${giverTag}
+                    ${subStatus}
+                    ${rewardTag}
+                  </div>
+                  ${item.desc ? `<div class="cl-item-desc">${item.desc}</div>` : ""}
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// --- Progress & UI Stats (100% Completion Tracker) ---
+function updateProgressUI() {
+  const totalAll = state.markers.length || 165;
+  const totalCollected = state.collected.size;
+  const totalPct = Math.round((totalCollected / totalAll) * 100);
+
+  // Top Sidebar 100% Completion Box
+  const totalText = document.getElementById("totalProgressText");
+  if (totalText) totalText.textContent = `${totalCollected} / ${totalAll} (${totalPct}%)`;
+
+  const totalBar = document.getElementById("totalProgressBar");
+  if (totalBar) totalBar.style.width = `${totalPct}%`;
+
+  const countAll = document.getElementById("count_all");
+  if (countAll) countAll.textContent = `${totalCollected}/${totalAll}`;
+
+  // Update Category checklist counts in Sidebar
+  Object.keys(state.categories).forEach(catId => {
+    const el = document.getElementById(`count_${catId}`);
+    if (el) {
+      const catTotal = state.categories[catId].count || 0;
+      const catDone = state.markers.filter(m => m.category === catId && state.collected.has(m.id)).length;
+      el.textContent = `${catDone}/${catTotal}`;
+    }
+  });
+
+  // Safehouse Weapon Milestone Tracker in Drawer
+  const hpCollected = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
+  const milestoneList = document.getElementById("safehouseMilestoneList");
+  if (milestoneList) {
+    milestoneList.innerHTML = SAFE_REWARDS.map(r => {
+      const unlocked = hpCollected >= r.count;
+      return `
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 3px 0; color: ${unlocked ? 'var(--color-green)' : 'var(--text-dim)'}; font-size: 11px;">
+          <span>${unlocked ? '✓' : '○'} ${r.reward}</span>
+          <span style="color: var(--color-amber);">${r.count} pkgs</span>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // Render Full 100% Checklist
+  renderFullChecklist();
+}
+
+// --- Island Navigation with Accurate Bounds ---
+function setIsland(islandKey) {
+  state.activeIsland = islandKey;
+  document.querySelectorAll(".island-btn[data-island]").forEach(b => {
+    b.classList.toggle("active", b.dataset.island === islandKey);
+  });
+
+  const bounds = ISLAND_BOUNDS[islandKey] || ISLAND_BOUNDS.all;
+  state.map.fitBounds(bounds, { animate: true, padding: [15, 15], maxZoom: 4.5 });
+  renderMarkers();
+}
+
+function setCategoryFilter(cat) {
+  state.activeCategory = cat;
+  document.querySelectorAll(".nav-item[data-cat]").forEach(b => {
+    b.classList.toggle("active", b.dataset.cat === cat);
+  });
+  renderMarkers();
+}
+
+function toggleChecklistDrawer(open) {
+  const drawer = document.getElementById("checklistDrawer");
+  const backdrop = document.getElementById("drawerBackdrop");
+  if (!drawer || !backdrop) return;
+  if (open === undefined) {
+    open = !drawer.classList.contains("open");
+  }
+  drawer.classList.toggle("open", open);
+  backdrop.classList.toggle("open", open);
+  if (open) {
+    renderFullChecklist();
+  }
+}
+
+function initDrawerCategories() {
+  const list = document.getElementById("drawerCategoryList");
+  if (!list) return;
+
+  list.innerHTML = "";
+  Object.keys(state.categories).forEach(catId => {
+    const cat = state.categories[catId];
+    const item = document.createElement("div");
+    item.className = "drawer-item";
+    item.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: #06090e; border: 1px solid var(--panel-border); border-radius: 6px; font-size: 11px;";
+    item.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background-color: ${cat.color};"></span>
+        <span style="font-weight: 500; color: var(--text-main);">${cat.name}</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 11px; color: var(--text-dim);" id="drawer_count_${catId}">0/${cat.count}</span>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
 function resetProgress() {
-  if (confirm("Reset all tracked progress?")) {
+  if (confirm("Reset all tracked progress (markers & 100% checklist tasks)?")) {
     state.collected.clear();
+    state.checklistTasks.clear();
     saveCollected();
+    saveChecklistProgress();
     renderMarkers();
     if (state.currentMarker) {
       updateMarkerVisual(state.currentMarker.id);
@@ -857,10 +1210,15 @@ function resetProgress() {
 }
 
 function exportProgress() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify([...state.collected]));
+  const exportDoc = {
+    collected: [...state.collected],
+    checklistTasks: [...state.checklistTasks],
+    timestamp: new Date().toISOString()
+  };
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportDoc, null, 2));
   const dlAnchor = document.createElement("a");
   dlAnchor.setAttribute("href", dataStr);
-  dlAnchor.setAttribute("download", "gta_lcs_progress.json");
+  dlAnchor.setAttribute("download", "gta_lcs_100_progress.json");
   dlAnchor.click();
 }
 
@@ -877,12 +1235,16 @@ function importProgress() {
         const imported = JSON.parse(event.target.result);
         if (Array.isArray(imported)) {
           state.collected = new Set(imported);
-          saveCollected();
-          renderMarkers();
-          alert("Progress loaded!");
+        } else if (imported && typeof imported === "object") {
+          if (Array.isArray(imported.collected)) state.collected = new Set(imported.collected);
+          if (Array.isArray(imported.checklistTasks)) state.checklistTasks = new Set(imported.checklistTasks);
         }
+        saveCollected();
+        saveChecklistProgress();
+        renderMarkers();
+        alert("Progress loaded successfully!");
       } catch (err) {
-        alert("Invalid file.");
+        alert("Invalid file format.");
       }
     };
     reader.readAsText(file);
@@ -913,6 +1275,55 @@ function bindEvents() {
 
   const drawerBackdrop = document.getElementById("drawerBackdrop");
   if (drawerBackdrop) drawerBackdrop.addEventListener("click", () => toggleChecklistDrawer(false));
+
+  // Credits Modal triggers
+  const btnOpenCredits = document.getElementById("btnOpenCredits");
+  if (btnOpenCredits) btnOpenCredits.addEventListener("click", () => toggleCreditsModal(true));
+
+  const btnCloseCredits = document.getElementById("btnCloseCredits");
+  if (btnCloseCredits) btnCloseCredits.addEventListener("click", () => toggleCreditsModal(false));
+
+  const creditsBackdrop = document.getElementById("creditsModalBackdrop");
+  if (creditsBackdrop) creditsBackdrop.addEventListener("click", () => toggleCreditsModal(false));
+
+  // Checklist island filter buttons
+  document.querySelectorAll(".cl-island-btn[data-cl-island]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.activeChecklistIsland = btn.dataset.clIsland;
+      document.querySelectorAll(".cl-island-btn[data-cl-island]").forEach(b => b.classList.toggle("active", b === btn));
+      renderFullChecklist();
+    });
+  });
+
+  // Optional tasks toggle
+  const toggleOpt = document.getElementById("toggleShowOptional");
+  if (toggleOpt) {
+    toggleOpt.checked = state.showOptionalTasks;
+    toggleOpt.addEventListener("change", (e) => {
+      state.showOptionalTasks = e.target.checked;
+      renderFullChecklist();
+    });
+  }
+
+  // Checklist search input
+  const searchInput = document.getElementById("inputChecklistSearch");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      state.checklistSearchQuery = e.target.value;
+      renderFullChecklist();
+    });
+  }
+
+  // Safehouse collapsible toggle
+  const toggleSafe = document.getElementById("toggleSafehouseMilestones");
+  if (toggleSafe) {
+    toggleSafe.addEventListener("click", () => {
+      const list = document.getElementById("safehouseMilestoneList");
+      const icon = toggleSafe.querySelector(".collapsible-icon");
+      if (list) list.classList.toggle("collapsed");
+      if (icon) icon.classList.toggle("collapsed");
+    });
+  }
 
   // Hide collected toggle
   const toggleHide = document.getElementById("toggleHideCollected");
@@ -960,6 +1371,7 @@ function bindEvents() {
     if (e.key === "Escape") {
       state.map.closePopup();
       toggleChecklistDrawer(false);
+      toggleCreditsModal(false);
     }
     if (state.currentMarker && state.currentMarker.category === "hidden_packages") {
       if (e.key === "ArrowLeft") navigatePackage(-1);
@@ -999,6 +1411,7 @@ function loadMarkerDataIntoState(data) {
 
 async function init() {
   loadCollected();
+  loadChecklistProgress();
   loadSettings();
   initMap();
   bindEvents();

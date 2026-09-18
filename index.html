@@ -167,7 +167,11 @@
         </div>
       </div>
 
-      <button class="sidebar-action-btn" id="btnResetProgress" title="Reset tracking">Reset Progress</button>
+        <div class="sidebar-action-row">
+          <button class="sidebar-action-btn secondary-btn" id="btnOpenCredits" title="View Credits & Sources">Credits & Sources</button>
+          <button class="sidebar-action-btn" id="btnResetProgress" title="Reset tracking">Reset</button>
+        </div>
+      </div>
     </div>
   </aside>
 
@@ -177,52 +181,148 @@
     <button class="island-btn" data-island="portland">Portland</button>
     <button class="island-btn" data-island="staunton">Staunton</button>
     <button class="island-btn" data-island="shoreside">Shoreside</button>
-    <button class="island-btn mobile-checklist-btn" id="mobileBtnChecklist" title="Open Checklist">✓ <span id="mobileProgressText">0/165</span></button>
+    <button class="island-btn mobile-checklist-btn" id="mobileBtnChecklist" title="Open Checklist">✓ <span id="mobileProgressText">0%</span></button>
   </nav>
 
   <!-- Side Checklist & Progress Drawer -->
   <div class="drawer-backdrop" id="drawerBackdrop"></div>
-  <aside class="checklist-drawer" id="checklistDrawer" aria-label="Checklist and Progress">
+  <aside class="checklist-drawer" id="checklistDrawer" aria-label="100% Checklist and Progress">
     <div class="drawer-header">
-      <h3 class="drawer-title">Checklist & Progress</h3>
+      <div class="drawer-header-left">
+        <h3 class="drawer-title">100% Checklist</h3>
+        <span class="drawer-badge" id="drawerPercentBadge">0.0%</span>
+      </div>
       <button class="card-close-btn" id="btnCloseDrawer" aria-label="Close drawer">✕</button>
     </div>
 
     <div class="drawer-body">
-      <!-- Total Completion Stat Card -->
-      <div class="stat-card">
-        <div>
-          <div class="stat-card-label">Total Completion</div>
-          <div style="font-size: 11px; color: var(--text-dim); margin-top: 2px;" id="drawerSubStats">All Collectibles</div>
+      <!-- 100% Mandatory Progress Card -->
+      <div class="stat-card checklist-stat-card">
+        <div class="stat-card-row">
+          <div>
+            <div class="stat-card-label">Game Completion</div>
+            <div class="stat-card-sub" id="drawerSubStats">Mandatory 100% Tasks</div>
+          </div>
+          <div class="stat-card-val" id="drawerStats">0 / 73</div>
         </div>
-        <div class="stat-card-val" id="drawerStats">0 / 166</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="checklistProgressBar" style="width: 0%;"></div>
+        </div>
       </div>
 
-      <!-- Safehouse Weapon Rewards -->
-      <div>
-        <div class="section-label">Safehouse Weapon Milestones</div>
-        <div id="safehouseMilestoneList" style="display: flex; flex-direction: column; gap: 4px; background: #090d16; padding: 8px 10px; border: 1px solid var(--panel-border); border-radius: 6px; font-size: 11px;"></div>
+      <!-- Checklist Filter Toolbar -->
+      <div class="checklist-toolbar">
+        <div class="checklist-filter-row">
+          <div class="checklist-island-filters" id="checklistIslandFilters">
+            <button class="cl-island-btn active" data-cl-island="all">All</button>
+            <button class="cl-island-btn" data-cl-island="portland">Portland</button>
+            <button class="cl-island-btn" data-cl-island="staunton">Staunton</button>
+            <button class="cl-island-btn" data-cl-island="shoreside">Shoreside</button>
+          </div>
+        </div>
+
+        <div class="checklist-search-row">
+          <input type="text" id="inputChecklistSearch" class="checklist-search-input" placeholder="Filter missions or tasks..." />
+        </div>
+
+        <div class="checklist-optional-toggle-row">
+          <label class="toggle-label cl-toggle-label" for="toggleShowOptional">
+            <span class="cl-toggle-text">Show Optional Tasks (Not needed for 100%)</span>
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleShowOptional" />
+              <span class="toggle-slider"></span>
+            </div>
+          </label>
+        </div>
       </div>
 
-      <!-- Category Filter Toggles -->
-      <div>
-        <div class="section-label">Categories</div>
-        <div id="drawerCategoryList" style="display: flex; flex-direction: column; gap: 4px;"></div>
+      <!-- Full Categorized Checklist Accordion/List -->
+      <div id="fullChecklistContainer" class="full-checklist-container"></div>
+
+      <!-- Safehouse Weapon Rewards Accordion -->
+      <div class="checklist-section-collapsible">
+        <div class="section-header-row" id="toggleSafehouseMilestones">
+          <span class="section-label">Safehouse Weapon Milestones</span>
+          <span class="collapsible-icon">▼</span>
+        </div>
+        <div id="safehouseMilestoneList" class="safehouse-milestone-list"></div>
       </div>
 
-      <!-- Backup & Restore -->
-      <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid var(--panel-border);">
+      <!-- Data Management -->
+      <div class="drawer-data-mgmt">
         <div class="section-label">Data Management</div>
-        <button class="drawer-btn" id="btnExportProgress">Export Progress (JSON)</button>
-        <button class="drawer-btn" id="btnImportProgress">Import Progress (JSON)</button>
+        <div class="drawer-btn-row">
+          <button class="drawer-btn" id="btnExportProgress">Export (JSON)</button>
+          <button class="drawer-btn" id="btnImportProgress">Import (JSON)</button>
+        </div>
       </div>
     </div>
   </aside>
+
+  <!-- Credits & Sources Modal -->
+  <div class="modal-backdrop" id="creditsModalBackdrop"></div>
+  <div class="credits-modal" id="creditsModal" role="dialog" aria-modal="true" aria-labelledby="creditsModalTitle">
+    <div class="credits-modal-header">
+      <div class="credits-title-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c88219" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <h3 id="creditsModalTitle">Credits & Sources</h3>
+      </div>
+      <button class="card-close-btn" id="btnCloseCredits" aria-label="Close credits">✕</button>
+    </div>
+    <div class="credits-modal-body">
+      <!-- SonofUgly Map Redraw -->
+      <div class="credit-card highlight-card">
+        <div class="credit-badge">Map Source</div>
+        <div class="credit-title">High-Resolution Radar Map Redraw</div>
+        <div class="credit-author">By <strong>SonofUgly</strong> (LCS-Texture-Pack)</div>
+        <p class="credit-desc">Clean radar redraw of Liberty City decompressed directly from the multi-layer Paint.NET source asset and upscaled with anti-aliasing.</p>
+        <a href="https://github.com/SonofUgly/LCS-Texture-Pack/blob/master/Map/Map_Radar_Redraw.pdn" target="_blank" rel="noopener noreferrer" class="credit-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          github.com/SonofUgly/LCS-Texture-Pack/Map_Radar_Redraw.pdn ↗
+        </a>
+      </div>
+
+      <!-- GTASeriesVideos -->
+      <div class="credit-card">
+        <div class="credit-badge">Video Walkthroughs</div>
+        <div class="credit-title">Comprehensive 100% Video Guides</div>
+        <div class="credit-author">By <strong>GTASeriesVideos</strong></div>
+        <p class="credit-desc">Exact video timestamps and walkthrough recordings for Hidden Packages, Rampages, and Unique Stunt Jumps.</p>
+        <a href="https://www.youtube.com/c/GTASeriesVideos" target="_blank" rel="noopener noreferrer" class="credit-link">
+          youtube.com/c/GTASeriesVideos ↗
+        </a>
+      </div>
+
+      <!-- GTAMap.net -->
+      <div class="credit-card">
+        <div class="credit-badge">Coordinate Data</div>
+        <div class="credit-title">Interactive Map & Collectibles Positioning</div>
+        <div class="credit-author">By <strong>GTAMap.net</strong></div>
+        <p class="credit-desc">Original interactive map database and in-game coordinate data points for Liberty City Stories.</p>
+        <a href="https://gtamap.net/map/gtalcs?city=lc&layer=game" target="_blank" rel="noopener noreferrer" class="credit-link">
+          gtamap.net/map/gtalcs ↗
+        </a>
+      </div>
+
+      <!-- GTA Wiki -->
+      <div class="credit-card">
+        <div class="credit-badge">Screenshots & Game Data</div>
+        <div class="credit-title">In-Game Screenshot Tips & Mission Requirements</div>
+        <div class="credit-author">By <strong>GTA Wiki / Fandom</strong></div>
+        <p class="credit-desc">Authentic high-resolution collectible screenshots, mission criteria, and 100% checklist breakdowns.</p>
+        <a href="https://gta.fandom.com/wiki/Grand_Theft_Auto:_Liberty_City_Stories" target="_blank" rel="noopener noreferrer" class="credit-link">
+          gta.fandom.com/wiki/Grand_Theft_Auto:_Liberty_City_Stories ↗
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <!-- Offline/Instant Bundled Marker Data -->
   <script src="data/markers_data.js"></script>
+  <!-- 100% & Optional Checklist Database -->
+  <script src="data/checklist_data.js"></script>
   <!-- Application JS -->
   <script src="js/app.js"></script>
 </body>
