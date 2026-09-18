@@ -461,7 +461,7 @@ html, body {
 .custom-leaflet-popup {
   left: 0 !important;
   margin-left: 0 !important;
-  margin-bottom: 0 !important;
+  margin-bottom: 20px !important;
 }
 
 .custom-leaflet-popup .leaflet-popup-content-wrapper {
@@ -606,18 +606,17 @@ html, body {
 .popup-media-box {
   position: relative;
   width: 100%;
-  max-height: 135px;
-  aspect-ratio: 16 / 9;
+  height: 163px;
   background: #000000;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: height 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .custom-leaflet-popup.video-expanded .popup-media-box {
-  max-height: 250px;
+  height: 248px;
 }
 
 .popup-media-box img {

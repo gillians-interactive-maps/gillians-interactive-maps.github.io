@@ -533,10 +533,16 @@ function openMarkerPopup(marker) {
   state.currentMarker = marker;
   state.currentMediaTab = "image"; // Photo tip first
 
-  // Smoothly center and zoom in on item if user is far out
+  // Smoothly center the map on the popup and pin with viewport-aware offsets
   const currentZoom = state.map.getZoom();
   const targetZoom = Math.max(currentZoom, 4.25);
-  state.map.setView([marker.lat, marker.lng], targetZoom, { animate: true });
+  const isMobile = window.innerWidth <= 768;
+  const sidebarWidth = isMobile ? 0 : 260;
+  const offsetX = isMobile ? 0 : (sidebarWidth / 2);
+  const offsetY = 135;
+  const pt = state.map.project([marker.lat, marker.lng], targetZoom);
+  const targetCenter = state.map.unproject([pt.x - offsetX, pt.y - offsetY], targetZoom);
+  state.map.setView(targetCenter, targetZoom, { animate: false });
 
   if (prevId) updateMarkerVisual(prevId);
   updateMarkerVisual(marker.id);
@@ -562,7 +568,8 @@ function openMarkerPopup(marker) {
 
       <!-- Media Box (16:9) -->
       <div class="popup-media-box" id="popupMediaBox">
-        ${marker.image ? `<img src="${marker.image}" alt="${marker.title}" loading="eager" />` : `<div class="popup-media-empty">No photo tip available.</div>`}
+        ${marker.image ? `<img id="popupMediaImg" src="${marker.image}" alt="${marker.title}" loading="eager" />` : `<div class="popup-media-empty" id="popupMediaImg">No photo tip available.</div>`}
+        ${marker.video ? `<video id="popupMediaVid" src="${marker.video}" controls playsinline muted loop preload="metadata" style="display: none;"></video>` : ''}
       </div>
 
       <!-- Media Switcher (Only if video walkthrough exists) -->
@@ -610,6 +617,12 @@ function openMarkerPopup(marker) {
         titleEl.style.setProperty("--marquee-dist", `-${overflowDist + 10}px`);
         titleEl.classList.add("marquee-scroll");
       }
+
+      // Ensure popup is not cut off at top of screen
+      const rect = popupEl.getBoundingClientRect();
+      if (rect.top < 65) {
+        state.map.panBy([0, rect.top - 75], { duration: 0.25 });
+      }
     }
   }, 20);
 }
@@ -640,34 +653,43 @@ function switchPopupMedia(tab) {
   const marker = state.currentMarker;
   if (!marker) return;
 
-  const box = document.getElementById("popupMediaBox");
   const tabImg = document.getElementById("popupTabImg");
   const tabVid = document.getElementById("popupTabVid");
+  const imgEl = document.getElementById("popupMediaImg");
+  const vidEl = document.getElementById("popupMediaVid");
   const popupEl = state.popup.getElement();
 
-  if (!box || !tabImg || !tabVid) return;
+  if (!tabImg || !tabVid) return;
 
-  const existingVideo = box.querySelector("video");
-  if (existingVideo) {
-    existingVideo.pause();
-    existingVideo.removeAttribute("src");
-    existingVideo.load();
-  }
-
-  if (tab === "video" && marker.video) {
+  if (tab === "video" && marker.video && vidEl) {
     tabVid.classList.add("active");
     tabImg.classList.remove("active");
+    if (imgEl) imgEl.style.display = "none";
+    vidEl.style.display = "block";
     if (popupEl) popupEl.classList.add("video-expanded");
-    box.innerHTML = `
-      <video src="${marker.video}" controls playsinline autoplay muted loop preload="auto">
-        Your browser does not support video.
-      </video>
-    `;
+    try {
+      vidEl.currentTime = 0;
+      vidEl.play();
+    } catch (e) {}
+
+    // Ensure expanded video popup stays comfortably inside the viewport
+    setTimeout(() => {
+      if (popupEl && state.map) {
+        const rect = popupEl.getBoundingClientRect();
+        if (rect.top < 65) {
+          state.map.panBy([0, rect.top - 75], { duration: 0.25 });
+        }
+      }
+    }, 40);
   } else {
     tabImg.classList.add("active");
     tabVid.classList.remove("active");
+    if (vidEl) {
+      vidEl.pause();
+      vidEl.style.display = "none";
+    }
+    if (imgEl) imgEl.style.display = "block";
     if (popupEl) popupEl.classList.remove("video-expanded");
-    box.innerHTML = marker.image ? `<img src="${marker.image}" alt="${marker.title}" loading="eager" />` : `<div class="popup-media-empty">No photo tip available.</div>`;
   }
 }
 
