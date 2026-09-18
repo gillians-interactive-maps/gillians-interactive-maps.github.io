@@ -1150,12 +1150,6 @@ html, body {
   gap: 6px;
 }
 
-.credit-card.highlight-card {
-  background: #111724;
-  border-color: rgba(200, 130, 25, 0.35);
-  box-shadow: 0 0 14px rgba(200, 130, 25, 0.08);
-}
-
 .credit-badge {
   align-self: flex-start;
   font-size: 9px;
@@ -1166,11 +1160,6 @@ html, body {
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.06);
   color: var(--text-muted);
-}
-
-.credit-card.highlight-card .credit-badge {
-  background: rgba(200, 130, 25, 0.2);
-  color: #fbbf24;
 }
 
 .credit-title {
