@@ -458,6 +458,12 @@ html, body {
 /* ==========================================================================
    Leaflet Attached Popup (Directly anchored to marker tip with arrow)
    ========================================================================== */
+.custom-leaflet-popup {
+  left: 0 !important;
+  margin-left: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 .custom-leaflet-popup .leaflet-popup-content-wrapper {
   background: var(--panel-card);
   color: var(--text-main);
@@ -466,14 +472,15 @@ html, body {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.9);
   padding: 0;
   overflow: hidden;
-  transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(-50%);
+  transition: width 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .custom-leaflet-popup .leaflet-popup-content {
   margin: 0;
   line-height: normal;
   width: 290px !important;
-  transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .custom-leaflet-popup.video-expanded .leaflet-popup-content {
@@ -481,8 +488,13 @@ html, body {
 }
 
 .custom-leaflet-popup .leaflet-popup-tip-container {
-  width: 20px;
-  height: 10px;
+  width: 40px !important;
+  height: 20px !important;
+  position: absolute;
+  left: 0 !important;
+  margin-left: -20px !important;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .custom-leaflet-popup .leaflet-popup-tip {
@@ -490,6 +502,11 @@ html, body {
   border-top: 1px solid var(--panel-border-light);
   border-left: 1px solid var(--panel-border-light);
   box-shadow: none;
+  width: 17px;
+  height: 17px;
+  padding: 1px;
+  margin: -10px auto 0;
+  transform: rotate(45deg);
 }
 
 .marker-popup-content {

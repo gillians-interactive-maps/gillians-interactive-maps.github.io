@@ -91,6 +91,8 @@ const state = {
   vectorLayer: null,
   popup: null
 };
+window.state = state;
+window.openMarkerPopup = openMarkerPopup;
 
 // --- Storage Handlers ---
 function loadCollected() {
@@ -188,7 +190,7 @@ function initMap() {
 
   // 2. Single reusable attached Leaflet popup with pointer tip
   state.popup = L.popup({
-    offset: [0, -32],
+    offset: [0, -34],
     className: "custom-leaflet-popup",
     closeButton: false,
     autoPan: true,

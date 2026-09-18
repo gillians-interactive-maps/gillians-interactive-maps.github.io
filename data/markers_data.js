@@ -1677,7 +1677,7 @@ window.LCS_MARKERS_DATA = window.MARKER_DATA = {
       "image": "assets/images/lcs_hp_75.webp",
       "video": "assets/videos/hp_100.mp4",
       "video_start": 2637.5,
-      "video_end": 2650,
+      "video_end": 2664,
       "video_timestamp": "43:50",
       "color": "#f59e0b",
       "countable": true
