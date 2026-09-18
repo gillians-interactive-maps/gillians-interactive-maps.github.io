@@ -1,7 +1,9 @@
-﻿const fs = require('fs');
+const fs = require('fs');
+const path = require('path');
 const vm = require('vm');
 
-const markersCode = fs.readFileSync('data/markers_data.js', 'utf8');
+const BASE_DIR = path.resolve(__dirname, '..');
+const markersCode = fs.readFileSync(path.join(BASE_DIR, 'data/markers_data.js'), 'utf8');
 const MARKERS_DATA = vm.runInNewContext(markersCode + '; MARKERS_DATA;');
 
 console.log('--- MARKERS DATA VALIDATION ---');
@@ -27,14 +29,14 @@ for (const m of MARKERS_DATA.markers) {
   }
 
   if (m.image) {
-    if (!fs.existsSync(m.image)) {
+    if (!fs.existsSync(path.join(BASE_DIR, m.image))) {
       console.warn('Image not found on disk:', m.image, 'for', m.id);
       missingImages++;
     }
   }
 
   if (m.video) {
-    if (!fs.existsSync(m.video)) {
+    if (!fs.existsSync(path.join(BASE_DIR, m.video))) {
       console.warn('Video not found on disk:', m.video, 'for', m.id);
       missingVideos++;
     }
@@ -42,7 +44,16 @@ for (const m of MARKERS_DATA.markers) {
 }
 console.log('Duplicates:', dupes, 'Missing Coords:', missingCoords, 'Missing Images:', missingImages, 'Missing Videos:', missingVideos);
 
-const checklistCode = fs.readFileSync('data/checklist_data.js', 'utf8');
+// Verify category counts match marker totals
+for (const [catKey, catObj] of Object.entries(MARKERS_DATA.categories)) {
+  const actual = MARKERS_DATA.markers.filter(m => m.category === catKey).length;
+  if (catObj.count !== actual) {
+    console.error(`Category count mismatch for ${catKey}: defined ${catObj.count}, actual ${actual}`);
+    process.exitCode = 1;
+  }
+}
+
+const checklistCode = fs.readFileSync(path.join(BASE_DIR, 'data/checklist_data.js'), 'utf8');
 const CHECKLIST_DATA = vm.runInNewContext(checklistCode + '; CHECKLIST_DATA;');
 
 console.log('\n--- CHECKLIST DATA VALIDATION ---');

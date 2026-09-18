@@ -4,8 +4,8 @@
   "description": "Interactive 4K map and 100% completion checklist tracker for Grand Theft Auto: Liberty City Stories",
   "scripts": {
     "start": "npx serve -l 8080 .",
-    "validate": "node scripts/validate_data.js",
-    "test": "node scripts/validate_data.js"
+    "validate": "node gta-lcs/scripts/validate_data.js",
+    "test": "node gta-lcs/scripts/validate_data.js"
   },
   "repository": {
     "type": "git",
