@@ -167,16 +167,20 @@ function applyPalette(palKey) {
   saveSettings();
 }
 
-// --- Dynamic Zoom Clamping (Fit full map to viewport without excess void) ---
+// --- Dynamic Zoom Clamping (Fit full map strictly to viewport without excess void) ---
 function calculateMinFitZoom() {
   const mapEl = document.getElementById("map");
-  if (!mapEl) return 1.75;
+  if (!mapEl) return 2.0;
   const w = mapEl.clientWidth || window.innerWidth;
   const h = mapEl.clientHeight || window.innerHeight;
+  const isMobile = window.innerWidth <= 768;
+  const availW = isMobile ? w : Math.max(320, w - 230);
+  const availH = h;
   // In L.CRS.Simple, map coordinates span 128 x 128 units.
-  // We want the entire map (128 units) to comfortably fit the viewport.
-  const fitZoom = Math.log2(Math.min(w, h) / 128);
-  return Math.max(1.5, Math.min(2.75, Math.floor(fitZoom * 4) / 4));
+  // We want the entire map (128 units) to fit comfortably within the viewable screen.
+  const fitZoom = Math.log2(Math.min(availW, availH) / 128);
+  // Floor to 0.25 zoom snap so the entire map is completely visible, but CANNOT zoom out further!
+  return Math.max(1.0, Math.floor(fitZoom * 4) / 4);
 }
 
 // --- Map Initialization ---
@@ -186,7 +190,7 @@ function initMap() {
   state.map = L.map("map", {
     crs: L.CRS.Simple,
     minZoom: minFitZoom,
-    maxZoom: 6,
+    maxZoom: 7.0,
     zoomSnap: 0.25,
     zoomDelta: 0.5,
     wheelPxPerZoomLevel: 100,
@@ -195,7 +199,7 @@ function initMap() {
     bounceAtZoomLimits: false,
     fadeAnimation: true,
     markerZoomAnimation: true,
-    maxBounds: [[-129, -1], [1, 129]],
+    maxBounds: [[-128, 0], [0, 128]],
     maxBoundsViscosity: 1.0
   });
 
@@ -209,12 +213,29 @@ function initMap() {
     }
   });
 
-  // 1. High-Resolution 4K Clean Map Layer (Zero-lag, GPU texture cached, seamless)
-  state.vectorLayer = L.imageOverlay("assets/map/lcs_map_4096.png", [[-128, 0], [0, 128]], {
+  // 1. High-Resolution Clean WebP Map Layer with Dynamic 8K Zoom-In LOD Rendering
+  state.currentMapUrl = "assets/map/lcs_map_4096.webp?v=3.1";
+  state.vectorLayer = L.imageOverlay(state.currentMapUrl, [[-128, 0], [0, 128]], {
     opacity: 1,
     interactive: false,
     zIndex: 1
   }).addTo(state.map);
+
+  // Preload 8K WebP in background so zooming in is completely seamless with zero lag
+  setTimeout(() => {
+    const preloader = new Image();
+    preloader.src = "assets/map/lcs_map_8192.webp?v=3.1";
+  }, 1000);
+
+  // Dynamic Level of Detail: swap to 8192x8192 WebP on zoom-in
+  state.map.on("zoom", () => {
+    const z = state.map.getZoom();
+    const targetUrl = (z >= 3.5) ? "assets/map/lcs_map_8192.webp?v=3.1" : "assets/map/lcs_map_4096.webp?v=3.1";
+    if (state.currentMapUrl !== targetUrl) {
+      state.currentMapUrl = targetUrl;
+      state.vectorLayer.setUrl(targetUrl);
+    }
+  });
 
   // 2. Single reusable attached Leaflet popup with pointer tip
   state.popup = L.popup({
@@ -759,115 +780,6 @@ function navigatePackage(offset) {
   }
 }
 
-// --- Progress & UI Stats (100% Completion Tracker) ---
-function updateProgressUI() {
-  const totalAll = state.markers.length || 165;
-  const totalCollected = state.collected.size;
-  const totalPct = Math.round((totalCollected / totalAll) * 100);
-
-  // Top Sidebar 100% Completion Box
-  const totalText = document.getElementById("totalProgressText");
-  if (totalText) totalText.textContent = `${totalCollected} / ${totalAll} (${totalPct}%)`;
-
-  const totalBar = document.getElementById("totalProgressBar");
-  if (totalBar) totalBar.style.width = `${totalPct}%`;
-
-  // Mobile Island Bar Stat
-  const mobileText = document.getElementById("mobileProgressText");
-  if (mobileText) mobileText.textContent = `${totalCollected}/${totalAll}`;
-
-  const countAll = document.getElementById("count_all");
-  if (countAll) countAll.textContent = `${totalCollected}/${totalAll}`;
-
-  // Update Category checklist counts in Sidebar and Drawer
-  Object.keys(state.categories).forEach(catId => {
-    const el = document.getElementById(`count_${catId}`);
-    if (el) {
-      const catTotal = state.categories[catId].count || 0;
-      const catDone = state.markers.filter(m => m.category === catId && state.collected.has(m.id)).length;
-      el.textContent = `${catDone}/${catTotal}`;
-    }
-  });
-
-  const drawerStats = document.getElementById("drawerStats");
-  if (drawerStats) {
-    drawerStats.textContent = `${totalCollected} / ${totalAll}`;
-  }
-  const subStats = document.getElementById("drawerSubStats");
-  if (subStats) {
-    subStats.textContent = `${totalPct}% collected`;
-  }
-
-  // Safehouse Weapon Milestone Tracker in Drawer
-  const hpCollected = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
-  const milestoneList = document.getElementById("safehouseMilestoneList");
-  if (milestoneList) {
-    milestoneList.innerHTML = SAFE_REWARDS.map(r => {
-      const unlocked = hpCollected >= r.count;
-      return `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 3px 0; color: ${unlocked ? 'var(--color-green)' : 'var(--text-dim)'}; font-size: 11px;">
-          <span>${unlocked ? '✓' : '○'} ${r.reward}</span>
-          <span style="color: var(--color-amber);">${r.count} pkgs</span>
-        </div>
-      `;
-    }).join("");
-  }
-}
-
-// --- Island Navigation with Accurate Bounds ---
-function setIsland(islandKey) {
-  state.activeIsland = islandKey;
-  document.querySelectorAll(".island-btn[data-island]").forEach(b => {
-    b.classList.toggle("active", b.dataset.island === islandKey);
-  });
-
-  const bounds = ISLAND_BOUNDS[islandKey] || ISLAND_BOUNDS.all;
-  state.map.fitBounds(bounds, { animate: true, padding: [15, 15], maxZoom: 4.5 });
-  renderMarkers();
-}
-
-function setCategoryFilter(cat) {
-  state.activeCategory = cat;
-  document.querySelectorAll(".nav-item[data-cat]").forEach(b => {
-    b.classList.toggle("active", b.dataset.cat === cat);
-  });
-  renderMarkers();
-}
-
-function toggleChecklistDrawer(open) {
-  const drawer = document.getElementById("checklistDrawer");
-  const backdrop = document.getElementById("drawerBackdrop");
-  if (!drawer || !backdrop) return;
-  if (open === undefined) {
-    open = !drawer.classList.contains("open");
-  }
-  drawer.classList.toggle("open", open);
-  backdrop.classList.toggle("open", open);
-}
-
-function initDrawerCategories() {
-  const list = document.getElementById("drawerCategoryList");
-  if (!list) return;
-
-  list.innerHTML = "";
-  Object.keys(state.categories).forEach(catId => {
-    const cat = state.categories[catId];
-    const item = document.createElement("div");
-    item.className = "drawer-item";
-    item.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: #06090e; border: 1px solid var(--panel-border); border-radius: 6px; font-size: 11px;";
-    item.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="width: 8px; height: 8px; border-radius: 50%; background-color: ${cat.color};"></span>
-        <span style="font-weight: 500; color: var(--text-main);">${cat.name}</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 11px; color: var(--text-dim);" id="drawer_count_${catId}">0/${cat.count}</span>
-      </div>
-    `;
-    list.appendChild(item);
-  });
-}
-
 const CHECKLIST_STORAGE_KEY = "gta_lcs_checklist_progress";
 
 function loadChecklistProgress() {
@@ -911,22 +823,23 @@ window.goToMapCoords = function(lat, lng, title) {
   }
 };
 
-function toggleCreditsModal(open) {
+window.toggleCreditsModal = function(open) {
   const modal = document.getElementById("creditsModal");
   const backdrop = document.getElementById("creditsModalBackdrop");
   if (!modal || !backdrop) return;
   if (open === undefined) open = !modal.classList.contains("active");
   modal.classList.toggle("active", open);
   backdrop.classList.toggle("active", open);
-}
+};
 
 // --- Render Complete 100% and Optional Checklist ---
 function renderFullChecklist() {
   const container = document.getElementById("fullChecklistContainer");
-  if (!container || typeof CHECKLIST_DATA === "undefined") return;
+  const checklist = window.CHECKLIST_DATA || (typeof CHECKLIST_DATA !== "undefined" ? CHECKLIST_DATA : null);
+  if (!container || !checklist) return;
 
-  const island = state.activeChecklistIsland;
-  const query = state.checklistSearchQuery.trim().toLowerCase();
+  const island = state.activeChecklistIsland || "all";
+  const query = (state.checklistSearchQuery || "").trim().toLowerCase();
   const showOpt = state.showOptionalTasks;
 
   let totalMandatory = 0;
@@ -935,7 +848,7 @@ function renderFullChecklist() {
   let completedOptional = 0;
 
   // Calculate live completion counts across all categories
-  CHECKLIST_DATA.categories.forEach(cat => {
+  checklist.categories.forEach(cat => {
     cat.items.forEach(item => {
       let isDone = false;
       if (item.isCategoryLink === "hidden_packages") {
@@ -963,6 +876,13 @@ function renderFullChecklist() {
 
   const mandatoryPct = totalMandatory > 0 ? ((completedMandatory / totalMandatory) * 100).toFixed(1) : "0.0";
 
+  // Update Top Sidebar 100% Completion Box
+  const totalText = document.getElementById("totalProgressText");
+  if (totalText) totalText.textContent = `${completedMandatory} / ${totalMandatory} (${mandatoryPct}%)`;
+
+  const totalBar = document.getElementById("totalProgressBar");
+  if (totalBar) totalBar.style.width = `${mandatoryPct}%`;
+
   // Update Drawer Stats & Progress Bar
   const drawerStats = document.getElementById("drawerStats");
   if (drawerStats) drawerStats.textContent = `${completedMandatory} / ${totalMandatory}`;
@@ -985,7 +905,7 @@ function renderFullChecklist() {
 
   // Render Category Groups
   let html = "";
-  CHECKLIST_DATA.categories.forEach(cat => {
+  checklist.categories.forEach(cat => {
     // Skip optional category if toggle is off
     if (!cat.requiredFor100 && !showOpt) return;
 
@@ -1014,46 +934,79 @@ function renderFullChecklist() {
     // Count done in this category
     const catDone = filteredItems.filter(item => {
       if (item.isCategoryLink === "hidden_packages") {
-        return state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length >= 100;
+        const hpCount = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
+        return hpCount >= 100 || state.checklistTasks.has(item.id);
       }
       if (item.isCategoryLink === "rampages") {
-        return state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length >= 20;
+        const rCount = state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length;
+        return rCount >= 20 || state.checklistTasks.has(item.id);
       }
       if (item.isCategoryLink === "unique_stunt_jumps") {
-        return state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length >= 26;
+        const jCount = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
+        return jCount >= 26 || state.checklistTasks.has(item.id);
       }
       return state.checklistTasks.has(item.id);
     }).length;
 
     html += `
       <div class="cl-group">
-        <div class="cl-group-header" onclick="this.parentElement.querySelector('.cl-group-items').classList.toggle('collapsed')">
+        <div class="cl-group-header" onclick="this.parentElement.querySelector('.cl-group-items').classList.toggle('collapsed'); this.querySelector('.cl-chevron').classList.toggle('collapsed');">
           <div class="cl-group-title-row">
-            <span class="cl-group-icon">${cat.icon || "★"}</span>
             <span class="cl-group-title">${cat.name}</span>
           </div>
-          <span class="cl-group-count">${catDone}/${filteredItems.length}</span>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="cl-group-count">${catDone}/${filteredItems.length}</span>
+            <span class="cl-chevron" style="font-size: 9px; color: var(--text-dim); transition: transform 0.2s ease;">▼</span>
+          </div>
         </div>
         <div class="cl-group-items">
           ${filteredItems.map(item => {
-            let isDone = false;
-            let subStatus = "";
-            if (item.isCategoryLink === "hidden_packages") {
-              const hpCount = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
-              isDone = hpCount >= 100;
-              subStatus = `<span class="cl-item-tag" style="color: #fbbf24; cursor: pointer;" onclick="setCategoryFilter('hidden_packages'); toggleChecklistDrawer(false);">${hpCount}/100 Found ↗</span>`;
-            } else if (item.isCategoryLink === "rampages") {
-              const rCount = state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length;
-              isDone = rCount >= 20;
-              subStatus = `<span class="cl-item-tag" style="color: #f87171; cursor: pointer;" onclick="setCategoryFilter('rampages'); toggleChecklistDrawer(false);">${rCount}/20 Beaten ↗</span>`;
-            } else if (item.isCategoryLink === "unique_stunt_jumps") {
-              const jCount = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
-              isDone = jCount >= 26;
-              subStatus = `<span class="cl-item-tag" style="color: #fbbf24; cursor: pointer;" onclick="setCategoryFilter('unique_stunt_jumps'); toggleChecklistDrawer(false);">${jCount}/26 Landed ↗</span>`;
-            } else {
-              isDone = state.checklistTasks.has(item.id);
+            if (item.isCategoryLink) {
+              let current = 0;
+              let total = item.count || 100;
+              let actionWord = "Collected";
+              if (item.isCategoryLink === "hidden_packages") {
+                current = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
+                total = 100;
+                actionWord = "Found";
+              } else if (item.isCategoryLink === "rampages") {
+                current = state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length;
+                total = 20;
+                actionWord = "Beaten";
+              } else if (item.isCategoryLink === "unique_stunt_jumps") {
+                current = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
+                total = 26;
+                actionWord = "Landed";
+              }
+              const isDone = current >= total;
+              const pct = Math.min(100, Math.round((current / total) * 100));
+              const rewardTag = item.reward ? `<span class="cl-item-tag" title="Reward">🏆 ${item.reward}</span>` : "";
+
+              return `
+                <div class="cl-item cl-counter-item ${isDone ? 'completed' : ''}">
+                  <div class="cl-counter-icon ${isDone ? 'completed' : ''}" title="${isDone ? 'Completed' : 'Tracked via map pins'}">
+                    ${isDone ? '✓' : '●'}
+                  </div>
+                  <div class="cl-item-body">
+                    <div class="cl-item-title-row">
+                      <span class="cl-item-title">${item.title}</span>
+                      <button class="cl-map-btn" onclick="setCategoryFilter('${item.isCategoryLink}'); toggleChecklistDrawer(false);">Show on Map</button>
+                    </div>
+                    <div class="cl-item-meta">
+                      <span class="cl-item-tag" style="color: ${isDone ? 'var(--color-green)' : '#fbbf24'}; font-weight: 600;">
+                        ${current}/${total} ${actionWord} (${pct}%)
+                      </span>
+                      ${rewardTag}
+                    </div>
+                    <div class="cl-mini-prog-track">
+                      <div class="cl-mini-prog-fill" style="width: ${pct}%"></div>
+                    </div>
+                  </div>
+                </div>
+              `;
             }
 
+            const isDone = state.checklistTasks.has(item.id);
             const mapBtn = item.coords
               ? `<button class="cl-map-btn" onclick="goToMapCoords(${item.coords[0]}, ${item.coords[1]}, '${item.title.replace(/'/g, "\\'")}')">📍 Map</button>`
               : "";
@@ -1073,7 +1026,6 @@ function renderFullChecklist() {
                   <div class="cl-item-meta">
                     ${optTag}
                     ${giverTag}
-                    ${subStatus}
                     ${rewardTag}
                   </div>
                   ${item.desc ? `<div class="cl-item-desc">${item.desc}</div>` : ""}
@@ -1091,19 +1043,9 @@ function renderFullChecklist() {
 
 // --- Progress & UI Stats (100% Completion Tracker) ---
 function updateProgressUI() {
-  const totalAll = state.markers.length || 165;
-  const totalCollected = state.collected.size;
-  const totalPct = Math.round((totalCollected / totalAll) * 100);
-
-  // Top Sidebar 100% Completion Box
-  const totalText = document.getElementById("totalProgressText");
-  if (totalText) totalText.textContent = `${totalCollected} / ${totalAll} (${totalPct}%)`;
-
-  const totalBar = document.getElementById("totalProgressBar");
-  if (totalBar) totalBar.style.width = `${totalPct}%`;
-
+  const totalPins = state.markers.length || 166;
   const countAll = document.getElementById("count_all");
-  if (countAll) countAll.textContent = `${totalCollected}/${totalAll}`;
+  if (countAll) countAll.textContent = `${state.collected.size}/${totalPins}`;
 
   // Update Category checklist counts in Sidebar
   Object.keys(state.categories).forEach(catId => {
@@ -1122,15 +1064,15 @@ function updateProgressUI() {
     milestoneList.innerHTML = SAFE_REWARDS.map(r => {
       const unlocked = hpCollected >= r.count;
       return `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 3px 0; color: ${unlocked ? 'var(--color-green)' : 'var(--text-dim)'}; font-size: 11px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 0; color: ${unlocked ? 'var(--color-green)' : 'var(--text-dim)'}; font-size: 11px;">
           <span>${unlocked ? '✓' : '○'} ${r.reward}</span>
-          <span style="color: var(--color-amber);">${r.count} pkgs</span>
+          <span style="color: var(--color-amber); font-weight: 600;">${r.count} pkgs</span>
         </div>
       `;
     }).join("");
   }
 
-  // Render Full 100% Checklist
+  // Render Full 100% Checklist (also updates 100% completion percentages)
   renderFullChecklist();
 }
 
