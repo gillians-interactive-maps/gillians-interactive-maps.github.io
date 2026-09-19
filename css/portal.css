@@ -3,12 +3,11 @@
    ========================================================================== */
 
 :root {
-  --bg-main: #06090e;
-  --bg-card: #090e17;
-  --bg-card-hover: #0e1522;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(200, 130, 25, 0.5);
-  --color-gold: #fbbf24;
+  --bg-main: #0a0d14;
+  --bg-card: #121721;
+  --bg-card-hover: #161c28;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-hover: rgba(255, 255, 255, 0.25);
   --text-main: #f3f4f6;
   --text-muted: #9ca3af;
   --text-dim: #6b7280;
@@ -29,10 +28,6 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.5;
-  background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(200, 130, 25, 0.12), transparent 70%),
-    linear-gradient(to bottom, #06090e 0%, #030508 100%);
-  background-attachment: fixed;
 }
 
 .portal-container {
@@ -94,23 +89,19 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
   text-decoration: none;
   color: inherit;
-  position: relative;
 }
 
 .map-card:hover {
   border-color: var(--border-hover);
   background: var(--bg-card-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(200, 130, 25, 0.1);
 }
 
 .map-card-banner {
   height: 190px;
-  background-color: #030508;
-  position: relative;
+  background-color: #000000;
   overflow: hidden;
   border-bottom: 1px solid var(--border-color);
   display: flex;
@@ -124,11 +115,6 @@ body {
   object-fit: cover;
   object-position: center 60%;
   display: block;
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-.map-card:hover .map-card-banner img {
-  transform: scale(1.05);
 }
 
 .map-card-body {
@@ -142,12 +128,11 @@ body {
 .card-game-title {
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
-  transition: color 0.15s ease;
+  color: #ffffff;
 }
 
 .map-card:hover .card-game-title {
-  color: var(--color-gold);
+  text-decoration: underline;
 }
 
 /* Footer */

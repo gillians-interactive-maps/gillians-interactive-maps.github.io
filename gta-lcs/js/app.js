@@ -1,8 +1,3 @@
-/**
- * GTA Liberty City Stories - Interactive Map & Checklist
- * Pure Black Ocean Canvas, 4K High-Res Clean Map, Attached Popups,
- * Colorblind-Aware Palettes, Same-Spot Icon Clustering with Count Badges
- */
 
 const STORAGE_KEY = "gta_lcs_collected_markers";
 const SETTINGS_KEY = "gta_lcs_user_settings";
@@ -1172,9 +1167,7 @@ function renderFullChecklist() {
 
   const drawerSub = document.getElementById("drawerSubStats");
   if (drawerSub) {
-    drawerSub.textContent = showOpt
-      ? `100%: ${completedMandatory}/${totalMandatory} | Optional: ${completedOptional}/${totalOptional}`
-      : `Mandatory 100% Tasks (${mandatoryPct}%)`;
+    drawerSub.textContent = `Mandatory ${completedMandatory}/${totalMandatory} | Optional ${completedOptional}/${totalOptional}`;
   }
 
   const mobileProg = document.getElementById("mobileProgressText");

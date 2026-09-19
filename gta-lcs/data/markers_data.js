@@ -2337,7 +2337,7 @@ const MARKERS_DATA = {
       "y": -840,
       "lat": -90.88,
       "lng": 103.2,
-      "image": "assets/images/lcs_low_rider.webp",
+      "image": null,
       "video": null,
       "color": "#3b82f6",
       "countable": true,
