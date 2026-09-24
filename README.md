@@ -35,4 +35,4 @@ We are grateful to the following creators and resources whose work made this pro
 - **[SonofUgly](https://github.com/SonofUgly/LCS-Texture-Pack)**: High-resolution Liberty City radar map redraw.
 - **[GTASeriesVideos](https://www.youtube.com/c/GTASeriesVideos)**: Walkthrough gameplay video guides.
 - **[GTAMap.net](https://gtamap.net)**: Original interactive coordinate database and marker positions.
-- **[GTA Wiki / Fandom](https://gta.fandom.com/wiki/)**: Comprehensive mission descriptions, unlock requirements, and completion criteria.
+- **[GTA.Wiki](https://gta.wiki/wiki/Grand_Theft_Auto:_Liberty_City_Stories)**: Comprehensive mission descriptions, unlock requirements, and completion criteria.

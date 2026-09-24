@@ -75,3 +75,38 @@ for (const cat of CHECKLIST_DATA.categories) {
   }
 }
 console.log('Total checklist items:', totalTasks, 'Mandatory:', mandatoryTasks, 'Optional:', optionalTasks, 'Broken Marker Refs:', brokenMarkerRefs);
+
+// --- MARKER COLLISION & OVERLAP VALIDATION ---
+console.log('\n--- MARKER COLLISION & OVERLAP VALIDATION ---');
+const MIN_MARKER_DISTANCE = 0.35; // Coordinate units (~22px clearance at zoom 5)
+let collisions = 0;
+const markers = MARKERS_DATA.markers;
+
+for (let i = 0; i < markers.length; i++) {
+  for (let j = i + 1; j < markers.length; j++) {
+    const m1 = markers[i];
+    const m2 = markers[j];
+    const dist = Math.hypot(m1.lat - m2.lat, m1.lng - m2.lng);
+    if (dist < MIN_MARKER_DISTANCE) {
+      console.error(`COLLISION DETECTED (${dist.toFixed(4)} < ${MIN_MARKER_DISTANCE}):`);
+      console.error(`  1. [${m1.category}] "${m1.title}" (${m1.id}) at [${m1.lat}, ${m1.lng}]`);
+      console.error(`  2. [${m2.category}] "${m2.title}" (${m2.id}) at [${m2.lat}, ${m2.lng}]`);
+      collisions++;
+    }
+  }
+}
+if (collisions > 0) {
+  console.error(`FAILED: Found ${collisions} overlapping marker pair(s) closer than ${MIN_MARKER_DISTANCE} units!`);
+  process.exitCode = 1;
+} else {
+  console.log(`PASSED: All ${markers.length} markers have sufficient clearance (min distance >= ${MIN_MARKER_DISTANCE} units).`);
+}
+
+// Verify synchronization between markers.json and markers_data.js
+const rawMarkersJson = JSON.parse(fs.readFileSync(path.join(BASE_DIR, 'data/markers.json'), 'utf8'));
+if (rawMarkersJson.markers.length !== MARKERS_DATA.markers.length) {
+  console.error(`SYNC ERROR: markers.json (${rawMarkersJson.markers.length}) vs markers_data.js (${MARKERS_DATA.markers.length})`);
+  process.exitCode = 1;
+} else {
+  console.log('PASSED: markers.json and markers_data.js are in sync.');
+}

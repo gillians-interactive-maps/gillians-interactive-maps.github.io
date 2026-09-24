@@ -19,7 +19,7 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <!-- App CSS -->
-  <link rel="stylesheet" href="css/style.css?v=3.6" />
+  <link rel="stylesheet" href="css/style.css?v=4.6" />
 </head>
 <body>
 
@@ -41,16 +41,16 @@
       </div>
       <!-- 100% Completion Tracker & Checklist Trigger -->
       <button class="sidebar-progress-box" id="sidebarProgressBox" title="Click to open full Checklist & Milestones" aria-label="Open Checklist">
-        <div class="progress-row">
+        <div class="progress-header-row">
           <span class="progress-lbl">100% Completion</span>
-          <span class="progress-stat" id="totalProgressText">0 / 87 (0%)</span>
+          <span class="progress-pct-badge" id="totalProgressPct">0.00%</span>
         </div>
         <div class="progress-bar">
           <div class="progress-fill" id="totalProgressBar"></div>
         </div>
-        <div class="progress-footer-hint">
-          <span class="hint-text">Checklist & Rewards</span>
-          <span class="hint-arrow">➔</span>
+        <div class="progress-footer-row">
+          <span class="progress-stat" id="totalProgressText">0 / 100 tasks</span>
+          <span class="progress-hint">Checklist <span class="hint-arrow">➔</span></span>
         </div>
       </button>
     </div>
@@ -84,7 +84,7 @@
       <!-- Rampages -->
       <button class="nav-item" data-cat="rampages">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #b83232;">
+          <span class="cat-icon-badge" style="background-color: #dc2626;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 4c4.418 0 8 3.358 8 7.5c0 1.901 -.755 3.637 -2 4.96l0 2.54a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1v-2.54c-1.245 -1.322 -2 -3.058 -2 -4.96c0 -4.142 3.582 -7.5 8 -7.5" />
               <path d="M10 17v3M14 17v3" />
@@ -100,7 +100,7 @@
       <!-- Unique Stunt Jumps -->
       <button class="nav-item" data-cat="unique_stunt_jumps">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #b89628;">
+          <span class="cat-icon-badge" style="background-color: #eab308;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/></svg>
           </span>
           <span class="nav-item-name">Unique Stunt Jumps</span>
@@ -111,7 +111,7 @@
       <!-- Vehicle Sub-Missions -->
       <button class="nav-item" data-cat="vehicle_missions">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #c05621;">
+          <span class="cat-icon-badge" style="background-color: #2563eb;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,2a8,8,0,0,1,7.38,4.92A29.93,29.93,0,0,0,12,8a29.63,29.63,0,0,0-7.4.94A8,8,0,0,1,12,4ZM4,12.67l1.11-.13A4.38,4.38,0,0,1,10,16.89v2.85A8,8,0,0,1,4,12.67Zm10,7.07V16.89a4.38,4.38,0,0,1,4.86-4.35l1.11.13A8,8,0,0,1,14,19.74Z"/></svg>
           </span>
           <span class="nav-item-name">Vehicle Sub-Missions</span>
@@ -122,7 +122,7 @@
       <!-- Odd Jobs -->
       <button class="nav-item" data-cat="odd_jobs">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #2b6cb0;">
+          <span class="cat-icon-badge" style="background-color: #8b5cf6;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 6h-3V4c0-1.103-.897-2-2-2H9c-1.103 0-2 .897-2 2v2H4c-1.103 0-2 .897-2 2v11c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V8c0-1.103-.897-2-2-2m-5-2v2H9V4zM8 8h12v3H4V8zM4 19v-6h6v2h4v-2h6l.001 6z"/></svg>
           </span>
           <span class="nav-item-name">Odd Jobs</span>
@@ -133,7 +133,7 @@
       <!-- Races (All Car, Bike, RC Races) -->
       <button class="nav-item" data-cat="races">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #466e9b;">
+          <span class="cat-icon-badge" style="background-color: #06b6d4;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>
           </span>
           <span class="nav-item-name">Races</span>
@@ -144,7 +144,7 @@
       <!-- Side Challenges -->
       <button class="nav-item" data-cat="challenges">
         <div class="nav-item-left">
-          <span class="cat-icon-badge" style="background-color: #327f5b;">
+          <span class="cat-icon-badge" style="background-color: #16a34a;">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h6v-2h-4z"/></svg>
           </span>
           <span class="nav-item-name">Side Challenges</span>
@@ -152,17 +152,6 @@
         <span class="nav-item-count" id="count_challenges">0/9</span>
       </button>
     </nav>
-
-    <!-- Island Quick Jump (Desktop Sidebar) -->
-    <div class="sidebar-section">
-      <div class="nav-section-label">Jump to Island</div>
-      <div class="island-btn-grid">
-        <button class="island-btn active" data-island="all">All</button>
-        <button class="island-btn" data-island="portland">Portland</button>
-        <button class="island-btn" data-island="staunton">Staunton</button>
-        <button class="island-btn" data-island="shoreside">Shoreside</button>
-      </div>
-    </div>
 
     <!-- Quick Options & Map Style -->
     <div class="sidebar-footer">
@@ -221,7 +210,8 @@
       </div>
 
       <div class="sidebar-action-row">
-        <button class="sidebar-action-btn secondary-btn" id="btnOpenCredits" type="button" onclick="toggleCreditsModal(true)" title="View Credits & Sources">Credits & Sources</button>
+        <button class="sidebar-action-btn secondary-btn" id="btnOpenHistory" type="button" onclick="toggleHistoryModal(true)" title="View Tracking History">History</button>
+        <button class="sidebar-action-btn secondary-btn" id="btnOpenCredits" type="button" onclick="toggleCreditsModal(true)" title="View Credits & Sources">Credits</button>
         <button class="sidebar-action-btn" id="btnResetProgress" type="button" title="Reset tracking">Reset</button>
       </div>
     </div>
@@ -256,7 +246,7 @@
     <div class="drawer-header">
       <div class="drawer-header-left">
         <h3 class="drawer-title">100% Checklist</h3>
-        <span class="drawer-badge" id="drawerPercentBadge">0.0%</span>
+        <span class="drawer-badge" id="drawerPercentBadge">0.00%</span>
       </div>
       <button class="card-close-btn" id="btnCloseDrawer" aria-label="Close drawer">✕</button>
     </div>
@@ -269,7 +259,7 @@
             <div class="stat-card-label">Game Completion</div>
             <div class="stat-card-sub" id="drawerSubStats">Mandatory 100% Tasks</div>
           </div>
-          <div class="stat-card-val" id="drawerStats">0 / 73</div>
+          <div class="stat-card-val" id="drawerStats">0 / 100</div>
         </div>
         <div class="progress-bar-wrap">
           <div class="progress-bar-fill" id="checklistProgressBar" style="width: 0%;"></div>
@@ -303,7 +293,7 @@
           <label class="toggle-label cl-toggle-label" for="toggleShowOptional">
             <span class="cl-toggle-text">Show Optional Tasks (Not needed for 100%)</span>
             <div class="toggle-switch">
-              <input type="checkbox" id="toggleShowOptional" />
+              <input type="checkbox" id="toggleShowOptional" checked />
               <span class="toggle-slider"></span>
             </div>
           </label>
@@ -325,12 +315,29 @@
     </div>
   </aside>
 
+  <!-- Tracking History Modal -->
+  <div class="modal-backdrop" id="historyModalBackdrop" onclick="toggleHistoryModal(false)"></div>
+  <div class="history-modal" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+    <div class="history-modal-header">
+      <div class="history-title-wrap">
+        <h3 id="historyModalTitle">Tracking History</h3>
+        <span class="history-count-badge" id="historyCountBadge">0</span>
+      </div>
+      <div class="history-header-actions">
+        <button class="history-clear-btn" id="btnClearHistory" type="button" onclick="clearTrackingHistory()" title="Clear tracking activity history">Clear</button>
+        <button class="card-close-btn" id="btnCloseHistory" onclick="toggleHistoryModal(false)" aria-label="Close tracking history">✕</button>
+      </div>
+    </div>
+    <div class="history-modal-body" id="historyModalBody">
+      <!-- Generated dynamically by app.js -->
+    </div>
+  </div>
+
   <!-- Credits & Sources Modal -->
   <div class="modal-backdrop" id="creditsModalBackdrop" onclick="toggleCreditsModal(false)"></div>
   <div class="credits-modal" id="creditsModal" role="dialog" aria-modal="true" aria-labelledby="creditsModalTitle">
     <div class="credits-modal-header">
       <div class="credits-title-wrap">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c88219" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
         <h3 id="creditsModalTitle">Credits & Sources</h3>
       </div>
       <button class="card-close-btn" id="btnCloseCredits" onclick="toggleCreditsModal(false)" aria-label="Close credits">✕</button>
@@ -338,22 +345,18 @@
     <div class="credits-modal-body">
       <!-- SonofUgly Map Redraw -->
       <div class="credit-card">
-        <div class="credit-badge">Map Source</div>
-        <div class="credit-title">High-Resolution Radar Map Redraw</div>
-        <div class="credit-author">By <strong>SonofUgly</strong> (LCS-Texture-Pack)</div>
-        <p class="credit-desc">Clean radar redraw of Liberty City decompressed directly from the multi-layer Paint.NET source asset and upscaled with anti-aliasing.</p>
+        <div class="credit-title">Radar Map Redraw</div>
+        <div class="credit-author">By <strong>SonofUgly</strong></div>
         <a href="https://github.com/SonofUgly/LCS-Texture-Pack/blob/master/Map/Map_Radar_Redraw.pdn" target="_blank" rel="noopener noreferrer" class="credit-link">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          github.com/SonofUgly/LCS-Texture-Pack/Map_Radar_Redraw.pdn ↗
+          github.com/SonofUgly/LCS-Texture-Pack ↗
         </a>
       </div>
 
       <!-- GTASeriesVideos -->
       <div class="credit-card">
-        <div class="credit-badge">Video Walkthroughs</div>
-        <div class="credit-title">Comprehensive 100% Video Guides</div>
+        <div class="credit-title">100% Video Guides</div>
         <div class="credit-author">By <strong>GTASeriesVideos</strong></div>
-        <p class="credit-desc">Exact video timestamps and walkthrough recordings for Hidden Packages, Rampages, and Unique Stunt Jumps.</p>
         <a href="https://www.youtube.com/c/GTASeriesVideos" target="_blank" rel="noopener noreferrer" class="credit-link">
           youtube.com/c/GTASeriesVideos ↗
         </a>
@@ -361,10 +364,8 @@
 
       <!-- GTAMap.net -->
       <div class="credit-card">
-        <div class="credit-badge">Coordinate Data</div>
-        <div class="credit-title">Interactive Map & Collectibles Positioning</div>
+        <div class="credit-title">Map & Collectibles Coordinates</div>
         <div class="credit-author">By <strong>GTAMap.net</strong></div>
-        <p class="credit-desc">Original interactive map database and in-game coordinate data points for Liberty City Stories.</p>
         <a href="https://gtamap.net/map/gtalcs?city=lc&layer=game" target="_blank" rel="noopener noreferrer" class="credit-link">
           gtamap.net/map/gtalcs ↗
         </a>
@@ -372,12 +373,10 @@
 
       <!-- GTA Wiki -->
       <div class="credit-card">
-        <div class="credit-badge">Screenshots & Game Data</div>
-        <div class="credit-title">In-Game Screenshot Tips & Mission Requirements</div>
-        <div class="credit-author">By <strong>GTA Wiki / Fandom</strong></div>
-        <p class="credit-desc">Authentic high-resolution collectible screenshots, mission criteria, and 100% checklist breakdowns.</p>
-        <a href="https://gta.fandom.com/wiki/Grand_Theft_Auto:_Liberty_City_Stories" target="_blank" rel="noopener noreferrer" class="credit-link">
-          gta.fandom.com/wiki/Grand_Theft_Auto:_Liberty_City_Stories ↗
+        <div class="credit-title">Screenshots & Game Data</div>
+        <div class="credit-author">By <strong>GTA Wiki</strong></div>
+        <a href="https://gta.wiki/wiki/Grand_Theft_Auto:_Liberty_City_Stories" target="_blank" rel="noopener noreferrer" class="credit-link">
+          gta.wiki/wiki/Grand_Theft_Auto:_Liberty_City_Stories ↗
         </a>
       </div>
     </div>
@@ -468,10 +467,10 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <!-- Offline/Instant Bundled Marker Data -->
-  <script src="data/markers_data.js?v=3.6"></script>
+  <script src="data/markers_data.js?v=4.6"></script>
   <!-- 100% Checklist & Optional Tasks Canonical Database -->
-  <script src="data/checklist_data.js?v=3.6"></script>
+  <script src="data/checklist_data.js?v=4.6"></script>
   <!-- Main Application Logic -->
-  <script src="js/app.js?v=3.8"></script>
+  <script src="js/app.js?v=4.6"></script>
 </body>
 </html>

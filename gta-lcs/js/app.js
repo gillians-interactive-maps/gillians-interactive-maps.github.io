@@ -1,6 +1,7 @@
 
 const STORAGE_KEY = "gta_lcs_collected_markers";
 const SETTINGS_KEY = "gta_lcs_user_settings";
+const HISTORY_STORAGE_KEY = "gta_lcs_tracking_history";
 
 const SAFE_REWARDS = [
   { count: 10, reward: "Pistol at Safehouses" },
@@ -18,44 +19,44 @@ const SAFE_REWARDS = [
 // Colorblind-Friendly Palettes
 const PALETTES = {
   standard: {
-    name: "Default (Subdued)",
+    name: "Default",
     hidden_packages: "#c88219",
-    rampages: "#b83232",
-    unique_stunt_jumps: "#b89628",
-    vehicle_missions: "#c05621",
-    odd_jobs: "#2b6cb0",
-    races: "#466e9b",
-    challenges: "#327f5b"
+    rampages: "#dc2626",
+    unique_stunt_jumps: "#eab308",
+    vehicle_missions: "#2563eb",
+    odd_jobs: "#8b5cf6",
+    races: "#06b6d4",
+    challenges: "#16a34a"
   },
   red_green: {
     name: "Protan / Deutan",
     hidden_packages: "#e69f00",   // Warm Orange
     rampages: "#d55e00",          // Vermilion
     unique_stunt_jumps: "#f0e442",// Golden Yellow
-    vehicle_missions: "#d55e00",  // Vermilion
-    odd_jobs: "#0072b2",          // Blue
-    races: "#56b4e9",             // Sky Blue
-    challenges: "#cc79a7"         // Magenta / Reddish Purple
+    vehicle_missions: "#0072b2",  // Deep Blue
+    odd_jobs: "#56b4e9",          // Sky Blue
+    races: "#009e73",             // Bluish Green
+    challenges: "#cc79a7"         // Reddish Purple
   },
   blue_yellow: {
     name: "Tritanopia",
-    hidden_packages: "#e66101",
-    rampages: "#ca0020",
-    unique_stunt_jumps: "#fdb863",
-    vehicle_missions: "#e66101",
-    odd_jobs: "#0571b0",
-    races: "#0571b0",
-    challenges: "#92c5de"
+    hidden_packages: "#ff7f0e",   // Vibrant Orange
+    rampages: "#d62728",          // Crimson Red
+    unique_stunt_jumps: "#bcbd22",// Olive / Chartreuse
+    vehicle_missions: "#17becf",  // Teal
+    odd_jobs: "#9467bd",          // Purple
+    races: "#e377c2",             // Pink / Magenta
+    challenges: "#2ca02c"         // Deep Green
   },
   high_contrast: {
     name: "High Contrast",
-    hidden_packages: "#ffb000",
-    rampages: "#ff0055",
-    unique_stunt_jumps: "#ffe600",
-    vehicle_missions: "#ff7b00",
-    odd_jobs: "#00f5d4",
-    races: "#00b4d8",
-    challenges: "#00f5d4"
+    hidden_packages: "#ffb703",   // Golden Yellow
+    rampages: "#ef233c",          // Bright Red
+    unique_stunt_jumps: "#f72585",// Hot Pink
+    vehicle_missions: "#4361ee",  // Vivid Blue
+    odd_jobs: "#7209b7",          // Deep Indigo
+    races: "#4cc9f0",             // Light Cyan
+    challenges: "#2ec4b6"         // Mint / Aquamarine
   }
 };
 
@@ -92,7 +93,8 @@ const state = {
   currentMediaTab: "image",
   collected: new Set(),
   checklistTasks: new Set(),
-  showOptionalTasks: false,
+  trackingHistory: [],
+  showOptionalTasks: true,
   collapsedCategories: new Set(),
   showPackageMilestones: false,
   activeChecklistIsland: "all",
@@ -105,12 +107,35 @@ const state = {
 };
 window.state = state;
 window.openMarkerPopup = openMarkerPopup;
+window.saveCollected = saveCollected;
+window.saveChecklistProgress = saveChecklistProgress;
+window.updateProgressUI = updateProgressUI;
+
+function escapeHtml(str) {
+  if (typeof str !== "string") return String(str || "");
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 // --- Storage Handlers ---
 function loadCollected() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) state.collected = new Set(JSON.parse(raw));
+    if (raw) {
+      const arr = JSON.parse(raw);
+      const migrated = Array.isArray(arr) ? arr.map(id => {
+        if (typeof id === "string" && id.startsWith("rampages_lcs_rampages_censored_")) {
+          const num = parseInt(id.replace("rampages_lcs_rampages_censored_", ""), 10);
+          return `rampages_lcs_rampages_${13 + num}`;
+        }
+        return id;
+      }) : [];
+      state.collected = new Set(migrated);
+    }
   } catch (e) {
     state.collected = new Set();
   }
@@ -121,6 +146,186 @@ function saveCollected() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...state.collected]));
   } catch (e) {}
   updateProgressUI();
+}
+
+function loadTrackingHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) state.trackingHistory = parsed;
+    }
+  } catch (e) {
+    state.trackingHistory = [];
+  }
+}
+
+function saveTrackingHistory() {
+  try {
+    if (state.trackingHistory && state.trackingHistory.length > 300) {
+      state.trackingHistory = state.trackingHistory.slice(-300);
+    }
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(state.trackingHistory || []));
+  } catch (e) {}
+}
+
+function logTrackingEvent(action, title, category, id) {
+  if (!state.trackingHistory) state.trackingHistory = [];
+  const entry = {
+    id: id || `${action}_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+    timestamp: Date.now(),
+    action, // "found" | "unfound" | "completed" | "uncompleted" | "batch_completed" | "batch_uncompleted" | "reset"
+    title: title || "Unknown Item",
+    category: category || "general"
+  };
+  state.trackingHistory.push(entry);
+  saveTrackingHistory();
+  const modal = document.getElementById("historyModal");
+  if (modal && modal.classList.contains("active")) {
+    renderHistoryTimeline();
+  }
+}
+
+function toggleHistoryModal(open) {
+  const modal = document.getElementById("historyModal");
+  const backdrop = document.getElementById("historyModalBackdrop");
+  if (!modal || !backdrop) return;
+  if (open === undefined) open = !modal.classList.contains("active");
+  modal.classList.toggle("active", open);
+  backdrop.classList.toggle("active", open);
+  if (open) {
+    renderHistoryTimeline();
+  }
+}
+window.toggleHistoryModal = toggleHistoryModal;
+
+function clearTrackingHistory() {
+  if (!state.trackingHistory || state.trackingHistory.length === 0) return;
+  if (confirm("Clear all tracking history? This will only erase the timestamped log, keeping your saved progress intact.")) {
+    state.trackingHistory = [];
+    saveTrackingHistory();
+    renderHistoryTimeline();
+  }
+}
+window.clearTrackingHistory = clearTrackingHistory;
+
+function renderHistoryTimeline() {
+  const container = document.getElementById("historyModalBody");
+  const countBadge = document.getElementById("historyCountBadge");
+  if (!container) return;
+
+  const history = state.trackingHistory || [];
+  if (countBadge) {
+    countBadge.textContent = history.length;
+  }
+
+  if (history.length === 0) {
+    container.innerHTML = `
+      <div class="history-empty-state">
+        <div class="history-empty-icon">🕒</div>
+        <div class="history-empty-title">No tracking activity yet</div>
+        <div class="history-empty-desc">When you find collectibles or complete missions on the map and checklist, your activity history with dates and times will appear here.</div>
+      </div>
+    `;
+    return;
+  }
+
+  // Group entries by date (descending order, newest first)
+  const grouped = new Map();
+  for (let i = history.length - 1; i >= 0; i--) {
+    const entry = history[i];
+    const d = new Date(entry.timestamp);
+    const dateKey = d.toDateString();
+    if (!grouped.has(dateKey)) {
+      grouped.set(dateKey, {
+        dateObj: d,
+        items: []
+      });
+    }
+    grouped.get(dateKey).items.push({ entry, dateObj: d });
+  }
+
+  const todayStr = new Date().toDateString();
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterdayStr = yesterdayDate.toDateString();
+
+  let html = "";
+  for (const [dateKey, group] of grouped) {
+    let headerText = group.dateObj.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+    if (dateKey === todayStr) headerText = "Today";
+    else if (dateKey === yesterdayStr) headerText = "Yesterday";
+
+    html += `
+      <div class="history-date-group">
+        <div class="history-date-heading">
+          <span>${headerText}</span>
+          <span class="history-date-count">${group.items.length} ${group.items.length === 1 ? 'event' : 'events'}</span>
+        </div>
+        <div class="history-item-list">
+    `;
+
+    for (const { entry, dateObj } of group.items) {
+      let badgeClass = "badge-found";
+      let badgeText = "+ Found";
+
+      if (entry.action === "found") {
+        badgeClass = "badge-found";
+        badgeText = "+ Found";
+      } else if (entry.action === "unfound") {
+        badgeClass = "badge-unfound";
+        badgeText = "- Removed";
+      } else if (entry.action === "completed" || entry.action === "batch_completed") {
+        badgeClass = "badge-completed";
+        badgeText = "+ Done";
+      } else if (entry.action === "uncompleted" || entry.action === "batch_uncompleted") {
+        badgeClass = "badge-uncompleted";
+        badgeText = "- Unchecked";
+      } else if (entry.action === "reset") {
+        badgeClass = "badge-reset";
+        badgeText = "⟲ Reset";
+      }
+
+      const timeStr = dateObj.toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+
+      let catDisplay = entry.category || "";
+      if (catDisplay === "hidden_packages") catDisplay = "Package";
+      else if (catDisplay === "rampages") catDisplay = "Rampage";
+      else if (catDisplay === "unique_stunt_jumps") catDisplay = "Stunt Jump";
+      else if (catDisplay.length > 0) {
+        catDisplay = catDisplay.replace(/_/g, " ");
+        catDisplay = catDisplay.charAt(0).toUpperCase() + catDisplay.slice(1);
+      }
+
+      html += `
+        <div class="history-item">
+          <div class="history-item-left">
+            <span class="history-badge ${badgeClass}">${badgeText}</span>
+            <div class="history-item-info">
+              <span class="history-item-title">${escapeHtml(entry.title)}</span>
+              ${catDisplay ? `<span class="history-item-cat">${escapeHtml(catDisplay)}</span>` : ""}
+            </div>
+          </div>
+          <div class="history-item-time">${timeStr}</div>
+        </div>
+      `;
+    }
+
+    html += `
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
 }
 
 function loadSettings() {
@@ -233,7 +438,7 @@ function initMap() {
   });
 
   // 1. High-Resolution 4K Clean Map Layer (Smooth, anti-aliased, zero aliasing)
-  state.vectorLayer = L.imageOverlay("assets/map/lcs_map_4096.webp?v=3.9", [[-128, 0], [0, 128]], {
+  state.vectorLayer = L.imageOverlay("assets/map/lcs_map_4096.webp?v=4.6", [[-128, 0], [0, 128]], {
     opacity: 1,
     interactive: false,
     zIndex: 1
@@ -252,6 +457,118 @@ function initMap() {
 
   state.markerLayer = L.layerGroup().addTo(state.map);
   state.map.fitBounds(ISLAND_BOUNDS.all);
+
+  // 3. Custom Map HUD Controls (Island Quick-Jump + Compact Zoom & Single Reset View)
+  const MapHudControl = L.Control.extend({
+    options: { position: "bottomright" },
+    onAdd: function (map) {
+      const container = L.DomUtil.create("div", "leaflet-control-map-hud");
+      
+      // Island Quick Jump Group
+      const islandGroup = L.DomUtil.create("div", "hud-island-group", container);
+      const islands = [
+        { key: "all", label: "All" },
+        { key: "portland", label: "Portland" },
+        { key: "staunton", label: "Staunton" },
+        { key: "shoreside", label: "Shoreside" }
+      ];
+      islands.forEach(isl => {
+        const btn = L.DomUtil.create("button", `island-btn hud-island-btn ${isl.key === (state.activeIsland || "all") ? "active" : ""}`, islandGroup);
+        btn.type = "button";
+        btn.dataset.island = isl.key;
+        btn.textContent = isl.label;
+        btn.title = `Jump to ${isl.label}`;
+        L.DomEvent.on(btn, "click", (e) => {
+          L.DomEvent.stop(e);
+          setIsland(isl.key);
+        });
+      });
+
+      // Compact Zoom & Reset Group
+      const zoomGroup = L.DomUtil.create("div", "hud-zoom-group", container);
+      
+      const btnIn = L.DomUtil.create("button", "zoom-btn zoom-btn-in", zoomGroup);
+      btnIn.type = "button";
+      btnIn.title = "Zoom In";
+      btnIn.setAttribute("aria-label", "Zoom in");
+      btnIn.innerHTML = "+";
+
+      const pctBadge = L.DomUtil.create("div", "zoom-pct-badge", zoomGroup);
+      pctBadge.id = "zoomPctBadge";
+      pctBadge.textContent = "100%";
+      pctBadge.title = "Current zoom level";
+
+      const btnOut = L.DomUtil.create("button", "zoom-btn zoom-btn-out", zoomGroup);
+      btnOut.type = "button";
+      btnOut.title = "Zoom Out";
+      btnOut.setAttribute("aria-label", "Zoom out");
+      btnOut.innerHTML = "−";
+
+      const btnReset = L.DomUtil.create("button", "zoom-btn zoom-btn-reset", zoomGroup);
+      btnReset.type = "button";
+      btnReset.title = "Reset View (⟲)";
+      btnReset.setAttribute("aria-label", "Reset view to island / full map");
+      btnReset.innerHTML = "⟲";
+
+      L.DomEvent.disableClickPropagation(container);
+      L.DomEvent.disableScrollPropagation(container);
+
+      L.DomEvent.on(btnIn, "click", (e) => {
+        L.DomEvent.stop(e);
+        map.zoomIn();
+      });
+
+      L.DomEvent.on(btnOut, "click", (e) => {
+        L.DomEvent.stop(e);
+        map.zoomOut();
+      });
+
+      L.DomEvent.on(btnReset, "click", (e) => {
+        L.DomEvent.stop(e);
+        const targetBounds = ISLAND_BOUNDS[state.activeIsland] || ISLAND_BOUNDS.all;
+        map.fitBounds(targetBounds, { animate: true });
+      });
+
+      function updatePct() {
+        const curZoom = map.getZoom();
+        const minZ = map.getMinZoom();
+        const maxZ = map.getMaxZoom();
+        const range = maxZ - minZ;
+        const ratio = range > 0 ? Math.max(0, Math.min(1, (curZoom - minZ) / range)) : 0;
+        // Clean, sensible scale from 100% (fit full map) to 400% (max zoom), rounded to nearest 5%
+        const pct = Math.round((100 + ratio * 300) / 5) * 5;
+        pctBadge.textContent = `${pct}%`;
+      }
+
+      map.on("zoom zoomend", updatePct);
+      setTimeout(updatePct, 200);
+
+      return container;
+    }
+  });
+
+  new MapHudControl().addTo(state.map);
+
+  // 4. Prevent touch/scroll gestures on UI menus from accidentally zooming/panning the map
+  const uiElementsToIsolate = [
+    document.getElementById("appSidebar"),
+    document.getElementById("checklistDrawer"),
+    document.getElementById("settingsModal"),
+    document.getElementById("creditsModal"),
+    document.querySelector(".mobile-top-controls"),
+    document.querySelector(".mobile-island-bar"),
+    document.getElementById("checklistBackdrop"),
+    document.getElementById("settingsModalBackdrop"),
+    document.getElementById("creditsModalBackdrop")
+  ];
+  uiElementsToIsolate.forEach(el => {
+    if (el) {
+      L.DomEvent.disableClickPropagation(el);
+      L.DomEvent.disableScrollPropagation(el);
+      el.addEventListener("touchstart", e => e.stopPropagation(), { passive: true });
+      el.addEventListener("touchmove", e => e.stopPropagation(), { passive: true });
+    }
+  });
 
   // Zoom-dependent scaling listener
   function updateZoomScaleClass() {
@@ -352,7 +669,7 @@ function createMarkerIcon(marker) {
 
   const html = `
     <div class="map-pin ${isCollected ? 'collected' : ''} ${isSelected ? 'selected' : ''}">
-      <svg viewBox="0 0 26 36" width="26" height="36" style="display: block;">
+      <svg viewBox="-2 -2 30 40" width="30" height="40" style="display: block; overflow: visible;">
         <!-- Built-in Contact Shadow -->
         <ellipse cx="13" cy="34.5" rx="5" ry="1.5" fill="#000000" opacity="0.45"/>
         <!-- Pin Base with Crisp Outline -->
@@ -368,8 +685,9 @@ function createMarkerIcon(marker) {
   return L.divIcon({
     html: html,
     className: "pin-div-icon",
-    iconSize: [26, 36],
-    iconAnchor: [13, 34]
+    iconSize: [30, 40],
+    iconAnchor: [15, 36],
+    popupAnchor: [0, -36]
   });
 }
 
@@ -381,7 +699,7 @@ function createClusterIcon(cluster) {
 
   const html = `
     <div class="map-pin cluster-pin ${allCollected ? 'collected' : ''}">
-      <svg viewBox="0 0 30 36" width="30" height="36" style="display: block; overflow: visible;">
+      <svg viewBox="-2 -2 34 40" width="34" height="40" style="display: block; overflow: visible;">
         <!-- Built-in Contact Shadow -->
         <ellipse cx="13" cy="34.5" rx="5.5" ry="1.5" fill="#000000" opacity="0.45"/>
         <!-- Pin Base with Crisp Outline -->
@@ -400,14 +718,15 @@ function createClusterIcon(cluster) {
   return L.divIcon({
     html: html,
     className: "pin-div-icon cluster-div-icon",
-    iconSize: [30, 36],
-    iconAnchor: [13, 34]
+    iconSize: [34, 40],
+    iconAnchor: [15, 36],
+    popupAnchor: [0, -36]
   });
 }
 
 // --- Same-Spot Icon Grouping Algorithm ---
 function getClusteredNodes(visibleMarkers, zoom) {
-  if (!state.clusterMarkers || zoom >= 5.25) {
+  if (!state.clusterMarkers || zoom >= 4.75) {
     return visibleMarkers.map(m => ({
       isCluster: false,
       lat: m.lat,
@@ -418,7 +737,7 @@ function getClusteredNodes(visibleMarkers, zoom) {
     }));
   }
 
-  const threshold = 26; // pixel radius threshold
+  const threshold = 14; // pixel radius threshold: only group markers that genuinely collide/overlap
   const clusters = [];
 
   // Project marker locations to screen pixel space at current zoom
@@ -503,6 +822,9 @@ function renderMarkers() {
 
     // Hide collected
     if (state.hideCollected && state.collected.has(marker.id)) return false;
+
+    // Optional tasks filter
+    if (!state.showOptionalTasks && marker.optional) return false;
 
     return true;
   });
@@ -706,7 +1028,21 @@ function openMarkerPopup(marker) {
 
       <!-- Collectible Info -->
       <div class="popup-info-box">
-        ${marker.unlock ? `<div class="popup-unlock">🔒 ${marker.unlock}</div>` : ''}
+        ${marker.missionLock && (!marker.lockingMissionId || !state.checklistTasks || !state.checklistTasks.has(marker.lockingMissionId)) ? `
+          <div class="popup-mission-lock">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+            <span class="popup-lock-badge">Mission Locked</span>
+            <span class="popup-lock-text">${marker.missionLock}</span>
+          </div>
+        ` : ''}
+        ${marker.optional ? `
+          <div class="popup-optional-notice">
+            <span class="popup-optional-badge">Optional</span>
+            <span class="popup-optional-sub">Not required for 100% completion</span>
+          </div>
+        ` : ''}
         ${marker.objective ? `<div class="popup-objective">${marker.objective}</div>` : ''}
         ${isPkg ? `<div class="popup-reward" id="popupRewardText">🎁 ${getDynamicRewardText()}</div>` : (marker.reward ? `<div class="popup-reward">🎁 Reward: ${marker.reward}</div>` : '')}
       </div>
@@ -823,8 +1159,10 @@ function toggleCurrentCollected() {
 
   if (state.collected.has(mId)) {
     state.collected.delete(mId);
+    logTrackingEvent("unfound", state.currentMarker.title || `Marker #${mId}`, state.currentMarker.category, mId);
   } else {
     state.collected.add(mId);
+    logTrackingEvent("found", state.currentMarker.title || `Marker #${mId}`, state.currentMarker.category, mId);
   }
 
   // Two-way sync: reflect on checklist task if mapped to this marker
@@ -892,11 +1230,17 @@ function saveChecklistProgress() {
 function toggleTaskCompleted(taskId) {
   const checklist = window.CHECKLIST_DATA || (typeof CHECKLIST_DATA !== "undefined" ? CHECKLIST_DATA : null);
   let linkedMarkerId = null;
+  let taskTitle = taskId;
+  let taskCategory = "checklist";
   if (checklist) {
     for (const cat of checklist.categories) {
       const it = cat.items.find(i => i.id === taskId);
-      if (it && it.markerId) {
-        linkedMarkerId = it.markerId;
+      if (it) {
+        taskTitle = it.title || taskId;
+        taskCategory = cat.id || "checklist";
+        if (it.markerId) {
+          linkedMarkerId = it.markerId;
+        }
         break;
       }
     }
@@ -904,6 +1248,7 @@ function toggleTaskCompleted(taskId) {
 
   if (state.checklistTasks.has(taskId)) {
     state.checklistTasks.delete(taskId);
+    logTrackingEvent("uncompleted", taskTitle, taskCategory, taskId);
     if (linkedMarkerId) {
       state.collected.delete(linkedMarkerId);
       saveCollected();
@@ -911,6 +1256,7 @@ function toggleTaskCompleted(taskId) {
     }
   } else {
     state.checklistTasks.add(taskId);
+    logTrackingEvent("completed", taskTitle, taskCategory, taskId);
     if (linkedMarkerId) {
       state.collected.add(linkedMarkerId);
       saveCollected();
@@ -926,6 +1272,11 @@ function toggleTaskCompleted(taskId) {
       btn.classList.toggle("collected", isFound);
       btn.innerHTML = `<span class="check-box-icon">${isFound ? '☑' : '☐'}</span> Found`;
     }
+  }
+
+  // Dynamically refresh active popup if it is locked by this mission
+  if (state.currentMarker && state.currentMarker.lockingMissionId === taskId) {
+    openMarkerPopup(state.currentMarker);
   }
 }
 
@@ -965,10 +1316,13 @@ window.toggleAllCategoryCollectibles = function(catKey) {
   const catMarkers = state.markers.filter(m => m.category === catKey);
   if (catMarkers.length === 0) return;
   const allFound = catMarkers.every(m => state.collected.has(m.id));
+  const catName = (state.categories[catKey] && state.categories[catKey].name) || catKey.replace(/_/g, " ");
   if (allFound) {
     catMarkers.forEach(m => state.collected.delete(m.id));
+    logTrackingEvent("batch_uncompleted", `All ${catName}`, catKey);
   } else {
     catMarkers.forEach(m => state.collected.add(m.id));
+    logTrackingEvent("batch_completed", `All ${catName}`, catKey);
   }
   saveCollected();
   renderMarkers();
@@ -1059,6 +1413,12 @@ window.toggleCategoryAll = function(catId, event) {
   }
 
   const allDone = filteredItems.every(isItemDone);
+  const catName = cat.name || catId;
+  if (allDone) {
+    logTrackingEvent("batch_uncompleted", `All ${catName}`, catId);
+  } else {
+    logTrackingEvent("batch_completed", `All ${catName}`, catId);
+  }
 
   filteredItems.forEach(item => {
     if (allDone) {
@@ -1113,6 +1473,7 @@ function renderFullChecklist() {
 
   let totalMandatory = 0;
   let completedMandatory = 0;
+  let mandatoryScore = 0;
   let totalOptional = 0;
   let completedOptional = 0;
 
@@ -1121,24 +1482,32 @@ function renderFullChecklist() {
     cat.items.forEach(item => {
       if (item.platform && item.platform !== state.selectedPlatform) return;
       let isDone = false;
+      let itemScore = 0;
+
       if (item.isCategoryLink === "hidden_packages") {
         const hpCount = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
-        isDone = hpCount >= 100;
+        isDone = hpCount >= 100 || state.checklistTasks.has(item.id);
+        itemScore = isDone ? 1 : Math.min(1, hpCount / 100);
       } else if (item.isCategoryLink === "rampages") {
         const rCount = state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length;
-        isDone = rCount >= 20;
+        isDone = rCount >= 20 || state.checklistTasks.has(item.id);
+        itemScore = isDone ? 1 : Math.min(1, rCount / 20);
       } else if (item.isCategoryLink === "unique_stunt_jumps") {
         const jCount = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
-        isDone = jCount >= 26;
+        isDone = jCount >= 26 || state.checklistTasks.has(item.id);
+        itemScore = isDone ? 1 : Math.min(1, jCount / 26);
       } else if (item.markerId && state.collected.has(item.markerId)) {
         isDone = true;
+        itemScore = 1;
       } else {
         isDone = state.checklistTasks.has(item.id);
+        itemScore = isDone ? 1 : 0;
       }
 
       if (item.required) {
         totalMandatory++;
         if (isDone) completedMandatory++;
+        mandatoryScore += itemScore;
       } else {
         totalOptional++;
         if (isDone) completedOptional++;
@@ -1146,24 +1515,29 @@ function renderFullChecklist() {
     });
   });
 
-  const mandatoryPct = totalMandatory > 0 ? ((completedMandatory / totalMandatory) * 100).toFixed(1) : "0.0";
+  const mandatoryPctNum = totalMandatory > 0 ? (mandatoryScore / totalMandatory) * 100 : 0;
+  const pctFormatted = `${Math.min(100, Math.max(0, mandatoryPctNum)).toFixed(2)}%`;
+  const pctBarWidth = pctFormatted;
 
   // Update Top Sidebar 100% Completion Box
   const totalText = document.getElementById("totalProgressText");
-  if (totalText) totalText.textContent = `${completedMandatory} / ${totalMandatory} (${mandatoryPct}%)`;
+  if (totalText) totalText.textContent = `${completedMandatory} / ${totalMandatory} tasks`;
+
+  const totalPct = document.getElementById("totalProgressPct");
+  if (totalPct) totalPct.textContent = pctFormatted;
 
   const totalBar = document.getElementById("totalProgressBar");
-  if (totalBar) totalBar.style.width = `${mandatoryPct}%`;
+  if (totalBar) totalBar.style.width = pctBarWidth;
 
   // Update Drawer Stats & Progress Bar
   const drawerStats = document.getElementById("drawerStats");
   if (drawerStats) drawerStats.textContent = `${completedMandatory} / ${totalMandatory}`;
 
   const drawerBadge = document.getElementById("drawerPercentBadge");
-  if (drawerBadge) drawerBadge.textContent = `${mandatoryPct}%`;
+  if (drawerBadge) drawerBadge.textContent = pctFormatted;
 
   const progressBar = document.getElementById("checklistProgressBar");
-  if (progressBar) progressBar.style.width = `${mandatoryPct}%`;
+  if (progressBar) progressBar.style.width = pctBarWidth;
 
   const drawerSub = document.getElementById("drawerSubStats");
   if (drawerSub) {
@@ -1171,7 +1545,7 @@ function renderFullChecklist() {
   }
 
   const mobileProg = document.getElementById("mobileProgressText");
-  if (mobileProg) mobileProg.textContent = `${Math.round(mandatoryPct)}%`;
+  if (mobileProg) mobileProg.textContent = pctFormatted;
 
   // Render Category Groups
   let html = "";
@@ -1226,6 +1600,16 @@ function renderFullChecklist() {
     const isCatDone = catDone === filteredItems.length;
     const isCatCollapsed = state.collapsedCategories && state.collapsedCategories.has(cat.id);
 
+    let groupCountText = `${catDone}/${filteredItems.length}`;
+    if (cat.id === "collectibles") {
+      const hp = state.markers.filter(m => m.category === "hidden_packages" && state.collected.has(m.id)).length;
+      const r = state.markers.filter(m => m.category === "rampages" && state.collected.has(m.id)).length;
+      const j = state.markers.filter(m => m.category === "unique_stunt_jumps" && state.collected.has(m.id)).length;
+      const totalColFound = hp + r + j;
+      const colPercent = ((totalColFound / 146) * 100).toFixed(1);
+      groupCountText = `${totalColFound}/146 (${colPercent}%)`;
+    }
+
     html += `
       <div class="cl-group">
         <div class="cl-group-header" onclick="toggleCategoryCollapse('${cat.id}', this)">
@@ -1239,7 +1623,7 @@ function renderFullChecklist() {
                     title="${isCatDone ? 'Uncheck all in ' + cat.name : 'Check all in ' + cat.name}">
               ${isCatDone ? 'Uncheck All ✕' : 'Check All ✓'}
             </button>
-            <span class="cl-group-count">${catDone}/${filteredItems.length}</span>
+            <span class="cl-group-count">${groupCountText}</span>
             <span class="cl-chevron ${isCatCollapsed ? 'collapsed' : ''}">▼</span>
           </div>
         </div>
@@ -1262,8 +1646,9 @@ function renderFullChecklist() {
                 total = 26;
                 actionWord = "Landed";
               }
-              const isDone = current >= total;
-              const pct = Math.min(100, Math.round((current / total) * 100));
+              const isDone = current >= total || state.checklistTasks.has(item.id);
+              const pctNum = Math.min(100, (current / total) * 100);
+              const pct = pctNum % 1 === 0 ? pctNum.toFixed(0) : pctNum.toFixed(1);
               const rewardTag = item.reward ? `<span class="cl-item-tag" title="Reward">🏆 ${item.reward}</span>` : "";
               const showMilestones = !!state.showPackageMilestones;
               const unlockedMilestones = SAFE_REWARDS.filter(r => current >= r.count).length;
@@ -1296,8 +1681,8 @@ function renderFullChecklist() {
                     <div class="cl-item-title-row">
                       <span class="cl-item-title">${item.title}</span>
                       <div class="cl-item-actions">
-                        <button class="cl-found-all-btn ${isDone ? 'all-found' : ''}" onclick="toggleAllCategoryCollectibles('${item.isCategoryLink}')" title="${isDone ? 'Reset ' + item.title : 'Mark all ' + item.title + ' as found'}">
-                          ${isDone ? 'Reset All ✕' : 'Found All ✓'}
+                        <button class="cl-cat-check-all-btn ${isDone ? 'all-done' : ''}" onclick="toggleAllCategoryCollectibles('${item.isCategoryLink}')" title="${isDone ? 'Uncollect all ' + item.title : 'Collect all ' + item.title}">
+                          ${isDone ? 'Uncollect All ✕' : 'Collect All ✓'}
                         </button>
                         <button class="cl-map-btn" onclick="setCategoryFilter('${item.isCategoryLink}'); toggleChecklistDrawer(false);">Show on Map</button>
                       </div>
@@ -1374,16 +1759,21 @@ function renderFullChecklist() {
 
 // --- Progress & UI Stats (100% Completion Tracker) ---
 function updateProgressUI() {
-  const totalPins = state.markers.length || 176;
+  const visibleFilter = m => state.showOptionalTasks || !m.optional;
+  const activeMarkers = state.markers.filter(visibleFilter);
+  const totalPins = activeMarkers.length;
+  const donePins = activeMarkers.filter(m => state.collected.has(m.id)).length;
+
   const countAll = document.getElementById("count_all");
-  if (countAll) countAll.textContent = `${state.collected.size}/${totalPins}`;
+  if (countAll) countAll.textContent = `${donePins}/${totalPins}`;
 
   // Update Category checklist counts in Sidebar
   Object.keys(state.categories).forEach(catId => {
     const el = document.getElementById(`count_${catId}`);
     if (el) {
-      const catTotal = state.categories[catId].count || 0;
-      const catDone = state.markers.filter(m => m.category === catId && state.collected.has(m.id)).length;
+      const catMarkers = state.markers.filter(m => m.category === catId && visibleFilter(m));
+      const catTotal = catMarkers.length;
+      const catDone = catMarkers.filter(m => state.collected.has(m.id)).length;
       el.textContent = `${catDone}/${catTotal}`;
     }
   });
@@ -1425,6 +1815,7 @@ function toggleChecklistDrawer(open) {
     renderFullChecklist();
   }
 }
+window.toggleChecklistDrawer = toggleChecklistDrawer;
 
 function initDrawerCategories() {
   const list = document.getElementById("drawerCategoryList");
@@ -1453,6 +1844,7 @@ function resetProgress() {
   if (confirm("Reset all tracked progress (markers & 100% checklist tasks)?")) {
     state.collected.clear();
     state.checklistTasks.clear();
+    logTrackingEvent("reset", "All Progress Reset", "system");
     saveCollected();
     saveChecklistProgress();
     renderMarkers();
@@ -1471,6 +1863,7 @@ function exportProgress() {
   const exportDoc = {
     collected: [...state.collected],
     checklistTasks: [...state.checklistTasks],
+    trackingHistory: state.trackingHistory || [],
     timestamp: new Date().toISOString()
   };
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportDoc, null, 2));
@@ -1498,6 +1891,10 @@ function importProgress(customFileInput) {
         } else if (imported && typeof imported === "object") {
           if (Array.isArray(imported.collected)) state.collected = new Set(imported.collected);
           if (Array.isArray(imported.checklistTasks)) state.checklistTasks = new Set(imported.checklistTasks);
+          if (Array.isArray(imported.trackingHistory)) {
+            state.trackingHistory = imported.trackingHistory;
+            saveTrackingHistory();
+          }
         }
         saveCollected();
         saveChecklistProgress();
@@ -1588,6 +1985,19 @@ function bindEvents() {
   const creditsBackdrop = document.getElementById("creditsModalBackdrop");
   if (creditsBackdrop) creditsBackdrop.addEventListener("click", () => toggleCreditsModal(false));
 
+  // History Modal triggers
+  const btnOpenHistory = document.getElementById("btnOpenHistory");
+  if (btnOpenHistory) btnOpenHistory.addEventListener("click", () => toggleHistoryModal(true));
+
+  const btnCloseHistory = document.getElementById("btnCloseHistory");
+  if (btnCloseHistory) btnCloseHistory.addEventListener("click", () => toggleHistoryModal(false));
+
+  const historyBackdrop = document.getElementById("historyModalBackdrop");
+  if (historyBackdrop) historyBackdrop.addEventListener("click", () => toggleHistoryModal(false));
+
+  const btnClearHistory = document.getElementById("btnClearHistory");
+  if (btnClearHistory) btnClearHistory.addEventListener("click", () => clearTrackingHistory());
+
   // Checklist island filter buttons
   document.querySelectorAll(".cl-island-btn[data-cl-island]").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -1604,7 +2014,8 @@ function bindEvents() {
     toggleOpt.addEventListener("change", (e) => {
       state.showOptionalTasks = e.target.checked;
       saveSettings();
-      renderFullChecklist();
+      renderMarkers();
+      updateProgressUI();
     });
   }
 
@@ -1719,6 +2130,7 @@ function bindEvents() {
       toggleChecklistDrawer(false);
       toggleCreditsModal(false);
       toggleSettingsModal(false);
+      toggleHistoryModal(false);
     }
     if (state.currentMarker) {
       if (e.key === "ArrowLeft") navigateMarker(-1);
@@ -1774,6 +2186,7 @@ function loadMarkerDataIntoState(data) {
 async function init() {
   loadCollected();
   loadChecklistProgress();
+  loadTrackingHistory();
   syncChecklistAndMarkers();
   loadSettings();
   setPlatform(state.selectedPlatform);

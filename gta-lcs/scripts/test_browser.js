@@ -77,7 +77,7 @@ async function run() {
     '--remote-debugging-port=9222',
     `--user-data-dir=${USER_DATA}`,
     '--window-size=390,844',
-    'http://localhost:8080/'
+    'http://localhost:8080/gta-lcs/'
   ]);
 
   let cdp = null;
