@@ -23,7 +23,6 @@ const PALETTES = {
     hidden_packages: "#c88219",
     rampages: "#dc2626",
     unique_stunt_jumps: "#eab308",
-    vehicle_missions: "#2563eb",
     odd_jobs: "#8b5cf6",
     races: "#06b6d4",
     challenges: "#16a34a"
@@ -33,7 +32,6 @@ const PALETTES = {
     hidden_packages: "#e69f00",   // Warm Orange
     rampages: "#d55e00",          // Vermilion
     unique_stunt_jumps: "#f0e442",// Golden Yellow
-    vehicle_missions: "#0072b2",  // Deep Blue
     odd_jobs: "#56b4e9",          // Sky Blue
     races: "#009e73",             // Bluish Green
     challenges: "#cc79a7"         // Reddish Purple
@@ -43,7 +41,6 @@ const PALETTES = {
     hidden_packages: "#ff7f0e",   // Vibrant Orange
     rampages: "#d62728",          // Crimson Red
     unique_stunt_jumps: "#bcbd22",// Olive / Chartreuse
-    vehicle_missions: "#17becf",  // Teal
     odd_jobs: "#9467bd",          // Purple
     races: "#e377c2",             // Pink / Magenta
     challenges: "#2ca02c"         // Deep Green
@@ -53,7 +50,6 @@ const PALETTES = {
     hidden_packages: "#ffb703",   // Golden Yellow
     rampages: "#ef233c",          // Bright Red
     unique_stunt_jumps: "#f72585",// Hot Pink
-    vehicle_missions: "#4361ee",  // Vivid Blue
     odd_jobs: "#7209b7",          // Deep Indigo
     races: "#4cc9f0",             // Light Cyan
     challenges: "#2ec4b6"         // Mint / Aquamarine
@@ -65,7 +61,6 @@ const CATEGORY_ICONS = {
   hidden_packages: `<path fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-linecap="round" d="M 18.80 2.40 c -0.28 -0.36 -0.68 -0.58 -1.13 -0.63 c -0.45 -0.05 -0.89 0.07 -1.25 0.35 c -0.36 0.28 -0.58 0.68 -0.63 1.13 l -0.63 4.52 v -0.18 c 0.00 -0.93 -0.76 -1.69 -1.69 -1.69 c -0.63 0.00 -1.17 0.34 -1.47 0.85 c -0.29 -0.51 -0.84 -0.85 -1.47 -0.85 c -0.93 0.00 -1.69 0.76 -1.69 1.69 v 0.94 L 8.21 3.24 c -0.05 -0.45 -0.28 -0.85 -0.63 -1.13 c -0.36 -0.28 -0.80 -0.40 -1.25 -0.35 c -0.45 0.05 -0.85 0.28 -1.13 0.63 c -0.28 0.36 -0.41 0.80 -0.35 1.25 l 1.16 9.32 c -0.61 1.18 -0.80 2.49 -0.64 3.65 c 0.25 1.78 1.25 3.10 2.69 3.66 V 22.02 c 0.00 0.13 0.10 0.23 0.23 0.23 h 8.24 c 0.13 0.00 0.23 -0.10 0.23 -0.23 V 20.15 c 0.70 -0.48 1.15 -1.32 1.15 -2.31 l 0.17 -5.07 L 19.15 3.64 C 19.20 3.20 19.08 2.75 18.80 2.40 z M 13.46 6.34 c 0.68 0.00 1.24 0.56 1.24 1.24 v 4.04 c 0.00 0.68 -0.56 1.24 -1.24 1.24 c -0.45 0.00 -0.85 -0.24 -1.07 -0.62 c 0.12 -0.48 0.09 -0.99 -0.09 -1.44 c -0.02 -0.05 -0.05 -0.11 -0.07 -0.16 v -3.06 C 12.22 6.89 12.78 6.34 13.46 6.34 z M 10.53 6.34 c 0.68 0.00 1.24 0.56 1.24 1.24 v 2.47 c -0.43 -0.37 -1.01 -0.49 -1.63 -0.31 c -0.30 0.08 -0.58 0.18 -0.84 0.29 V 7.58 C 9.29 6.89 9.85 6.34 10.53 6.34 z M 5.30 3.58 c -0.04 -0.33 0.05 -0.65 0.26 -0.91 c 0.20 -0.26 0.50 -0.42 0.83 -0.46 c 0.33 -0.04 0.65 0.05 0.91 0.26 c 0.26 0.20 0.42 0.50 0.46 0.83 l 0.83 7.06 c -0.95 0.52 -1.68 1.20 -2.21 1.97 L 5.30 3.58 z M 18.70 3.59 l -1.08 9.14 l -0.17 5.10 c 0.00 1.31 -0.91 2.30 -2.13 2.30 c -0.13 0.00 -0.23 0.10 -0.23 0.23 s 0.10 0.23 0.23 0.23 c 0.35 0.00 0.68 -0.07 0.98 -0.19 V 21.79 H 8.51 v -1.37 c 0.39 0.10 0.80 0.16 1.23 0.16 c 0.13 0.00 0.23 -0.10 0.23 -0.23 s -0.10 -0.23 -0.23 -0.23 c -2.08 0.00 -3.62 -1.41 -3.92 -3.58 c -0.15 -1.07 0.03 -2.27 0.58 -3.35 c 0.04 -0.03 0.06 -0.08 0.07 -0.13 c 0.51 -0.94 1.33 -1.79 2.48 -2.38 c 0.00 -0.00 0.01 -0.00 0.01 -0.01 c 0.06 -0.03 0.13 -0.06 0.20 -0.10 c 0.00 -0.00 0.00 -0.00 0.00 -0.00 c 0.34 -0.16 0.71 -0.30 1.10 -0.41 c 0.63 -0.17 1.17 0.03 1.50 0.56 c 0.01 0.02 0.03 0.05 0.04 0.08 c 0.02 0.04 0.04 0.09 0.06 0.13 c 0.00 0.01 0.01 0.02 0.01 0.02 c 0.02 0.04 0.03 0.09 0.05 0.13 c 0.01 0.04 0.02 0.08 0.03 0.12 c 0.00 0.01 0.00 0.01 0.01 0.02 c 0.04 0.18 0.06 0.37 0.04 0.56 c -0.00 0.00 -0.00 0.01 -0.00 0.01 c -0.00 0.03 -0.01 0.06 -0.01 0.09 c -0.00 0.03 -0.01 0.06 -0.01 0.09 c -0.00 0.02 -0.01 0.04 -0.01 0.06 c -0.01 0.04 -0.02 0.08 -0.03 0.13 c -0.08 0.27 -0.22 0.54 -0.44 0.78 c -0.68 0.69 -1.57 1.26 -2.80 1.78 c -0.12 0.05 -0.17 0.18 -0.12 0.30 c 0.05 0.12 0.18 0.17 0.30 0.12 c 0.33 -0.14 0.64 -0.29 0.93 -0.44 c 0.18 -0.09 0.34 -0.18 0.49 -0.27 c 0.60 -0.36 1.11 -0.74 1.53 -1.18 c 0.15 -0.17 0.28 -0.34 0.37 -0.53 c 0.32 0.36 0.77 0.57 1.27 0.57 c 0.93 0.00 1.69 -0.76 1.69 -1.69 v -0.57 L 16.24 3.30 c 0.04 -0.33 0.20 -0.62 0.46 -0.83 c 0.26 -0.20 0.58 -0.30 0.91 -0.26 c 0.33 0.04 0.62 0.20 0.83 0.46 C 18.64 2.94 18.73 3.26 18.70 3.59 z"/>`,
   rampages: `<path d="M12 4c4.418 0 8 3.358 8 7.5c0 1.901 -.755 3.637 -2 4.96l0 2.54a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1v-2.54c-1.245 -1.322 -2 -3.058 -2 -4.96c0 -4.142 3.582 -7.5 8 -7.5" /><path d="M10 17v3M14 17v3" /><circle cx="9" cy="11.5" r="1.5" fill="currentColor" stroke="none" /><circle cx="15" cy="11.5" r="1.5" fill="currentColor" stroke="none" />`,
   unique_stunt_jumps: `<path d="M3 19h18v2H3v-2zm1.5-4L15 6.5V11h2V3h-8v2h4.5L5.5 13 4.5 15z"/>`,
-  vehicle_missions: `<path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,2a8,8,0,0,1,7.38,4.92A29.93,29.93,0,0,0,12,8a29.63,29.63,0,0,0-7.4.94A8,8,0,0,1,12,4ZM4,12.67l1.11-.13A4.38,4.38,0,0,1,10,16.89v2.85A8,8,0,0,1,4,12.67Zm10,7.07V16.89a4.38,4.38,0,0,1,4.86-4.35l1.11.13A8,8,0,0,1,14,19.74Z"/>`,
   odd_jobs: `<path d="M20 6h-3V4c0-1.103-.897-2-2-2H9c-1.103 0-2 .897-2 2v2H4c-1.103 0-2 .897-2 2v11c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V8c0-1.103-.897-2-2-2m-5-2v2H9V4zM8 8h12v3H4V8zM4 19v-6h6v2h4v-2h6l.001 6z"/>`,
   races: `<path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/>`,
   challenges: `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h6v-2h-4z"/>`
@@ -726,7 +721,7 @@ function createClusterIcon(cluster) {
 
 // --- Same-Spot Icon Grouping Algorithm ---
 function getClusteredNodes(visibleMarkers, zoom) {
-  if (!state.clusterMarkers || zoom >= 4.75) {
+  if (!state.clusterMarkers || zoom >= 4.5) {
     return visibleMarkers.map(m => ({
       isCluster: false,
       lat: m.lat,
@@ -737,7 +732,7 @@ function getClusteredNodes(visibleMarkers, zoom) {
     }));
   }
 
-  const threshold = 14; // pixel radius threshold: only group markers that genuinely collide/overlap
+  const threshold = 10; // pixel radius threshold: only group markers that genuinely collide/overlap
   const clusters = [];
 
   // Project marker locations to screen pixel space at current zoom
@@ -860,7 +855,7 @@ function renderMarkers() {
 
 function handleClusterClick(cluster) {
   const currentZoom = state.map.getZoom();
-  if (currentZoom < 4.75) {
+  if (currentZoom < 4.5) {
     // Zoom in smoothly to disperse the clustered icons!
     state.map.flyTo([cluster.lat, cluster.lng], Math.min(state.map.getMaxZoom(), currentZoom + 1.25), {
       duration: 0.35
@@ -871,6 +866,20 @@ function handleClusterClick(cluster) {
   }
 }
 
+// Clean vector checkbox icon
+function renderCheckboxIcon(isFound, size = 15) {
+  if (isFound) {
+    return `<svg class="check-box-svg checked" viewBox="0 0 20 20" width="${size}" height="${size}" style="vertical-align: -2.5px; display: inline-block; flex-shrink: 0;" fill="none">
+      <rect x="2" y="2" width="16" height="16" rx="3.5" fill="currentColor" stroke="none" />
+      <path d="M5.5 10.5 L8.5 13.5 L14.5 6.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>`;
+  } else {
+    return `<svg class="check-box-svg unchecked" viewBox="0 0 20 20" width="${size}" height="${size}" style="vertical-align: -2.5px; display: inline-block; flex-shrink: 0;" fill="none">
+      <rect x="2.5" y="2.5" width="15" height="15" rx="3" stroke="currentColor" stroke-width="1.8" fill="none" opacity="0.75" />
+    </svg>`;
+  }
+}
+
 function openClusterListPopup(cluster) {
   const catMeta = state.categories[cluster.category] || { name: cluster.category, color: cluster.color };
   const itemsHtml = cluster.items.map(m => {
@@ -878,7 +887,7 @@ function openClusterListPopup(cluster) {
     return `
       <div class="cluster-popup-item" onclick="openMarkerFromCluster('${m.id}')">
         <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
-          <span style="font-size: 13px;">${isFound ? '☑' : '☐'}</span>
+          ${renderCheckboxIcon(isFound, 14)}
           <div style="display: flex; flex-direction: column; min-width: 0;">
             <span style="font-weight: 600; font-size: 12px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${m.title}">${m.title}</span>
             <span style="font-size: 10px; color: var(--text-muted);">${m.location ? m.location + ' • ' : ''}${m.island}</span>
@@ -1051,7 +1060,7 @@ function openMarkerPopup(marker) {
       <div class="popup-actions">
         <button class="popup-stepper-btn" id="popupBtnPrev" title="${prevTitle}" onclick="handlePopupAction(event, 'prev')" ${prevDisabled}>◀</button>
         <button class="btn-mark-found ${isFound ? 'collected' : ''}" id="popupBtnFound" onclick="handlePopupAction(event, 'found')">
-          <span class="check-box-icon">${isFound ? '☑' : '☐'}</span> Found
+          <span class="check-box-icon">${renderCheckboxIcon(isFound, 14)}</span> Found
         </button>
         <button class="popup-stepper-btn" id="popupBtnNext" title="${nextTitle}" onclick="handlePopupAction(event, 'next')" ${nextDisabled}>▶</button>
       </div>
@@ -1189,7 +1198,7 @@ function toggleCurrentCollected() {
   const btn = document.getElementById("popupBtnFound");
   if (btn) {
     btn.classList.toggle("collected", isFound);
-    btn.innerHTML = `<span class="check-box-icon">${isFound ? '☑' : '☐'}</span> Found`;
+    btn.innerHTML = `<span class="check-box-icon">${renderCheckboxIcon(isFound, 14)}</span> Found`;
   }
 
   if (state.currentMarker.category === "hidden_packages") {
@@ -1270,7 +1279,7 @@ function toggleTaskCompleted(taskId) {
     const btn = document.getElementById("popupBtnFound");
     if (btn) {
       btn.classList.toggle("collected", isFound);
-      btn.innerHTML = `<span class="check-box-icon">${isFound ? '☑' : '☐'}</span> Found`;
+      btn.innerHTML = `<span class="check-box-icon">${renderCheckboxIcon(isFound, 14)}</span> Found`;
     }
   }
 
@@ -1853,7 +1862,7 @@ function resetProgress() {
       const btn = document.getElementById("popupBtnFound");
       if (btn) {
         btn.classList.remove("collected");
-        btn.innerHTML = `<span class="check-box-icon">☐</span> Found`;
+        btn.innerHTML = `<span class="check-box-icon">${renderCheckboxIcon(false, 14)}</span> Found`;
       }
     }
   }
